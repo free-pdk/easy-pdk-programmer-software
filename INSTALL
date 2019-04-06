@@ -1,7 +1,35 @@
-EASY PDK PROGRAMMER
--------------------
+macOS:
+======
+homebrew: make all
 
-```
+Windows:
+========
+mingw: make all
+msys2: make all
+
+Driver for older Windows versions:
+==================================
+On Windows 7,8,10 Windows should find the correct STM32 virtual comport driver automatically (online).
+If have problems installing the driver on older Windows versions (XP, Vista®, 7, and 8.x) you 
+can point to the folder "WindowsSTM32VCPDriver" when asked for the driver. It contains the required .inf and
+the corresponding Microsoft signed .cat file. You also can download an installer for the driver from ST website:
+https://www.st.com/en/development-tools/stsw-stm32102.html
+
+Linux:
+======
+make all
+
+Problems with Linux distributions (Ubuntu and others):
+======================================================
+
+To reduce the initial delay after connecting USB you need to exclude the virtual com port from "modemmanager" to check it as a modem.
+You can do this by the following command:
+
+sudo bash -c 'cp udevrules/90-stm32vcp.rules /etc/udev/rules.d/ ; udevadm control --reload'
+
+
+************
+
 Usage: easypdkprog [OPTION...] list|probe|read|write|erase|start [FILE]
 easypdkprog -- read, write and execute programs on PADAUK microcontroller
 https://free-pdk.github.io
@@ -21,32 +49,32 @@ https://free-pdk.github.io
   -?, --help                 Give this help list
       --usage                Give a short usage message
   -V, --version              Print program version
-```
+
 
 Examples:
 
 list all supported ICs:
-```  easypdkprog list```
+  easypdkprog list
 
 probe IC in socket (can determine IC type/name):
-```  easypdkprog probe```
+  easypdkprog probe
 
 read IC to readout.hex file:
-```  easypdkprog -n PFS154 read readout.hex```
+  easypdkprog -n PFS154 read readout.hex
 
 read IC to readout.bin file:
-```  easypdkprog -n PFS154 read readout.hex -b```
+  easypdkprog -n PFS154 read readout.hex -b
 
 write IC:
-```  easypdkprog -n PFS154 write myprog.hex```
+  easypdkprog -n PFS154 write myprog.hex
 
 erase IC (flash based only):
-```  easypdkprog -n PFS154 erase```
+  easypdkprog -n PFS154 erase
 
 start IC in socket (interactive mode):
  all serial output sent form IC-PA.7 (autobaud detection) is displayed on screen
  all input from keyboard is sent as serial to IC-PA.0 (using same detected baud as receive)
  
-```  easypdkprog start```
+  easypdkprog start
 
   

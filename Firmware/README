@@ -1,0 +1,41 @@
+************************
+ DFU-NOTES for firmware
+************************
+
+Install "dfu-util" on your computer: http://dfu-util.sourceforge.net
+(macOS: brew install dfu-util / Linux: sudo apt-get install dfu-util / Windows: follow the guide on dfu-util web site)
+
+1. unplug USB from Easy PDK programmer
+
+2. on Easy PDK programmer PRESS AND KEEP HOLDING THE BUTTON
+
+3. WHILE STILL HOLDING THE BUTTON connect USB
+
+4. ONLY AFTER USB is connected release the button
+
+5. EXECUTE: 
+   dfu-util -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D EASYPDKPROG.bin 
+
+   EXAMPLE OUTPUT:
+   ---------------
+   dfu-util 0.9
+   ...
+   dfu-util: Invalid DFU suffix signature
+   dfu-util: A valid DFU suffix will be required in a future dfu-util release!!!
+   Opening DFU capable USB device...
+   ID 0483:df11
+    Run-time device DFU version 011a
+   Claiming USB DFU Interface...
+   Setting Alternate Setting #0 ...
+   Determining device status: state = dfuIDLE, status = 0
+   dfuIDLE, continuing
+   DFU mode device DFU version 011a
+   Device returned transfer size 2048
+   DfuSe interface name: "Internal Flash  "
+   Downloading to address = 0x08000000, size = 27635
+   Download  [=========================] 100%        27635 bytes
+   Download done.
+   File downloaded successfully
+
+6. UNPLUG USB from Easy PDK programmer
+
