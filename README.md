@@ -1,6 +1,8 @@
 EASY PDK PROGRAMMER
 -------------------
 
+Hardware sources can be found here: https://github.com/free-pdk/easy-pdk-programmer-hardware
+
 ```
 Usage: easypdkprog [OPTION...] list|probe|read|write|erase|start [FILE]
 easypdkprog -- read, write and execute programs on PADAUK microcontroller
