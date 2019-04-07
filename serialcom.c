@@ -35,7 +35,7 @@ int serialcom_open(const char* devpath)
   struct termios config;
   memset(&config, 0, sizeof(config));
   tcgetattr(fd, &config);
-  config.c_iflag &= ~(INLCR | ICRNL);
+  config.c_iflag &= ~(IXON | IXOFF | IXANY | ICRNL | INLCR | IGNCR);
   config.c_iflag |= IGNPAR | IGNBRK;
   config.c_oflag &= ~(OPOST | ONLCR | OCRNL);
   config.c_cflag &= ~(PARENB | PARODD | CSTOPB | CSIZE | CRTSCTS);
