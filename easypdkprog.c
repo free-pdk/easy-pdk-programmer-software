@@ -72,11 +72,11 @@ static error_t easypdkprog_parse_opt(int key, char *arg, struct argp_state *stat
     case 'v': arguments->verbose = 1; break;
     case 'p': arguments->port = arg; break;
     case 'b': arguments->binout = 1; break;
-    case 'c': arguments->nocalibrate = 1; break;
     case 555: arguments->noerase = 1; break;
     case 666: arguments->noblankcheck = 1; break;
     case 777: arguments->securefill = 1; break;
     case 888: arguments->noverify = 1; break;
+    case 999: arguments->nocalibrate = 1; break;
     case 'f': if(arg) arguments->fuse = strtol(arg,NULL,16); break;
     case 'n': arguments->ic = arg; break;
     case 'i': if(arg) arguments->icid = strtol(arg,NULL,16); break;
