@@ -1,0 +1,52 @@
+Firmware for Easy PDK Programmer
+================================
+
+Requirement: GNU Arm Embedded Toolchain: 
+ * download and unpack from here: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
+
+Compile:
+ * open Makefile and modify first line GCC_PATH to point to GNU ARM embedded Toolchain "bin" folder
+   e.g. GCC_PATH = ../gcc-arm-none-eabi-8-2018-q4-major/bin
+
+ * run make to compile the firmware
+
+Update firmware on Easy PDK Programmer:
+
+ * after compilation you can find "EASYPDKPROG.bin" in "build" folder
+
+ * use dfu-util to update firmware on Easy PDK Programmer:
+
+
+1. unplug USB from Easy PDK programmer
+
+2. on Easy PDK programmer PRESS AND KEEP HOLDING THE BUTTON
+
+3. WHILE STILL HOLDING THE BUTTON connect USB
+
+4. ONLY AFTER USB is connected release the button
+
+5. EXECUTE: 
+   dfu-util -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D EASYPDKPROG.bin 
+
+6. UNPLUG USB from Easy PDK programmer
+
+
+Special note for CubeMX:
+========================
+In case you use CubeMX with the provided EASYPDKPROG.ioc file an reconfigure / regenerate the project you will have to add the 3 fpdk source 
+code files to "C_SOURCES" in the regenerated "Makefile" manually:
+
+C_SOURCES =  \
+  ...
+  Src/fpdk.c \
+  Src/fpdkuart.c \
+  Src/fpdkusb.c \
+  ...
+
+You also need to change the USB serial number descriptor function "USBD_FS_SerialStrDescriptor" in "usbd_desc.c" manually:
+
+  uint8_t * USBD_FS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+  {
+    USBD_GetString((uint8_t *)USBD_SERIALNUMBER_STRING_FS, USBD_StringSerial, length);
+    return (uint8_t *) USBD_StringSerial;
+  }
