@@ -6,16 +6,15 @@ CFLAGS += -Wall -O2 -std=c99
 
 all: easypdkprog
 
-ifeq ($(OS),Windows_NT)
-    EXE_EXTENSION := .exe
+UNAME_S := $(shell uname -s)
+ifneq ($(UNAME_S),Linux)
     ARGPSA    = lib/argp-standalone-1.3
     ARGPSALIB = $(ARGPSA)/libargp.a
     CFLAGS  += -I$(ARGPSA)
-else
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Darwin)
-        LDFLAGS += -largp
-    endif
+endif
+
+ifeq ($(OS),Windows_NT)
+    EXE_EXTENSION := .exe
 endif
 
 DEP=  $(wildcard *.h)
@@ -39,6 +38,6 @@ clean:
 	$(RM) simpletest$(EXE_EXTENSION)
 
 distclean: clean
-ifeq ($(OS),Windows_NT)
+ifneq ($(UNAME_S),Linux)
 	-$(MAKE) distclean -C $(ARGPSA)
 endif
