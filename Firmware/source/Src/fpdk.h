@@ -21,14 +21,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <stdint.h>
 
-#define __FPDKSW__ "1.0"
+#define __FPDKSW__ "1.1"
 #define __FPDKHW__ "1.2"
 
 typedef enum FPDKICTYPE
 {
-  FPDK_IC_FLASH = 'F',
-  FPDK_IC_OTP1  = 'O',
-  FPDK_IC_OTP2  = '2',
+  FPDK_IC_FLASH   = 'F',
+  FPDK_IC_OTP1_2  = 0x12,
+  FPDK_IC_OTP2_1  = 0x21,
+  FPDK_IC_OTP2_2  = 0x22,
+  FPDK_IC_OTP3_1  = 0x31,
 } FPDKICTYPE;
 
 void     FPDK_Init(void);

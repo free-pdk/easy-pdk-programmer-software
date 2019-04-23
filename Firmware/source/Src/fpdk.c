@@ -35,18 +35,25 @@ extern DMA_HandleTypeDef  hdma_spi1_rx;
 extern UART_HandleTypeDef huart1;
 
 //board specific defines for programing IO
+#define _FPDK_CLK2_UP()      HAL_GPIO_WritePin( IC_IO_PA0_UART1_TX_GPIO_Port, IC_IO_PA0_UART1_TX_Pin, GPIO_PIN_SET )
+#define _FPDK_CLK2_DOWN()    HAL_GPIO_WritePin( IC_IO_PA0_UART1_TX_GPIO_Port, IC_IO_PA0_UART1_TX_Pin, GPIO_PIN_RESET )
 #define _FPDK_CLK_UP()       HAL_GPIO_WritePin( IC_IO_PA3_CLK_GPIO_Port, IC_IO_PA3_CLK_Pin, GPIO_PIN_SET )
 #define _FPDK_CLK_DOWN()     HAL_GPIO_WritePin( IC_IO_PA3_CLK_GPIO_Port, IC_IO_PA3_CLK_Pin, GPIO_PIN_RESET )
 #define _FPDK_SET_DAT_O(bit) HAL_GPIO_WritePin( IC_IO_PA4_GPIO_Port,     IC_IO_PA4_Pin,     bit?GPIO_PIN_SET:GPIO_PIN_RESET )
 #define _FPDK_SET_DAT_F(bit) HAL_GPIO_WritePin( IC_IO_PA6_DAT_GPIO_Port, IC_IO_PA6_DAT_Pin, bit?GPIO_PIN_SET:GPIO_PIN_RESET )
 #define _FPDK_GET_DAT()      HAL_GPIO_ReadPin(  IC_IO_PA6_DAT_GPIO_Port, IC_IO_PA6_DAT_Pin )
+#define _FPDK_SET_CMT(bit)   HAL_GPIO_WritePin( IC_IO_PA7_USART1_RX_GPIO_Port, IC_IO_PA7_USART1_RX_Pin, bit?GPIO_PIN_SET:GPIO_PIN_RESET )
 
 //general macros for programing IO
 #define _FPDK_DelayUS(us)    { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,#1\nCMP R0,#0\nBNE 1b"::[loops]"r"(10*us):"memory"); }
 #define _FPDK_Clock()        { _FPDK_CLK_UP(); _FPDK_CLK_DOWN(); }
+#define _FPDK_Clock2()       { _FPDK_CLK2_UP(); _FPDK_CLK2_DOWN(); }
+#define _FPDK_Commit2()      { _FPDK_SET_CMT(1); _FPDK_SET_CMT(0); _FPDK_Clock2(); }
 #define _FPDK_SendBitO(bit)  { _FPDK_SET_DAT_O(bit); _FPDK_Clock(); }
+#define _FPDK_SendBitO2(bit) { _FPDK_SET_DAT_O(bit); _FPDK_Clock2(); }
 #define _FPDK_SendBitF(bit)  { _FPDK_SET_DAT_F(bit); _FPDK_Clock(); }
 #define _FPDK_RecvBit()      ({ _FPDK_CLK_UP(); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK_DOWN(); bit; })
+#define _FPDK_RecvBit2()     ({ _FPDK_CLK2_UP(); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK2_DOWN(); bit; })
 
 //board specific max values (DAC max => mV max after opamp output / -30 mV DAC DC offset)
 #define FPDK_VDD_DAC_MAX_MV ( 6290 - 30)
@@ -147,6 +154,32 @@ static void _FPDK_SetPA4Incoming(void)
   HAL_GPIO_Init(IC_IO_PA4_GPIO_Port, &GPIO_InitStruct);
 }
 
+static void _FPDK_SetPA0Outgoing(void)
+{
+  HAL_GPIO_WritePin( IC_IO_PA0_UART1_TX_GPIO_Port, IC_IO_PA0_UART1_TX_Pin, GPIO_PIN_RESET );
+  GPIO_InitTypeDef GPIO_InitStruct = { .Pin=IC_IO_PA0_UART1_TX_Pin, .Mode=GPIO_MODE_OUTPUT_PP, .Speed=GPIO_SPEED_FREQ_HIGH };
+  HAL_GPIO_Init(IC_IO_PA0_UART1_TX_GPIO_Port, &GPIO_InitStruct);
+}
+
+static void _FPDK_SetPA0Incoming(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = { .Pin=IC_IO_PA0_UART1_TX_Pin, .Mode=GPIO_MODE_INPUT, .Speed=GPIO_SPEED_FREQ_HIGH };
+  HAL_GPIO_Init(IC_IO_PA0_UART1_TX_GPIO_Port, &GPIO_InitStruct);
+}
+
+static void _FPDK_SetPA7Outgoing(void)
+{
+  HAL_GPIO_WritePin( IC_IO_PA7_USART1_RX_GPIO_Port, IC_IO_PA7_USART1_RX_Pin, GPIO_PIN_RESET );
+  GPIO_InitTypeDef GPIO_InitStruct = { .Pin=IC_IO_PA7_USART1_RX_Pin, .Mode=GPIO_MODE_OUTPUT_PP, .Speed=GPIO_SPEED_FREQ_HIGH };
+  HAL_GPIO_Init(IC_IO_PA7_USART1_RX_GPIO_Port, &GPIO_InitStruct);
+}
+
+static void _FPDK_SetPA7Incoming(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = { .Pin=IC_IO_PA7_USART1_RX_Pin, .Mode=GPIO_MODE_INPUT, .Speed=GPIO_SPEED_FREQ_HIGH };
+  HAL_GPIO_Init(IC_IO_PA7_USART1_RX_GPIO_Port, &GPIO_InitStruct);
+}
+
 static void _FPDK_SendBits32O(const uint32_t data, const uint8_t bits)
 {
   uint32_t bitdat = data<<(32-bits);
@@ -157,6 +190,18 @@ static void _FPDK_SendBits32O(const uint32_t data, const uint8_t bits)
   }
   _FPDK_SET_DAT_O(0);
 }
+
+static void _FPDK_SendBits32O2(const uint32_t data, const uint8_t bits)
+{
+  uint32_t bitdat = data<<(32-bits);
+  for( uint32_t p=0; p<bits; p++ )
+  {
+    _FPDK_SendBitO2( bitdat&0x80000000 );
+    bitdat<<=1;
+  }
+  _FPDK_SET_DAT_O(0);
+}
+
 
 static void _FPDK_SendBits32F(const uint32_t data, const uint8_t bits)
 {
@@ -173,6 +218,14 @@ static uint32_t _FPDK_RecvBits32(const uint8_t bits)
   uint32_t bitdat = 0;
   for( uint32_t p=0; p<bits; p++ )
     bitdat = (bitdat<<1) | (_FPDK_RecvBit()?1:0);
+  return bitdat;
+}
+
+static uint32_t _FPDK_RecvBits32O2(const uint8_t bits)
+{
+  uint32_t bitdat = 0;
+  for( uint32_t p=0; p<bits; p++ )
+    bitdat = (bitdat<<1) | (_FPDK_RecvBit2()?1:0);
   return bitdat;
 }
 
@@ -199,6 +252,11 @@ static int _FPDK_EnterProgramingmMode(const FPDKICTYPE type, const uint32_t VPP_
   {
     _FPDK_SetDatIncoming();                                                                        //set DAT incoming
     _FPDK_SetPA4Outgoing();                                                                        //set PA4 outgoing
+    if( FPDK_IC_OTP3_1 == type )
+    {
+      _FPDK_SetPA0Outgoing();
+      _FPDK_SetPA7Outgoing();
+    }
   }
   return 0;
 }
@@ -207,9 +265,11 @@ static void _FPDK_LeaveProgramingMode(const FPDKICTYPE type, const uint32_t extr
 {
   _FPDK_SetDatIncoming();
   _FPDK_SetPA4Incoming();
+  _FPDK_SetPA0Incoming();
+  _FPDK_SetPA7Incoming();
   FPDK_SetVDD(0, FPDK_VDD_STOP_DELAYUS);                                                           //disable VDD
   FPDK_SetVPP(0, FPDK_VPP_STOP_DELAYUS);                                                           //disable VPP
-  _FPDK_DelayUS(FPDK_LEAVEPROGMODE_DELAYUS);
+  _FPDK_DelayUS(FPDK_LEAVE_PROG_MODE_DELAYUS);
   _FPDK_DelayUS(extrawaitus+1);
   _FPDK_SetClkIncoming();
 }
@@ -217,16 +277,30 @@ static void _FPDK_LeaveProgramingMode(const FPDKICTYPE type, const uint32_t extr
 static uint16_t _FPDK_SendCommand(const FPDKICTYPE type, const uint8_t command)
 {
   uint32_t ack = 0;
-  if( FPDK_IC_FLASH == type )
+  switch( type )
   {
-    _FPDK_SendBits32F(0xA5A5A5A0 | command, 32);                                                   //preamble+command
-    _FPDK_SetDatIncoming();                                                                        //set DAT incoming
-    ack = _FPDK_RecvBits32(16);                                                                    //receive ack
-    _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
-    _FPDK_Clock();                                                                                 //1 extra clock
+    case FPDK_IC_FLASH:
+      _FPDK_SendBits32F(0xA5A5A5A0 | command, 32);                                                 //preamble+command
+      _FPDK_SetDatIncoming();                                                                      //set DAT incoming
+      ack = _FPDK_RecvBits32(16);                                                                  //receive ack
+      _FPDK_SetDatOutgoing();                                                                      //set DAT outgoing
+      _FPDK_Clock();                                                                               //1 extra clock
+      break;
+
+    case FPDK_IC_OTP1_2:
+      _FPDK_SendBits32O(0xA5A5A5A0 | command, 32);                                                 //preamble+command
+      break;
+
+    case FPDK_IC_OTP2_1:
+    case FPDK_IC_OTP2_2:
+      _FPDK_SendBits32O(0x5A5A5A50 | command, 32);                                                 //preamble+command
+      break;
+
+    case FPDK_IC_OTP3_1:
+      _FPDK_SendBits32O(0x5A5A5A5A, 32);                                                           //preamble1
+      _FPDK_SendBits32O(0x00000000, 27);                                                           //preamble2
+      break;
   }
-  else
-    _FPDK_SendBits32O(0xA5A5A5A0 | command, 32);                                                   //preamble+command
   return ack;                                                                                      //return ack (ic_id)
 }
 
@@ -240,6 +314,13 @@ static uint32_t _FPDK_ReadAddr(const FPDKICTYPE type, const uint32_t addr, const
     dat = _FPDK_RecvBits32(data_bits);                                                             //receive data
     _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
     _FPDK_Clock();                                                                                 //1 extra clock
+  }
+  else
+  if( FPDK_IC_OTP3_1 == type )
+  {
+    _FPDK_SendBits32O2(addr,addr_bits);                                                            //send address to read from 
+    _FPDK_Commit2();                                                                               //send shift register commit + 1 clock
+    dat = _FPDK_RecvBits32O2(data_bits);                                                           //receive data
   }
   else
   {
@@ -277,6 +358,20 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
     }
     _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
     _FPDK_DelayUS(25);
+  }
+  else
+  if( FPDK_IC_OTP3_1 == type )
+  {
+    //TODO:
+/*
+    for( uint32_t p=0; p<count; p++ )
+      _FPDK_SendBits32O2(data[p],data_bits);                                                       //write 1 word
+
+    _FPDK_SendBits32O2(addr,addr_bits);                                                            //send address to read from 
+    _FPDK_Commit2();                                                                               //send shift register commit + 1 clock
+
+    ...
+*/
   }
   else
   {
@@ -340,6 +435,8 @@ void FPDK_Init(void)
   _FPDK_SetClkIncoming();
   _FPDK_SetDatIncoming();
   _FPDK_SetPA4Incoming();
+  _FPDK_SetPA0Incoming();
+  _FPDK_SetPA7Incoming();
 }
 
 void FPDK_DeInit(void)
@@ -350,6 +447,8 @@ void FPDK_DeInit(void)
   _FPDK_SetClkIncoming();
   _FPDK_SetDatIncoming();
   _FPDK_SetPA4Incoming();
+  _FPDK_SetPA0Incoming();
+  _FPDK_SetPA7Incoming();
 }
 
 void FPDK_SetLeds(uint32_t val)
@@ -433,72 +532,67 @@ bool FPDK_SetVPP(uint32_t mV, uint32_t stabelizeDelayUS)
   return true;
 }
 
-static uint32_t _FPDK_GetIDIC(const FPDKICTYPE type, const uint32_t vpp_cmd, const uint32_t vdd_cmd, const uint8_t data_bits)
+static uint32_t _FPDK_GetIDIC(const FPDKICTYPE type, const uint32_t vpp_cmd, const uint32_t vdd_cmd, const uint8_t databits)
 {
   uint32_t ic_id = 0;
+
+  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd)<0 )
+    return FPDK_ERR_VPPVDD;
+
   switch( type )
   {
     case FPDK_IC_FLASH:
-      {
-        if( _FPDK_EnterProgramingmMode(FPDK_IC_FLASH,vpp_cmd,vdd_cmd)<0 )
-          return FPDK_ERR_VPPVDD;
-  
-        ic_id = _FPDK_SendCommand(FPDK_IC_FLASH, 0x6);                                             //use read command for probing
-  
-        _FPDK_LeaveProgramingMode(FPDK_IC_FLASH, 0);
-      }
+      ic_id = _FPDK_SendCommand(type, 0x6);                                                        //use read command for probing
       break;
 
-    case FPDK_IC_OTP1:
-      {
-        if( _FPDK_EnterProgramingmMode(FPDK_IC_OTP1,vpp_cmd,vdd_cmd)<0 )
-          return FPDK_ERR_VPPVDD;
-
-        _FPDK_SendCommand(FPDK_IC_OTP1, 0x7);                                                      //use write command for probing
-
-        ic_id = _FPDK_RecvBits32(data_bits+data_bits+12);                                          //data#1, data#2, address => 12 bit response
-
-        _FPDK_LeaveProgramingMode(FPDK_IC_OTP1, 0);                                                //abort write before it is executed
-      }
+    case FPDK_IC_OTP1_2:
+      _FPDK_SendCommand(type, 0x7);                                                                //use write command for probing
+      ic_id = _FPDK_RecvBits32(databits+databits+12);                                                     
       break;
 
-    case FPDK_IC_OTP2:
+    case FPDK_IC_OTP2_1:
+      _FPDK_SendCommand(type, 0x7);                                                                //use write command for probing
+      ic_id = _FPDK_RecvBits32(databits+12);
+      break;
+
+    case FPDK_IC_OTP2_2:
+      _FPDK_SendCommand(type, 0x7);                                                                //use write command for probing
+      ic_id = _FPDK_RecvBits32(databits+databits+12);
+      break;
+
+    case FPDK_IC_OTP3_1:
+       _FPDK_SendCommand(type, 0);
+      ic_id = _FPDK_RecvBits32O2(databits+1+12);
       break;
   }
+  _FPDK_LeaveProgramingMode(type, 0);                                                              //leave prog mode, abort write before it is executed
+
   return ic_id;
 }
 
 uint32_t FPDK_ProbeIC(FPDKICTYPE* type, uint32_t* vpp_cmd, uint32_t* vdd_cmd)
 {
-  uint32_t vpp_probe;
-  uint32_t vdd_probe;
-  uint32_t ic_id;
+  //try to get IC with low voltages
+  *vpp_cmd = 4500; *vdd_cmd = 2000;
 
-  //try flash first
-  vpp_probe = 4500; vdd_probe = 2000;
-  ic_id = _FPDK_GetIDIC(FPDK_IC_FLASH, vpp_probe, vdd_probe, 0);
-  if( ic_id )
-  {
+  uint32_t ic_id = 0;
+
+  if( (ic_id = _FPDK_GetIDIC(FPDK_IC_FLASH, *vpp_cmd, *vdd_cmd, 0)) )                              //try flash first
     *type = FPDK_IC_FLASH;
-    *vpp_cmd = vpp_probe;
-    *vdd_cmd = vdd_probe;
-    return ic_id;
-  }
+  else
+  if( (ic_id = _FPDK_GetIDIC(FPDK_IC_OTP1_2, *vpp_cmd, *vdd_cmd, 16))&0xFFFF )                     //try OTP1_2 with 2x16 codebits (need to shift right for smaller devices)
+    *type = FPDK_IC_OTP1_2;
+  else
+  if( (ic_id = _FPDK_GetIDIC(FPDK_IC_OTP2_2, *vpp_cmd, *vdd_cmd, 16))&0xFFFF )                     //try OTP2_2 with 2x16 codebits (need to shift right for smaller devices)
+    *type = FPDK_IC_OTP2_2;
+  else
+  if( (ic_id = _FPDK_GetIDIC(FPDK_IC_OTP2_1, *vpp_cmd, *vdd_cmd, 16))&0xFFFF )                     //try OTP2_1 with 1x16 codebits (need to shift right for smaller devices)
+    *type = FPDK_IC_OTP2_1;
+  else
+  if( (ic_id = _FPDK_GetIDIC(FPDK_IC_OTP3_1, *vpp_cmd, *vdd_cmd, 16)&0xFFFF) )                     //try OTP3_1 with 16 codebits (need to shift right for smaller devices)
+    *type = FPDK_IC_OTP3_1;
 
-  //try OTP1
-  vpp_probe = 4500; vdd_probe = 2000;
-  ic_id = _FPDK_GetIDIC(FPDK_IC_OTP1, vpp_probe, vdd_probe, 16);                                   //try with 16 codebits (need to shift right for smaller devices)
-  if( ic_id )
-  {
-    *type = FPDK_IC_OTP1;
-    *vpp_cmd = vpp_probe;
-    *vdd_cmd = vdd_probe;
-    return ic_id;
-  }
-
-  //TODO: try OTP2
-
-  return 0;
+  return ic_id;
 }
 
 uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type, const uint32_t vpp_cmd, const uint32_t vdd_cmd,
