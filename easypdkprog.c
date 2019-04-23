@@ -162,7 +162,7 @@ int main( int argc, const char * argv [] )
 
       if( !icdata )
       {
-        printf("ERROR: Unknown OTP ID.\n");
+        printf("ERROR: Unknown IC NAME / OTP ID.\n");
         return -2;
       }
     }
@@ -252,6 +252,11 @@ int main( int argc, const char * argv [] )
 
     case 'r': //read
     {
+      if( !icdata->vdd_cmd_read  || !icdata->vpp_cmd_read )
+      {
+        printf("Read for this IC not implemented yet.\n");
+        break;
+      }
       printf("Reading IC... ");
       int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, 0, icdata->addressbits, 0, icdata->codebits, icdata->codewords);
       if( r>=FPDK_ERR_ERROR )
@@ -293,6 +298,11 @@ int main( int argc, const char * argv [] )
 
     case 'w': //write
     {
+      if( !icdata->vdd_cmd_write  || !icdata->vpp_cmd_write || !icdata->vdd_write_hv || !icdata->vpp_write_hv )
+      {
+        printf("Write for this IC not implemented yet.\n");
+        break;
+      }
       uint16_t write_data[0x1800];
       if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, 0x1800) < 0 )
       {
@@ -362,7 +372,7 @@ int main( int argc, const char * argv [] )
       }
 
       bool do_calibration = false;
-      
+
       uint32_t       calibrate_frequency = 0;
       uint32_t       calibrate_millivolt = 5000;
       FPDKCALIBTYPE  calibrate_prg_type;
@@ -458,7 +468,7 @@ int main( int argc, const char * argv [] )
           case FPDKCALIB_ILRC_BG:      printf("BG / ILRC SYSCLK=%dHz", calibrate_frequency); break;
         }
         printf(")... ");
-        
+
         uint8_t fcalval, bgcalval;
         uint32_t fcalfreq;
 
@@ -521,6 +531,11 @@ int main( int argc, const char * argv [] )
       if( FPDK_IC_FLASH != icdata->type )
       {
         printf("ERROR: Only FLASH type IC can get erased\n");
+        break;
+      }
+      if( !icdata->vdd_cmd_erase  || !icdata->vpp_cmd_erase || !icdata->vdd_erase_hv || !icdata->vpp_erase_hv )
+      {
+        printf("Erase for this IC not implemented yet.\n");
         break;
       }
 
