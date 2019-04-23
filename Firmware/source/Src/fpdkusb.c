@@ -200,7 +200,7 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
         uint32_t vpp, vdd;
         uint32_t ic_id = FPDK_ProbeIC(&type, &vpp, &vdd);
         FPDK_SetLed(FPDK_LED_IC,false);
-        uint32_t r[] = {ic_id,vpp,vdd,type};
+        uint32_t r[] = {ic_id & 0x7FFFFFFF,vpp,vdd,type};
         _FPDKUSB_Ack((uint8_t*)&r, sizeof(r));
       }
       break;
