@@ -230,7 +230,7 @@ int main( int argc, const char * argv [] )
         if( FPDK_IC_FLASH==type )
           icdata = FPDKICDATA_GetICDataById12Bit(icid);
         else
-          icdata = FPDKICDATA_GetICDataForOTPByCmdResponse(icid);
+          icdata = FPDKICDATA_GetICDataForOTPByCmdResponse(type,icid);
 
         if( icdata )
         {

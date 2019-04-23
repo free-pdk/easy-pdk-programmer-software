@@ -21,12 +21,12 @@ static const FPDKICDATA fpdk_ic_table[] =
 {
   { .name                         = "PMS150C",
     .otpid                        = 0x2A16,
-    .id12bit                      = 0xA16,
-    .type                         = FPDK_IC_OTP1,
+    .id12bit                      = 0xA16,          //OTP_WAY: 0x12
+    .type                         = FPDK_IC_OTP1_2,
     .addressbits                  = 12,
     .codebits                     = 13,
     .codewords                    = 0x400,
-    .ramsize                      = 64,
+    .ramsize                      = 0x40,
     .exclude_code_start           = 0x3F6,
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 3.0,
@@ -43,12 +43,12 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PMS154B",
     .name_variant_1               = "PMS154C",
     .otpid                        = 0x2C06,
-    .id12bit                      = 0xE06,
-    .type                         = FPDK_IC_OTP1,
+    .id12bit                      = 0xE06,          //OTP_WAY: 0x11
+    .type                         = FPDK_IC_OTP1_2,
     .addressbits                  = 12,
     .codebits                     = 14,
     .codewords                    = 0x800,
-    .ramsize                      = 128,
+    .ramsize                      = 0x80,
     .exclude_code_first_instr     = true,
     .exclude_code_start           = 0x7E8,
     .exclude_code_end             = 0x800,
@@ -65,12 +65,12 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "PFS154",
     .otpid                        = 0x2AA1,
-    .id12bit                      = 0xAA1,
+    .id12bit                      = 0xAA1,          //OTP_WAY: 0x13
     .type                         = FPDK_IC_FLASH,
     .addressbits                  = 13,
     .codebits                     = 14,
     .codewords                    = 0x800,
-    .ramsize                      = 128,
+    .ramsize                      = 0x80,
     .exclude_code_start           = 0x7E0,  //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
     .exclude_code_end             = 0x7F0,
     .vdd_cmd_read                 = 2.5, //3.0,
@@ -91,12 +91,12 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "PFS173",
     .otpid                        = 0x2AA2,
-    .id12bit                      = 0xEA2,
+    .id12bit                      = 0xEA2,          //OTP_WAY: 0x13
     .type                         = FPDK_IC_FLASH,
     .addressbits                  = 13,
     .codebits                     = 15,
     .codewords                    = 0xC00,
-    .ramsize                      = 256,
+    .ramsize                      = 0x100,
     .exclude_code_start           = 0xBE0, //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
     .exclude_code_end             = 0xBF0,
     .vdd_cmd_read                 = 2.5, //3.0
@@ -128,27 +128,50 @@ FPDKICDATA* FPDKICDATA_GetICDataById12Bit(const uint16_t id12bit)
   return 0;
 }
 
-static FPDKICDATA* _FPDKICDATA_GetICDataById12BitAndCodebits(const uint16_t id12bit, const uint8_t codebits)
+static FPDKICDATA* _FPDKICDATA_GetICDataById12BitAndCodebits(const FPDKICTYPE type, const uint16_t id12bit, const uint8_t codebits)
 {
   unsigned int i;
   for( i=0; i<(sizeof(fpdk_ic_table)/sizeof(FPDKICDATA)); i++ )
   {
-    if( ((id12bit&0xFFF) == (fpdk_ic_table[i].id12bit)) && (codebits == fpdk_ic_table[i].codebits) )
+    if( ((id12bit&0xFFF) == (fpdk_ic_table[i].id12bit)) && 
+        (type == fpdk_ic_table[i].type) &&
+        (codebits == fpdk_ic_table[i].codebits)
+      )
+    {
       return (FPDKICDATA*)&fpdk_ic_table[i];
+    }
   }
 
   return 0;
 }
 
-FPDKICDATA* FPDKICDATA_GetICDataForOTPByCmdResponse(const uint32_t cmdrsp)
+FPDKICDATA* FPDKICDATA_GetICDataForOTPByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp)
 {
-  FPDKICDATA* icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(cmdrsp, 16); //try as 16 codebits words
+  unsigned int shift;
+
+  switch( type )
+  {
+    case FPDK_IC_OTP2_1:
+    case FPDK_IC_OTP3_1:
+      shift=1;
+      break;
+
+    case FPDK_IC_OTP1_2:
+    case FPDK_IC_OTP2_2:
+      shift=2;
+      break;
+
+    default:
+      return NULL;
+  }
+
+  FPDKICDATA* icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(type, cmdrsp, 16);   //try as 16 codebits words
   if( !icdata ) 
-    icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(cmdrsp>>2, 15);        //try as 15 codebits words
+    icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(type, cmdrsp>>shift, 15);      //try as 15 codebits words
   if( !icdata ) 
-    icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(cmdrsp>>4, 14);        //try as 14 codebits words
+    icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(type, cmdrsp>>(shift*2), 14);  //try as 14 codebits words
   if( !icdata ) 
-    icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(cmdrsp>>6, 13);        //try as 13 codebits words
+    icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(type, cmdrsp>>(shift*3), 13);  //try as 13 codebits words
 
   return icdata;
 }
