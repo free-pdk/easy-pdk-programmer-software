@@ -123,7 +123,7 @@ int FPDKCOM_OpenAuto(char portpath[64])
 #error Unknown architecture (not unix, apple, windows mingw, windows msys2)
 #endif
     int fd = FPDKCOM_Open( portpath );
-    if( fd>=0 )
+    if( (fd>=0) || (-3==fd) )
       return fd;
   }
   return -1;
@@ -144,8 +144,7 @@ int FPDKCOM_Open(const char* devname)
     serialcom_close(fd);
     return -2;
   }
-
-  if( __FPDKPROTOF__ != proto )
+  if( (__FPDKPROTOF__*1000) != (proto*1000) )
   {
     serialcom_close(fd);
     return -3;

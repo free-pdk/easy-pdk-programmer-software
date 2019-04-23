@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkihex8.h"
 #include "argp.h"
 
-const char *argp_program_version                = "easypdkprog 1.0";
+const char *argp_program_version                = "easypdkprog 1.1";
 static const char easypdkprog_doc[]             = "easypdkprog -- read, write and execute programs on PADAUK microcontroller\nhttps://free-pdk.github.io";
 static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start [FILE]";
 
@@ -182,7 +182,15 @@ int main( int argc, const char * argv [] )
     char compath[64];
     comfd = FPDKCOM_OpenAuto(compath);
     if( comfd<0 )
-      printf("No programmer found\n");
+    {
+      if( -3 == comfd )
+      {
+        verbose_printf(" found: %s\n", compath);
+        printf("Error: Programmer protocol mismatch. Please update programmer firmware.\n");
+      }
+      else
+        printf("No programmer found\n");
+    }
     else
       verbose_printf(" found: %s\n", compath);
   }

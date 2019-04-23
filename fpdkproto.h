@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __FPDKPROTO_H_
 #define __FPDKPROTO_H_
 
-#define __FPDKPROTO__ "1.0"
-#define __FPDKPROTOF__ 1.0
+#define __FPDKPROTO__ "1.1"
+#define __FPDKPROTOF__ 1.1
 
 typedef enum FPDKPROTO_CMD
 {
