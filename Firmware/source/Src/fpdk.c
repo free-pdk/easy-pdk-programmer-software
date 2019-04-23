@@ -71,7 +71,7 @@ extern UART_HandleTypeDef huart1;
 #define FPDK_VDD_EW_STABELIZE_DELAYUS   10000
 #define FPDK_VDD_STOP_DELAYUS           0 //250
 #define FPDK_VPP_STOP_DELAYUS           0 //100
-#define FPDK_LEAVEPROGMODE_DELAYUS      10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
+#define FPDK_LEAVE_PROG_MODE_DELAYUS    10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
 #define FPDK_VDD_CAL_STARTUP_DELAYUS    1000
 
 
