@@ -111,6 +111,29 @@ static const FPDKICDATA fpdk_ic_table[] =
     .write_block_clocks_per_group = 8,
   },
 
+  { .name                         = "PMS152",
+    .otpid                        = 0x2A27,
+    .id12bit                      = 0xA27,          //OTP_WAY: 0x11
+    .type                         = FPDK_IC_OTP2_2,
+    .addressbits                  = 12,
+    .codebits                     = 14,
+    .codewords                    = 0x500,
+    .ramsize                      = 0x50,
+    .exclude_code_start           = 0x4F6,
+    .exclude_code_end             = 0x500,
+    .vdd_cmd_read                 = 3.0,
+    .vpp_cmd_read                 = 5.0,
+/*
+    .vdd_cmd_write                = 4.3,
+    .vpp_cmd_write                = 8.0,
+    .vdd_write_hv                 = 5.8,
+    .vpp_write_hv                 = 10.5,
+    .write_block_size             = 2,
+    .write_block_clock_groups     = 1,
+    .write_block_clocks_per_group = 8,
+*/
+  },
+
   { .name                         = "PMS154B",
     .name_variant_1               = "PMS154C",
     .otpid                        = 0x2C06,
@@ -146,8 +169,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x7F0,
     .vdd_cmd_read                 = 2.5, //3.0,
     .vpp_cmd_read                 = 5.5, //5.0
-    .vdd_cmd_write                = 3.0,
-    .vpp_cmd_write                = 5.0,
+    .vdd_cmd_write                = 2.5, //3.0,
+    .vpp_cmd_write                = 5.5, //5.0
     .vdd_write_hv                 = 5.8,
     .vpp_write_hv                 = 8.5,
     .write_block_size             = 4,
@@ -158,6 +181,29 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vdd_erase_hv                 = 3.0,
     .vpp_erase_hv                 = 9.0,
     .erase_clocks                 = 2
+  },
+
+  { .name                         = "PMS171B",
+    .otpid                        = 0x2D36,
+    .id12bit                      = 0xD36,          //OTP_WAY: 0x11
+    .type                         = FPDK_IC_OTP2_2,
+    .addressbits                  = 12,
+    .codebits                     = 14,
+    .codewords                    = 0x600,
+    .ramsize                      = 0x60,
+    .exclude_code_start           = 0x5F9,
+    .exclude_code_end             = 0x600,
+    .vdd_cmd_read                 = 3.0,
+    .vpp_cmd_read                 = 5.0,
+/*
+    .vdd_cmd_write                = 4.3,
+    .vpp_cmd_write                = 8.0,
+    .vdd_write_hv                 = 5.8,
+    .vpp_write_hv                 = 10.5,
+    .write_block_size             = 2,
+    .write_block_clock_groups     = 1,
+    .write_block_clocks_per_group = 8,
+*/
   },
 
   { .name                         = "PFS173",
@@ -186,6 +232,29 @@ static const FPDKICDATA fpdk_ic_table[] =
     .erase_clocks                 = 4
   },
 
+  { .name                         = "PMC251",
+    .otpid                        = 0x0058,
+    .id12bit                      = 0x058,          //OTP_WAY: 0x0A
+    .type                         = FPDK_IC_OTP3_1,
+    .addressbits                  = 13,
+    .codebits                     = 16,
+    .codewords                    = 0x400,
+    .ramsize                      = 0x60,
+    .exclude_code_start           = 0x3F9,
+    .exclude_code_end             = 0x400,
+    .vdd_cmd_read                 = 2.5, 
+    .vpp_cmd_read                 = 5.0,
+/*
+    .vdd_cmd_write                = 4.3,
+    .vpp_cmd_write                = 8.0,
+    .vdd_write_hv                 = 5.8,
+    .vpp_write_hv                 = 10.5,
+    .write_block_size             = 1,
+    .write_block_clock_groups     = 1,
+    .write_block_clocks_per_group = 8,
+*/
+  },
+
   { .name                         = "PMS271",
     .otpid                        = 0x0A58,
     .id12bit                      = 0xA58,          //OTP_WAY: 0x0A
@@ -194,9 +263,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .codebits                     = 16,
     .codewords                    = 0x400,
     .ramsize                      = 0x40,
-//    .exclude_code_start           = 0x3F9,
-//    .exclude_code_end             = 0x400,
-
+    .exclude_code_start           = 0x3F9,
+    .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 2.5, 
     .vpp_cmd_read                 = 5.0,
 /*
