@@ -25,8 +25,8 @@ easypdkprog: $(ARGPSALIB) $(DEP) $(OBJ) easypdkprog.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o easypdkprog easypdkprog.c $(OBJ) $(LIBS) $(ARGPSALIB)
 	$(STRIP) easypdkprog$(EXE_EXTENSION)
 
-simpletest: $(DEP) $(OBJ) simpletest.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o simpletest simpletest.c $(OBJ) $(LIBS)
+easypdkprogtest: $(DEP) $(OBJ) easypdkprogtest.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o easypdkprogtest easypdkprogtest.c $(OBJ) $(LIBS)
 
 $(ARGPSALIB):
 	cd $(ARGPSA) && sh configure
@@ -35,7 +35,7 @@ $(ARGPSALIB):
 clean:
 	$(RM) $(OBJ)
 	$(RM) easypdkprog$(EXE_EXTENSION)
-	$(RM) simpletest$(EXE_EXTENSION)
+	$(RM) easypdkprogtest$(EXE_EXTENSION)
 
 distclean: clean
 ifneq ($(UNAME_S),Linux)
