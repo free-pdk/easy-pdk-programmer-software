@@ -1,4 +1,6 @@
 /*
+Simple hardware selftest for the easy pdk programmer hardware
+
 Copyright (C) 2019  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
