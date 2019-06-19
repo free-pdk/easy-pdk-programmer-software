@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkcom.h"
 #include "fpdkicdata.h"
 #include "fpdkiccalib.h"
+#include "fpdkicserial.h"
 #include "fpdkihex8.h"
 #include "argp.h"
 
@@ -32,18 +33,19 @@ static const char easypdkprog_doc[]             = "easypdkprog -- read, write an
 static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start [FILE]";
 
 static struct argp_option easypdkprog_options[] = {
-  {"verbose",     'v', 0,      0,  "Verbose output" },
-  {"port",        'p', "PORT", 0,  "COM port of programmer. Default: Auto search" },
-  {"bin",         'b', 0,      0,  "Binary file output. Default: ihex8" },
-  {"noerase",    555,  0,      0,  "Skip erase before write" },
-  {"noblankchk", 666,  0,      0,  "Skip blank check before write" },
-  {"securefill", 777,  0,      0,  "Fill unused space with 0 (NOP) to prevent readout" },
-  {"noverify",   888,  0,      0,  "Skip verify after write" },
-  {"nocalibrate",999,  0,      0,  "Skip calibration after write." },
-  {"fuse",        'f', "FUSE", 0,  "FUSE value, e.g. 0x31FD"},
-  {"runvdd",      'r', "VDD",  0,  "Voltage for running the IC. Default: 5.0" },
-  {"icname",      'n', "NAME", 0,  "IC name, e.g. PFS154" },
-  {"icid",        'i', "ID",   0,  "IC ID 12 bit, e.g. 0xAA1" },
+  {"verbose",     'v', 0,        0,  "Verbose output" },
+  {"port",        'p', "PORT",   0,  "COM port of programmer. Default: Auto search" },
+  {"bin",         'b', 0,        0,  "Binary file output. Default: ihex8" },
+  {"noerase",    555,  0,        0,  "Skip erase before write" },
+  {"noblankchk", 666,  0,        0,  "Skip blank check before write" },
+  {"securefill", 777,  0,        0,  "Fill unused space with 0 (NOP) to prevent readout" },
+  {"noverify",   888,  0,        0,  "Skip verify after write" },
+  {"nocalibrate",999,  0,        0,  "Skip calibration after write." },
+  {"fuse",        'f', "FUSE",   0,  "FUSE value, e.g. 0x31FD"},
+  {"runvdd",      'r', "VDD",    0,  "Voltage for running the IC. Default: 5.0" },
+  {"icname",      'n', "NAME",   0,  "IC name, e.g. PFS154" },
+  {"icid",        'i', "ID",     0,  "IC ID 12 bit, e.g. 0xAA1" },
+  {"serial",      's', "SERIAL", 0,  "SERIAL value (64bit), e.g. 0x123456789ABCDEF0"},
   { 0 }
 };
 
@@ -59,6 +61,7 @@ struct easypdkprog_args {
   int      noblankcheck;
   int      noverify;
   uint16_t fuse;
+  uint64_t serial;
   float    runvdd;
   char     *ic;
   uint16_t icid;
@@ -81,6 +84,7 @@ static error_t easypdkprog_parse_opt(int key, char *arg, struct argp_state *stat
     case 'n': arguments->ic = arg; break;
     case 'i': if(arg) arguments->icid = strtol(arg,NULL,16); break;
     case 'r': if(arg) sscanf(arg,"%f",&arguments->runvdd); break;
+    case 's': if(arg) arguments->serial = strtoull(arg,NULL,16); break;
 
     case ARGP_KEY_ARG:
       if(0 == state->arg_num)
@@ -122,7 +126,7 @@ int main( int argc, const char * argv [] )
   //immediate output on stdout (no buffering)
   setvbuf(stdout,0,_IONBF,0);
   
-  struct easypdkprog_args arguments = { .runvdd=5.0, .fuse=0xFFFF };
+  struct easypdkprog_args arguments = { .runvdd=5.0, .fuse=0xFFFF, .serial=0x4C41495245535046ULL };
   argp_parse(&argp, argc, (char**)argv, 0, 0, &arguments);
 
   verbose_set(arguments.verbose);
@@ -406,6 +410,19 @@ int main( int argc, const char * argv [] )
 
       if( !arguments.nocalibrate )
         do_calibration = FPDKCALIB_InsertCalibration(icdata, data, len, &calibrate_frequency, &calibrate_millivolt, &calibrate_prg_type, &calibrate_prg_algo, &calibrate_prg_loopcycles, &calibrate_prg_pos);
+
+      int inserts = FPDKSERIAL_InsertSerial(icdata, data, len, arguments.serial);
+
+      if( arguments.serial != 0x4C41495245535046ULL )
+        printf("Setting serial: 0x%016llX (%d insertions)\n", arguments.serial, inserts);
+      else
+      {
+        if( inserts>0 )
+        {
+          printf("ERROR: Firmware uses serial feature, but no serial specified. Use --serial option.\n");
+          return -22;
+        }
+      }
 
       printf("Writing IC... ");
 

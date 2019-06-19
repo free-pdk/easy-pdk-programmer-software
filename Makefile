@@ -18,7 +18,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 DEP=  $(wildcard *.h)
-SRC=  serialcom.c fpdkutil.c fpdkcom.c fpdkicdata.c fpdkihex8.c fpdkiccalib.c
+SRC=  serialcom.c fpdkutil.c fpdkcom.c fpdkicdata.c fpdkihex8.c fpdkiccalib.c fpdkicserial.c
 OBJ=  $(subst .c,.o,$(SRC))
 
 easypdkprog: $(ARGPSALIB) $(DEP) $(OBJ) easypdkprog.c
