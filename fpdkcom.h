@@ -29,7 +29,7 @@ int      FPDKCOM_Open(const char* devname);
 
 int      FPDKCOM_Close(const int fd);
 
-bool     FPDKCOM_GetVersion(const int fd, float* hw, float* sw, float* proto);
+bool     FPDKCOM_GetVersion(const int fd, unsigned int *hw_major, unsigned int *hw_minor, unsigned int *sw_major, unsigned int *sw_minor, unsigned int *proto_major, unsigned int *proto_minor);
 
 bool     FPDKCOM_SetLed(const int fd, const uint8_t ledbits);
 

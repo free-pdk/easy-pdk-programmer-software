@@ -197,7 +197,7 @@ int main( int argc, const char * argv [] )
       }
       else
       {
-        verbose_printf ("(tried serial ports up to %s)", compath);
+        verbose_printf (" (tried serial ports up to %s) ", compath);
         fprintf(stderr, "No programmer found\n");
       }
       return -1;
@@ -218,11 +218,11 @@ int main( int argc, const char * argv [] )
     }
   }
 
-  float hw,sw,proto;
-  if( !FPDKCOM_GetVersion(comfd, &hw, &sw, &proto) )
+  unsigned int hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor;
+  if( !FPDKCOM_GetVersion(comfd, &hw_major, &hw_minor, &sw_major, &sw_minor, &proto_major, &proto_minor) )
     return -1;
 
-  verbose_printf("FREE-PDK EASY PROG - Hardware:%.1f Firmware:%.1f Protocol:%.1f\n", hw, sw, proto);
+  verbose_printf("FREE-PDK EASY PROG - Hardware:%u.%u Firmware:%u.%u Protocol:%u.%u\n", hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor);
 
   switch( arguments.command )
   {

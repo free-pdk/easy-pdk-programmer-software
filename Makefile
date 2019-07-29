@@ -2,7 +2,7 @@ CC    ?= gcc
 RM    ?= rm -rf
 STRIP ?= strip
 
-CFLAGS += -Wall -O2 -std=c99
+CFLAGS += -std=c99 -pedantic -Wall -O2
 
 all: easypdkprog
 
