@@ -1,10 +1,13 @@
 Firmware for Easy PDK Programmer
 ================================
 
-Requirement: GNU Arm Embedded Toolchain: 
- * download and unpack from here: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
+Requirement: ARM toolchain
 
-Compile:
+Option 0: Toolchain from distribution
+ * install toolchain from distribution (e.g. on Debian-based GNU/Linux install the gcc-arm-none-eabi and libnewlib-arm-none-eabi packages)
+
+Option 1: GNU Arm Embedded Toolchain from ARM: 
+ * download and unpack from here: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
  * open Makefile and modify first line GCC_PATH to point to GNU ARM embedded Toolchain "bin" folder
    e.g. GCC_PATH = ../gcc-arm-none-eabi-8-2018-q4-major/bin
 
