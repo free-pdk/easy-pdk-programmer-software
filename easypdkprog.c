@@ -122,6 +122,8 @@ static error_t easypdkprog_parse_opt(int key, char *arg, struct argp_state *stat
 
 static struct argp argp = { easypdkprog_options, easypdkprog_parse_opt, easypdkprog_args_doc, easypdkprog_doc };
 
+#define PROTOCOL_MISMATCH_ERROR_STRING "Programmer protocol mismatch - Please update programmer firmware"
+
 int main( int argc, const char * argv [] )
 {
   //immediate output on stdout (no buffering)
@@ -156,7 +158,7 @@ int main( int argc, const char * argv [] )
   {
     if( !arguments.icid && !arguments.ic)
     {
-      printf("ERROR: IC NAME and OTP ID unspecified. Use -n or -o option.\n");
+      fprintf(stderr, "ERROR: IC NAME and OTP ID unspecified. Use -n or -o option.\n");
       return -2;
     }
     else
@@ -167,7 +169,7 @@ int main( int argc, const char * argv [] )
 
       if( !icdata )
       {
-        printf("ERROR: Unknown IC NAME / OTP ID.\n");
+        fprintf(stderr, "ERROR: Unknown IC NAME / OTP ID.\n");
         return -2;
       }
     }
@@ -175,7 +177,7 @@ int main( int argc, const char * argv [] )
 
   if( ('w'==arguments.command) && !arguments.inoutfile )
   {
-    printf("ERROR: Write requires an input file.\n");
+    fprintf(stderr, "ERROR: Write requires an input file.\n");
     return -3;
   }
 
@@ -191,10 +193,14 @@ int main( int argc, const char * argv [] )
       if( -3 == comfd )
       {
         verbose_printf(" found: %s\n", compath);
-        printf("Error: Programmer protocol mismatch. Please update programmer firmware.\n");
+        printf("Error: " PROTOCOL_MISMATCH_ERROR_STRING ".\n");
       }
       else
-        printf("No programmer found\n");
+      {
+        verbose_printf ("(tried serial ports up to %s)", compath);
+        fprintf(stderr, "No programmer found\n");
+      }
+      return -1;
     }
     else
       verbose_printf(" found: %s\n", compath);
@@ -203,11 +209,14 @@ int main( int argc, const char * argv [] )
   {
     comfd = FPDKCOM_Open(arguments.port);
     if( comfd<0 )
-      printf("Error %d connecting to programmer on port: %s\n\n", comfd, arguments.port);
+    {
+      if ( -3 == comfd )
+        fprintf(stderr, "Error %d (" PROTOCOL_MISMATCH_ERROR_STRING ") connecting to programmer on port: %s\n\n", comfd, arguments.port);
+      else
+        fprintf(stderr, "Error %d connecting to programmer on port: %s\n\n", comfd, arguments.port);
+      return -1;
+    }
   }
-
-  if( comfd<0 )
-    return -1;
 
   float hw,sw,proto;
   if( !FPDKCOM_GetVersion(comfd, &hw, &sw, &proto) )
@@ -228,7 +237,7 @@ int main( int argc, const char * argv [] )
       else
       if( (icid>=FPDK_ERR_ERROR) && (icid<=0xFFFF) )
       {
-        printf("ERROR: %s\n",FPDK_ERR_MSG[icid&0x000F]);
+        fprintf(stderr, "ERROR: %s\n",FPDK_ERR_MSG[icid&0x000F]);
         return -4;
       }
       else
@@ -269,13 +278,13 @@ int main( int argc, const char * argv [] )
       int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, 0, icdata->addressbits, 0, icdata->codebits, icdata->codewords);
       if( r>=FPDK_ERR_ERROR )
       {
-        printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+        fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
         return -4;
       }
       else
       if( r != icdata->id12bit )
       {
-        printf("ERROR: Read failed.\n");
+        fprintf(stderr, "ERROR: Read failed.\n");
         return -5;
       }
       else
@@ -296,7 +305,7 @@ int main( int argc, const char * argv [] )
               }
               else
               {
-                printf("ERROR: Could not write file: %s\n", arguments.inoutfile);
+                fprintf(stderr, "ERROR: Could not write file: %s\n", arguments.inoutfile);
                 return -6;
               }
             }
@@ -304,14 +313,14 @@ int main( int argc, const char * argv [] )
             {
               if( FPDKIHEX8_WriteFile(arguments.inoutfile, buf, icdata->codewords*sizeof(uint16_t)) < 0 )
               {
-                printf("ERROR: Could not write file: %s\n", arguments.inoutfile);
+                fprintf(stderr, "ERROR: Could not write file: %s\n", arguments.inoutfile);
                 return -6;
               }
             }
           }
           else
           {
-            printf("ERROR: Could not read data from programmer\n");
+            fprintf(stderr, "ERROR: Could not read data from programmer\n");
             return -7;
           }
         }
@@ -323,13 +332,13 @@ int main( int argc, const char * argv [] )
     {
       if( !icdata->vdd_cmd_write  || !icdata->vpp_cmd_write || !icdata->vdd_write_hv || !icdata->vpp_write_hv )
       {
-        printf("Write for this IC not implemented yet.\n");
+        fprintf(stderr, "Write for this IC not implemented yet.\n");
         return -20;
       }
       uint16_t write_data[0x1800];
       if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, 0x1800) < 0 )
       {
-        printf("ERROR: Invalid input file / not ihex8 format.\n");
+        fprintf(stderr, "ERROR: Invalid input file / not ihex8 format.\n");
         return -8;
       }
 
@@ -340,13 +349,13 @@ int main( int argc, const char * argv [] )
         int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, icdata->erase_clocks );
         if( r>=FPDK_ERR_ERROR )
         {
-          printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
           return -4;
         }
         else
         if( r != icdata->id12bit )
         {
-          printf("ERROR: Erase failed.\n");
+          fprintf(stderr, "ERROR: Erase failed.\n");
           return -9;
         }
         else
@@ -359,12 +368,12 @@ int main( int argc, const char * argv [] )
         int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
         if( r>=FPDK_ERR_ERROR )
         {
-          printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
           return -4;
         }
         if( r != icdata->id12bit )
         {
-          printf("ERROR: Blank check failed.\n");
+          fprintf(stderr, "ERROR: Blank check failed.\n");
           return -10;
         }
         verbose_printf("done.\n");
@@ -420,7 +429,7 @@ int main( int argc, const char * argv [] )
       {
         if( inserts>0 )
         {
-          printf("ERROR: Firmware uses serial feature, but no serial specified. Use --serial option.\n");
+          fprintf(stderr, "ERROR: Firmware uses serial feature, but no serial specified. Use --serial option.\n");
           return -22;
         }
       }
@@ -429,7 +438,7 @@ int main( int argc, const char * argv [] )
 
       if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
       {
-        printf("ERROR: Could not send data to programmer\n");
+        fprintf(stderr, "ERROR: Could not send data to programmer\n");
         return -11;
       }
 
@@ -441,12 +450,12 @@ int main( int argc, const char * argv [] )
                                icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
       if( r>=FPDK_ERR_ERROR )
       {
-        printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+        fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
         return -4;
       }
       if( r != icdata->id12bit )
       {
-        printf("ERROR: Write failed.\n");
+        fprintf(stderr, "ERROR: Write failed.\n");
         return -12;
       }
       printf("done.\n");
@@ -462,7 +471,7 @@ int main( int argc, const char * argv [] )
         }
         if( r != icdata->id12bit )
         {
-          printf("ERROR: Verify failed.\n");
+          fprintf(stderr, "ERROR: Verify failed.\n");
           return -13;
         }
         verbose_printf("done.\n");
@@ -477,7 +486,7 @@ int main( int argc, const char * argv [] )
 
         if( !FPDKCOM_SetBuffer(comfd, fuseaddr*2, fusedata, sizeof(fusedata)) )
         {
-          printf("ERROR: Could not send data to programmer\n");
+          fprintf(stderr, "ERROR: Could not send data to programmer\n");
           return -14;
         }
 
@@ -487,12 +496,12 @@ int main( int argc, const char * argv [] )
                                  icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
         if( r>=FPDK_ERR_ERROR )
         {
-          printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
           return -4;
         }
         if( r != icdata->id12bit )
         {
-          printf("ERROR: Write fuse failed.\n");
+          fprintf(stderr, "ERROR: Write fuse failed.\n");
           return -15;
         }
         printf("done.\n");
@@ -537,7 +546,7 @@ int main( int argc, const char * argv [] )
           //TODO: OPTIMIZE: only write part
           if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
           {
-            printf("ERROR: Could not send data to programmer\n");
+            fprintf(stderr, "ERROR: Could not send data to programmer\n");
             return -16;
           }
 
@@ -549,18 +558,18 @@ int main( int argc, const char * argv [] )
                                    icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
           if( r>=FPDK_ERR_ERROR )
           {
-            printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+            fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
             return -4;
           }
           if( r != icdata->id12bit )
           {
-            printf("ERROR: Write calibration failed.\n");
+            fprintf(stderr, "ERROR: Write calibration failed.\n");
             return -16;
           }
         }
         else
         {
-          printf("ERROR: Removing calibration function.\n");
+          fprintf(stderr, "ERROR: Removing calibration function.\n");
           return -17;
         }
         printf("done.\n");
@@ -572,12 +581,12 @@ int main( int argc, const char * argv [] )
     {
       if( FPDK_IC_FLASH != icdata->type )
       {
-        printf("ERROR: Only FLASH type IC can get erased\n");
+        fprintf(stderr, "ERROR: Only FLASH type IC can get erased\n");
         return -18;
       }
       if( !icdata->vdd_cmd_erase  || !icdata->vpp_cmd_erase || !icdata->vdd_erase_hv || !icdata->vpp_erase_hv )
       {
-        printf("Erase for this IC not implemented yet.\n");
+        fprintf(stderr, "Erase for this IC not implemented yet.\n");
         return -20;
       }
 
@@ -585,13 +594,13 @@ int main( int argc, const char * argv [] )
       int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, icdata->erase_clocks );
       if( r>=FPDK_ERR_ERROR )
       {
-        printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+        fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
         return -4;
       }
       else
       if( r != icdata->id12bit )
       {
-        printf("ERROR: Erasing IC failed.\n");
+        fprintf(stderr, "ERROR: Erasing IC failed.\n");
         return -19;
       }
       else
@@ -604,12 +613,12 @@ int main( int argc, const char * argv [] )
           int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
           if( r>=FPDK_ERR_ERROR )
           {
-            printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+            fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
             return -4;
           }
           if( r != icdata->id12bit )
           {
-            printf("ERROR: Blank check IC failed.\n");
+            fprintf(stderr, "ERROR: Blank check IC failed.\n");
             return -21;
           }
           verbose_printf("done.\n");
@@ -623,7 +632,7 @@ int main( int argc, const char * argv [] )
       printf("Running IC (%.2fV)... ", arguments.runvdd);
       if( !FPDKCOM_IC_StartExecution(comfd, arguments.runvdd) )
       {
-        printf("ERROR: Could not start IC.\n");
+        fprintf(stderr, "ERROR: Could not start IC.\n");
         return -22;
       }
       printf("IC started, press [Esc] to stop.\n");
