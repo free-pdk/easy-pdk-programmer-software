@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <unistd.h>
 
 #include "fpdkutil.h"
@@ -414,7 +415,7 @@ int main( int argc, const char * argv [] )
       int inserts = FPDKSERIAL_InsertSerial(icdata, data, len, arguments.serial);
 
       if( arguments.serial != 0x4C41495245535046ULL )
-        printf("Setting serial: 0x%016llX (%d insertions)\n", arguments.serial, inserts);
+        printf("Setting serial: 0x%" PRIX64 " (%d insertions)\n", arguments.serial, inserts);
       else
       {
         if( inserts>0 )

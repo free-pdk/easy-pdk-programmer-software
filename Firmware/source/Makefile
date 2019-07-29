@@ -1,4 +1,4 @@
-GCC_PATH = ../../../../gcc-arm-none-eabi-8-2018-q4-major/bin
+#GCC_PATH = ../../../../gcc-arm-none-eabi-8-2018-q4-major/bin
 BUILD_DIR = build
 
 TARGET = EASYPDKPROG

@@ -326,7 +326,7 @@ FPDKICDATA* FPDKICDATA_GetICDataForOTPByCmdResponse(const FPDKICTYPE type, const
       break;
 
     default:
-      return NULL;
+      return 0;
   }
 
   FPDKICDATA* icdata = _FPDKICDATA_GetICDataById12BitAndCodebits(type, cmdrsp, 16);   //try as 16 codebits words
