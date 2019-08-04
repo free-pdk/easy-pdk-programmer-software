@@ -158,7 +158,7 @@ int main( int argc, const char * argv [] )
   {
     if( !arguments.icid && !arguments.ic)
     {
-      fprintf(stderr, "ERROR: IC NAME and OTP ID unspecified. Use -n or -o option.\n");
+      fprintf(stderr, "ERROR: IC NAME and IC ID unspecified. Use -n or -i option.\n");
       return -2;
     }
     else
@@ -169,7 +169,7 @@ int main( int argc, const char * argv [] )
 
       if( !icdata )
       {
-        fprintf(stderr, "ERROR: Unknown IC NAME / OTP ID.\n");
+        fprintf(stderr, "ERROR: Unknown IC NAME / IC ID.\n");
         return -2;
       }
     }
