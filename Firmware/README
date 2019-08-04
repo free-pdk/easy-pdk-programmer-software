@@ -14,17 +14,15 @@ Install "dfu-util" on your computer: http://dfu-util.sourceforge.net
 4. ONLY AFTER USB is connected release the button
 
 5. EXECUTE: 
-   dfu-util -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D EASYPDKPROG.bin 
+   dfu-util -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D EASYPDKPROG.dfu
 
    EXAMPLE OUTPUT:
    ---------------
    dfu-util 0.9
    ...
-   dfu-util: Invalid DFU suffix signature
-   dfu-util: A valid DFU suffix will be required in a future dfu-util release!!!
    Opening DFU capable USB device...
    ID 0483:df11
-    Run-time device DFU version 011a
+   Run-time device DFU version 011a
    Claiming USB DFU Interface...
    Setting Alternate Setting #0 ...
    Determining device status: state = dfuIDLE, status = 0

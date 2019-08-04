@@ -68,7 +68,8 @@ CP = $(PREFIX)objcopy
 SZ = $(PREFIX)size
 endif
 BIN = $(CP) -O binary -S
- 
+DFU = dfu-suffix
+
 #######################################
 # CFLAGS
 #######################################
@@ -141,8 +142,8 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin
 
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET).dfu
 
 #######################################
 # build the application
@@ -167,6 +168,10 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
+$(BUILD_DIR)/%.dfu: $(BUILD_DIR)/%.bin | $(BUILD_DIR)
+	cp $< $@
+	-$(DFU) -v 0483 -p df11 -a $@
+
 $(BUILD_DIR):
 	mkdir $@		
 
