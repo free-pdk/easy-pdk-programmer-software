@@ -7,14 +7,19 @@ CFLAGS += -std=c99 -pedantic -Wall -O2
 all: easypdkprog
 
 UNAME_S := $(shell uname -s)
-ifneq ($(UNAME_S),Linux)
-    ARGPSA    = lib/argp-standalone-1.3
-    ARGPSALIB = $(ARGPSA)/libargp.a
-    CFLAGS  += -I$(ARGPSA)
+
+ifeq ($(OSTYPE),msys)
+    UNAME_S := Windows
 endif
 
 ifeq ($(OS),Windows_NT)
     EXE_EXTENSION := .exe
+endif
+
+ifneq ($(UNAME_S),Linux)
+    ARGPSA    = lib/argp-standalone-1.3
+    ARGPSALIB = $(ARGPSA)/libargp.a
+    CFLAGS  += -I$(ARGPSA)
 endif
 
 DEP=  $(wildcard *.h)
