@@ -34,6 +34,11 @@ else
     fi
 fi
 
+cp INSTALL LICENSE $DESTDIR
+
+mkdir -p  $DESTDIR/Firmware
+cp Firmware/* $DESTDIR/Firmware
+
 cd build
 zip -r -9 "EASYPDKPROG_${OS}_${DATE}_${GIT}.zip" "EASYPDKPROG"
 cd ..
