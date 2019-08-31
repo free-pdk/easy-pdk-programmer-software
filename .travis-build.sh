@@ -37,7 +37,7 @@ fi
 cp INSTALL LICENSE $DESTDIR
 
 mkdir -p  $DESTDIR/Firmware
-cp Firmware/* $DESTDIR/Firmware
+cp Firmware/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README $DESTDIR/Firmware
 
 cd build
 zip -r -9 "EASYPDKPROG_${OS}_${DATE}_${GIT}.zip" "EASYPDKPROG"
