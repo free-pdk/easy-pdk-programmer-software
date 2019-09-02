@@ -186,7 +186,7 @@ static uint16_t _FPDKCALIB_GetAlgoLength(const FPDKCALIBCP* algo)
 static uint16_t _FPDKCALIB_FindPattern(const uint16_t* code, const uint16_t codewords, const FPDKCALIBCP* algo)
 {
   uint16_t algowords = _FPDKCALIB_GetAlgoLength(algo);
-  for( uint16_t p=0; p<=codewords-(algowords-1); p++ )
+  for( uint16_t p=0; p<=codewords-(algowords); p++ )
   {
     bool match = true;
     for( uint16_t m=0; m<algowords; m++ )

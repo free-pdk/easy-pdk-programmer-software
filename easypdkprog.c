@@ -390,7 +390,7 @@ int main( int argc, const char * argv [] )
         if( write_data[p] & 0xFF00 )
         {
           data[p] = write_data[p]&0xFF;
-          len = p;
+          len = p + 1;
         }
       }
 

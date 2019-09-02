@@ -45,7 +45,7 @@ int FPDKSERIAL_InsertSerial(const FPDKICDATA* icdata, uint8_t* code, const uint1
     default:
       return 0;
   }
-  for( uint16_t p=0; p<=len16-(8-1); p++ )
+  for( uint16_t p=0; p<=len16-8; p++ )
   {
     //search pattern
     if( 0 == memcmp( &code16[p], &_serial_pattern[idx][0], 8*2 ) )

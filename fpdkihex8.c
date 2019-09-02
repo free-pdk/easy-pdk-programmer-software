@@ -80,9 +80,7 @@ int FPDKIHEX8_ReadFile(const char* filename, uint16_t* datout, const uint16_t da
     return -1;
 
   bool berr = false;
-//  char *line = 0;
-//  size_t len = 0;
-//  while( getline(&line, &len, fin)>0 )
+
   char line[600];
   while( NULL != fgets(line, sizeof(line), fin) )
   {
@@ -108,9 +106,6 @@ int FPDKIHEX8_ReadFile(const char* filename, uint16_t* datout, const uint16_t da
     for( uint8_t p=0; p<count; p++ )
       datout[address+p] = 0x100 + tmp[p];
   }
-
-//  if( line )
-//    free(line);
 
   fclose(fin);
 
