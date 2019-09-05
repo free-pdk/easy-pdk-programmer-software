@@ -239,13 +239,22 @@ bool FPDKCOM_SetBuffer(const int fd, const uint16_t woffset, const uint8_t* dat,
 
 int FPDKCOM_GetBuffer(const int fd, const uint16_t roffset, uint8_t* dat, const uint16_t len)
 {
-  uint8_t cdata[] = { roffset&0xFF, roffset>>8, len&0xFF, len>>8 };
-  uint8_t resp[3 + 0x1000*sizeof(uint16_t)];
-  if( len>(sizeof(resp)-3) )
-    return -1;
-  if( len != (_FPDKCOM_SendReceiveCommand(fd, FPDKPROTO_CMD_GETBUF, cdata, sizeof(cdata), resp, 3+len)-3) )
-    return -2;
-  memcpy( dat, &resp[3], len );
+  uint16_t p;
+  for( p=0; p<len; )
+  {
+    uint16_t rlen = len;
+#if defined(_WIN32)
+    if( rlen>63 ) rlen = 63; //work around for windows serial receive problems
+#endif
+    uint8_t cdata[] = { (p+roffset)&0xFF, (p+roffset)>>8, rlen&0xFF, rlen>>8 };
+    uint8_t resp[3 + 0x1000*sizeof(uint16_t)];
+    if( rlen>(sizeof(resp)-3) )
+      return -1;
+    if( rlen != (_FPDKCOM_SendReceiveCommand(fd, FPDKPROTO_CMD_GETBUF, cdata, sizeof(cdata), resp, 3+rlen)-3) )
+      return -2;
+    memcpy( dat+p, &resp[3], rlen );
+    p += rlen;
+  }
   return(len);
 }
 
