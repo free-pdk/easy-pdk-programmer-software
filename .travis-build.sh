@@ -24,6 +24,7 @@ mkdir -p $DESTDIR
 if [ "$OSTYPE" == "msys" ]; then
     OS="WIN"
     cp easypdkprog $DESTDIR/easypdkprog.exe
+    cp Windows_STM32VCPDriver $DESTDIR/
 else
     if [[ $OSTYPE =~ darwin.* ]]; then
         OS="MAC"
