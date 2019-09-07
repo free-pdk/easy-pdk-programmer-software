@@ -13,13 +13,14 @@ https://free-pdk.github.io
   -b, --bin                  Binary file output. Default: ihex8
   -f, --fuse=FUSE            FUSE value, e.g. 0x31FD
   -i, --icid=ID              IC ID 12 bit, e.g. 0xAA1
-      --noverify             Skip verify after write
+      --noblankchk           Skip blank check before write
       --nocalibrate          Skip calibration after write.
   -n, --icname=NAME          IC name, e.g. PFS154
-      --noblankchk           Skip blank check before write
       --noerase              Skip erase before write
+      --noverify             Skip verify after write
   -p, --port=PORT            COM port of programmer. Default: Auto search
   -r, --runvdd=VDD           Voltage for running the IC. Default: 5.0
+  -s, --serial=SERIAL        SERIAL value (64bit), e.g. 0x123456789ABCDEF0
       --securefill           Fill unused space with 0 (NOP) to prevent readout
   -v, --verbose              Verbose output
   -?, --help                 Give this help list
