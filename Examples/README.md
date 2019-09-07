@@ -1,7 +1,7 @@
 Hello World! for Padauk ICs.
 ============================
 
-Helloworld is a sample program which show how to setup the processor and how to send a "Hello World!" string over a software emulated serial output on PA7.
+Helloworld is a sample program which shows how to setup the processor and how to send a "Hello World!" string over a software emulated serial output on PA7.
 
 Easy PDK programmer can capture serial data and shows it as output in easypdkprog (baud rate is autodetected, first character sent must be 0x55 for autobaud).
 
