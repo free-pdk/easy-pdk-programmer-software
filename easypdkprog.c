@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkihex8.h"
 #include "argp.h"
 
-const char *argp_program_version                = "easypdkprog 1.1";
+const char *argp_program_version                = "easypdkprog 1.2";
 static const char easypdkprog_doc[]             = "easypdkprog -- read, write and execute programs on PADAUK microcontroller\nhttps://free-pdk.github.io";
 static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start [FILE]";
 
