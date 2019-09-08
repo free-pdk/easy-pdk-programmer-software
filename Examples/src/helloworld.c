@@ -35,14 +35,14 @@ unsigned char _sdcc_external_startup(void)
 {
   EASY_PDK_INIT_SYSCLOCK_8MHZ();                //use 8MHz sysclock
   EASY_PDK_CALIBRATE_IHRC(8000000,4000);        //tune SYSCLK to 8MHz @ 4.000V
-	return 0;                                     //perform normal initialization
+  return 0;                                     //perform normal initialization
 }
 
 void main(void)
 {
   //setup timer2 (TM2) interrupt for 115200 baud
   _tm2c = TM2C_CLK_IHRC;                        //use IHRC -> 16 Mhz
-  _tm2s = TM2S_PRESCALE_NONE | TM2S_SCALE_DIV2; //TODO    //no prescale, scale 2 ~> 8MHz
+  _tm2s = TM2S_PRESCALE_NONE | TM2S_SCALE_DIV2; //no prescale, scale 2 ~> 8MHz
   _tm2b = 68;                                   //divide by (68+1) ~> 115942 Hz (apx. 115200)
 
   _pac = 0x80;                                  //enable PA.7 as output

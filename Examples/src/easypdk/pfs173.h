@@ -287,7 +287,7 @@ __sfr16          _t16c;
 #define MISC_LVR_BANDGAP_AUTO        0x03
 
 //gpcc definitions
-#define GPCC_COMP_PLUS_VINT          0x00
+#define GPCC_COMP_PLUS_VINT_R        0x00
 #define GPCC_COMP_PLUS_PA4           0x01
 #define GPCC_COMP_MINUS_PA3          0x00
 #define GPCC_COMP_MINUS_PA4          0x02
@@ -485,5 +485,19 @@ __sfr16          _t16c;
 #define PWMG2C_OUT_PB2               0x08
 #define PWMG2C_OUT_PA5               0x0A
 #define PWMG2C_OUT_PB5               0x0C
+
+//rop definitions
+//#define ROP_UNK_PB0                  0x00
+//#define ROP_UNK_PA4                  0x01
+//#define ROP_UNK_PA0                  0x02
+//#define ROP_UNK_PB5                  0x03
+#define ROP_TMX_6BIT                   0x00
+#define ROP_TMX_7BIT                   0x10
+#define ROP_TMX_16MHZ                  0x00
+#define ROP_TMX_32MHZ                  0x20
+#define ROP_PURE_PWM                   0x00
+#define ROP_GPC_PWM                    0x40
+#define ROP_PWM_16MHZ                  0x00
+#define ROP_PWM_32MHZ                  0x80
 
 #endif //__PFS173_H__
