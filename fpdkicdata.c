@@ -91,6 +91,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   },
 
   { .name                         = "PMS150C",
+    .name_variant_1               = "PMS15A",
     .otpid                        = 0x2A16,
     .id12bit                      = 0xA16,          //OTP_WAY: 0x12
     .type                         = FPDK_IC_OTP1_2,
