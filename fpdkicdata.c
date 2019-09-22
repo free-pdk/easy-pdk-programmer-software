@@ -279,6 +279,29 @@ static const FPDKICDATA fpdk_ic_table[] =
 */
   },
 
+  { .name                         = "MCU390",
+    .otpid                        = 0x2A31,
+    .id12bit                      = 0xC31,          //OTP_WAY: 0x15
+    .type                         = FPDK_IC_OTP1_2,
+    .addressbits                  = 12,
+    .codebits                     = 14,
+    .codewords                    = 0x800,
+    .ramsize                      = 0x80,
+    .exclude_code_start           = 0x7F6,
+    .exclude_code_end             = 0x800,
+    .vdd_cmd_read                 = 3.0,
+    .vpp_cmd_read                 = 5.0,
+/*
+    .vdd_cmd_write                = 4.3,
+    .vpp_cmd_write                = 8.0,
+    .vdd_write_hv                 = 5.8,
+    .vpp_write_hv                 = 10.5,
+    .write_block_size             = 2,
+    .write_block_clock_groups     = 1,
+    .write_block_clocks_per_group = 8,
+*/
+  },
+
 };
 
 FPDKICDATA* FPDKICDATA_GetICDataById12Bit(const uint16_t id12bit)
