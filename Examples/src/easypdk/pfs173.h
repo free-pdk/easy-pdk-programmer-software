@@ -52,7 +52,7 @@ __sfr __at(0x24) _adcrgc;
 //0x25
 __sfr __at(0x26) _misc;
 __sfr __at(0x27) _misc2;
-__sfr __at(0x28) _misc_lvr;
+__sfr __at(0x28) _misclvr;
 //0x2a
 __sfr __at(0x2b) _gpcc;
 __sfr __at(0x2c) _gpcs;
@@ -102,6 +102,61 @@ __sfr __at(0x67) _rop;
 
 //T16C register
 __sfr16          _t16c;
+
+#define CLKMD     _clkmd
+#define INTEN     _inten
+#define INTRQ     _intrq
+#define T16M      _t16m
+#define EOSCR     _eoscr
+#define IHRCR     _ihrcr
+#define INTEGS    _inetgs
+#define PADIER    _padier
+#define PBDIER    _pbdier
+#define PCDIER    _pcdier
+#define PA        _pa
+#define PAC       _pac
+#define PAPH      _paph
+#define PB        _pb
+#define PBC       _pbc
+#define PBPH      _pbph
+#define PC        _pc
+#define PCC       _pcc
+#define PCPH      _pcph
+#define PBPL      _pbpl
+#define PCPL      _pcpl
+#define ADCC      _adcc
+#define ADCM      _adcm
+#define ADCR      _adcr
+#define ADCRGC    _adcrgc
+#define MISC      _misc
+#define MISC2     _misc2
+#define MISCLVR   _misclvr
+#define GPCC      _gpcc
+#define GPCS      _gpcs
+#define TM2C      _tm2c
+#define TM2CT     _tm2ct
+#define TM2S      _tm2s
+#define TM2B      _tm2b
+#define TM3C      _tm3c
+#define TM3CT     _tm3ct
+#define TM3S      _tm3s
+#define TM3B      _tm3b
+#define PWMG0C    _pwmg0c
+#define PWMGCLK   _pwmgclk
+#define PWMG0DTH  _pwmg0dth
+#define PWMG0DTL  _pwmg0dtl
+#define PWMGCUBH  _pwmgcubh
+#define PWMGCUBL  _pwmgcubl
+#define PWMG1C    _pwmg1c
+#define PWMG1DTH  _pwmg1dth
+#define PWMG1DTL  _pwmg1dtl
+#define PWMG2C    _pwmg2c
+#define PWMG2DTH  _pwmg2dth
+#define PWMG2DTL  _pwmg2dtl
+#define ILRCR     _ilrcr
+#define BGTR      _bgtr
+#define ROP       _rop
+#define T16C      _t16c
 
 //clkmd definitions
 #define CLKMD_ENABLE_PA5RST          0x01
@@ -265,26 +320,26 @@ __sfr16          _t16c;
 #define MISC2_COMP_EDGE_INT_FALL     0x40
 
 //misc_lvr definitions
-#define MISC_LVR_1V8                 0x00
-#define MISC_LVR_1V9                 0x10
-#define MISC_LVR_2V                  0x20
-#define MISC_LVR_2V1                 0x30
-#define MISC_LVR_2V2                 0x40
-#define MISC_LVR_2V3                 0x50
-#define MISC_LVR_2V4                 0x60
-#define MISC_LVR_2V5                 0x70
-#define MISC_LVR_2V75                0x80
-#define MISC_LVR_3V                  0x90
-#define MISC_LVR_3V15                0xA0
-#define MISC_LVR_3V3                 0xB0
-#define MISC_LVR_3V5                 0xC0
-#define MISC_LVR_3V75                0xD0
-#define MISC_LVR_4V                  0xE0
-#define MISC_LVR_4V5                 0xF0
-#define MISC_LVR_BANDGAP_ON          0x00
-#define MISC_LVR_BANDGAP_DIV4        0x01
-#define MISC_LVR_BANDGAP_DIV32       0x02
-#define MISC_LVR_BANDGAP_AUTO        0x03
+#define MISCLVR_1V8                  0x00
+#define MISCLVR_1V9                  0x10
+#define MISCLVR_2V                   0x20
+#define MISCLVR_2V1                  0x30
+#define MISCLVR_2V2                  0x40
+#define MISCLVR_2V3                  0x50
+#define MISCLVR_2V4                  0x60
+#define MISCLVR_2V5                  0x70
+#define MISCLVR_2V75                 0x80
+#define MISCLVR_3V                   0x90
+#define MISCLVR_3V15                 0xA0
+#define MISCLVR_3V3                  0xB0
+#define MISCLVR_3V5                  0xC0
+#define MISCLVR_3V75                 0xD0
+#define MISCLVR_4V                   0xE0
+#define MISCLVR_4V5                  0xF0
+#define MISCLVR_BANDGAP_ON           0x00
+#define MISCLVR_BANDGAP_DIV4         0x01
+#define MISCLVR_BANDGAP_DIV32        0x02
+#define MISCLVR_BANDGAP_AUTO         0x03
 
 //gpcc definitions
 #define GPCC_COMP_PLUS_VINT_R        0x00

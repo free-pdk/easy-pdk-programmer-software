@@ -48,6 +48,28 @@ __sfr __at(0x1f) _ilrcr;
 //T16C register
 __sfr16          _t16c;
 
+#define CLKMD   _clkmd
+#define INTEN   _inten
+#define INTRQ   _intrq
+#define T16M    _t16m
+#define TM2B    _tm2b
+#define EOSCR   _eoscr
+#define IHRCR   _ihrcr
+#define INTEGS  _inetgs
+#define PADIER  _padier
+#define PA      _pa
+#define PAC     _pac
+#define PAPH    _paph
+#define TM2S    _tm2s
+#define BGTR    _bgtr
+#define GPCC    _gpcc
+#define MISC    _misc
+#define TM2C    _tm2c
+#define TM2CT   _tm2ct
+#define GPCS    _gpcs
+#define ILRCR   _ilrcr
+#define T16C    _t16c
+
 //clkmd definitions
 #define CLKMD_ENABLE_PA5RST          0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02

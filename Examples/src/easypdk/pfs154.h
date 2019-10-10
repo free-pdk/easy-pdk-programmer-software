@@ -39,7 +39,7 @@ __sfr __at(0x17) _tm2s;
 __sfr __at(0x18) _gpcc;
 __sfr __at(0x19) _gpcs;
 __sfr __at(0x1a) _bgtr;
-__sfr __at(0x1b) _misc_lvr;
+__sfr __at(0x1b) _misclvr;
 __sfr __at(0x1c) _tm2c;
 __sfr __at(0x1d) _tm2ct;
 //0x1e
@@ -79,6 +79,55 @@ __sfr __at(0x39) _ilrcr;
 
 //T16C register
 __sfr16          _t16c;
+
+#define CLKMD     _clkmd
+#define INTEN     _inten
+#define INTRQ     _intrq
+#define T16M      _t16m
+#define TM2B      _tm2b
+#define EOSCR     _eoscr
+#define IHRCR     _ihrcr
+#define INTEGS    _inetgs
+#define PADIER    _padier
+#define PBDIER    _pbdier
+#define MISC2     _misc2
+#define PA        _pa
+#define PAC       _pac
+#define PAPH      _paph
+#define PB        _pb
+#define PBC       _pbc
+#define PBPH      _pbph
+#define TM2S      _tm2s
+#define GPCC      _gpcc
+#define GPCS      _gpcs
+#define BGTR      _bgtr
+#define MISCLVR   _misclvr
+#define TM2C      _tm2c
+#define TM2CT     _tm2ct
+#define PWMG0C    _pwmg0c
+#define PWMG0S    _pwmg0s
+#define PWMG0DTH  _pwmg0dth
+#define PWMG0DTL  _pwmg0dtl
+#define PWMG0CUBH _pwmg0cubh
+#define PWMG0CUBL _pwmg0cubl
+#define PWMG1C    _pwmg1c
+#define PWMG1S    _pwmg1s
+#define PWMG1DTH  _pwmg1dth
+#define PWMG1DTL  _pwmg1dtl
+#define PWMG1CUBH _pwmg1cubh
+#define PWMG1CUBL _pwmg1cubl
+#define PWMG2C    _pwmg2c
+#define PWMG2S    _pwmg2s
+#define PWMG2DTH  _pwmg2dth
+#define PWMG2DTL  _pwmg2dtl
+#define PWMG2CUBH _pwmg2cubh
+#define PWMG2CUBL _pwmg2cubl
+#define TM3C      _tm3c
+#define TM3CT     _tm3ct
+#define TM3S      _tm3s
+#define TM3B      _tm3b
+#define ILRCR     _ilrcr
+#define T16C      _t16c
 
 //clkmd definitions
 #define CLKMD_ENABLE_PA5RST          0x01
@@ -192,14 +241,14 @@ __sfr16          _t16c;
 //#define MISC2_UNK_PWMG1              0x08
 
 //misc_lvr definitions
-#define MISC_LVR_4V                  0x00
-#define MISC_LVR_3V5                 0x20
-#define MISC_LVR_3V                  0x40
-#define MISC_LVR_2V75                0x60
-#define MISC_LVR_2V5                 0x70
-#define MISC_LVR_1V8                 0xA0
-#define MISC_LVR_2V2                 0xC0
-#define MISC_LVR_2V                  0xE0
+#define MISCLVR_4V                   0x00
+#define MISCLVR_3V5                  0x20
+#define MISCLVR_3V                   0x40
+#define MISCLVR_2V75                 0x60
+#define MISCLVR_2V5                  0x70
+#define MISCLVR_1V8                  0xA0
+#define MISCLVR_2V2                  0xC0
+#define MISCLVR_2V                   0xE0
 
 //tm2c definitions
 #define TM2C_CLK_DISABLE             0x00
