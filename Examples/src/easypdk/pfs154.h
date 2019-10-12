@@ -245,7 +245,7 @@ __sfr16          _t16c;
 #define MISCLVR_3V5                  0x20
 #define MISCLVR_3V                   0x40
 #define MISCLVR_2V75                 0x60
-#define MISCLVR_2V5                  0x70
+#define MISCLVR_2V5                  0x80
 #define MISCLVR_1V8                  0xA0
 #define MISCLVR_2V2                  0xC0
 #define MISCLVR_2V                   0xE0
