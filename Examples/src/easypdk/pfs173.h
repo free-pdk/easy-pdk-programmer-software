@@ -9,7 +9,7 @@
 
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H9
-#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_IHRC_L9
+#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L9
 
 //IO register definitions
 //__sfr __at(0x00) _flag;
