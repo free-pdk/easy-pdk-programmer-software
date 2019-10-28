@@ -142,11 +142,11 @@ int main( int argc, const char * argv [] )
       FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(id);
       if( icdata )
       {
-        printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes\n", icdata->name, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize);
+        printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_1[0] )
-          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes\n", icdata->name_variant_1, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize);
+          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_1, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_2[0] )
-          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes\n", icdata->name_variant_2, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize);
+          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_2, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
       }
     }
     return 0;
