@@ -9,12 +9,12 @@
 
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H9
-#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L9
+#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_IHRC_L9
 
 //IO register definitions
-//__sfr __at(0x00) _flag;
+__sfr __at(0x00) _flag;
 //0x01
-//__sfr __at(0x02) _sp;
+__sfr __at(0x02) _sp;
 __sfr __at(0x03) _clkmd;
 __sfr __at(0x04) _inten;
 __sfr __at(0x05) _intrq;
@@ -103,13 +103,15 @@ __sfr __at(0x67) _rop;
 //T16C register
 __sfr16          _t16c;
 
+#define SP        _sp
+#define FLAG      _flag
 #define CLKMD     _clkmd
 #define INTEN     _inten
 #define INTRQ     _intrq
 #define T16M      _t16m
 #define EOSCR     _eoscr
 #define IHRCR     _ihrcr
-#define INTEGS    _integs
+#define INTEGS    _inetgs
 #define PADIER    _padier
 #define PBDIER    _pbdier
 #define PCDIER    _pcdier
@@ -157,6 +159,12 @@ __sfr16          _t16c;
 #define BGTR      _bgtr
 #define ROP       _rop
 #define T16C      _t16c
+
+//flag definitions
+#define FLAG_ZF 1
+#define FLAG_CF 2
+#define FLAG_AC 4
+#define FLAG_OV 8
 
 //clkmd definitions
 #define CLKMD_ENABLE_PA5RST          0x01
