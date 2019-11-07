@@ -5,6 +5,8 @@
 #define _STRINGIFY(x) #x
 #define _ASMV(x) "_"_STRINGIFY(x)
 #define _ASMD(x) _STRINGIFY(x)
+#define _ASME(x) _ ## x
+#define _ASMS(x) _ASME(x)
 
 //definitions for built in opcodess
 #define __nop()      __asm__("nop\n")
