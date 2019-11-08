@@ -57,7 +57,7 @@ __sfr16          _t16c;
 #define TM2B    _tm2b
 #define EOSCR   _eoscr
 #define IHRCR   _ihrcr
-#define INTEGS  _inetgs
+#define INTEGS  _integs
 #define PADIER  _padier
 #define PA      _pa
 #define PAC     _pac
