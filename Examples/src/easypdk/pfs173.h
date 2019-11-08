@@ -111,7 +111,7 @@ __sfr16          _t16c;
 #define T16M      _t16m
 #define EOSCR     _eoscr
 #define IHRCR     _ihrcr
-#define INTEGS    _inetgs
+#define INTEGS    _integs
 #define PADIER    _padier
 #define PBDIER    _pbdier
 #define PCDIER    _pcdier
