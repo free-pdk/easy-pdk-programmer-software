@@ -92,7 +92,8 @@ void main(void)
   TM2S = TM2S_PRESCALE_NONE | TM2S_SCALE_NONE;  //no prescale, no scale
   TM2B = 33;                                    //divide by (33+1) ~> 230400 Hz (/4 phases = 57600)
 
-  PAC = 0x80;                                   //enable PA.7 as output
+  PAC = 0x80;                                   //enable PA.7 as output, PA.0 as input
+  PADIER = 0x01;                                //select PA.0 as digital input (required for PFS173)
   txdata = 0xD55F;                              //setup 2 stop bits, 0x55 char for autobaud, 1 start bit, 5 stop bits
   INTEN = INTEN_TM2;                            //enable TM2 interrupt, send out initial stop bits and autobaud char
   __engint();                                   //enable global interrupts
