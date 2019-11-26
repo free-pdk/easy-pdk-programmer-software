@@ -10,6 +10,7 @@
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
 #define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_IHRC_L8
+#define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { _ihrcr = *((const unsigned char*)(0x87ed)); }
 
 //IO register definitions
 __sfr __at(0x00) _flag;
