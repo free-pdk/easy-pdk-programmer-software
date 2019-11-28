@@ -12,6 +12,7 @@ PFS173:
 	mkdir -p $(OUTDIR)
 	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/helloworld_pfs173.ihx helloworld.c
 	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/serialecho_pfs173.ihx serialecho.c
+	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/adctest_pfs173.ihx adctest.c
 
 PMS150C:
 	mkdir -p $(OUTDIR)

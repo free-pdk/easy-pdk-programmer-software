@@ -1,11 +1,14 @@
-Hello World! for Padauk ICs.
-============================
-
-Helloworld is a sample program which shows how to setup the processor and how to send a "Hello World!" string over a software emulated serial output on PA7.
+Example programs for Padauk ICs.
+================================
 
 Easy PDK programmer can capture serial data and shows it as output in easypdkprog (baud rate is autodetected, first character sent must be 0x55 for autobaud).
 
-Serialecho is a simple example which shows how to receive (PA0) and send (PA7) at the same time. The baud rate is lowered to 57600 since higher baud rates consume more time in interrupt.
+* Helloworld is a sample program which shows how to setup the processor and how to send a "Hello World!" string over a software emulated serial output on PA7.
+
+* Serialecho is a simple example which shows how to receive (PA0) and send (PA7) at the same time. The baud rate is lowered to 57600 since higher baud rates consume more time in interrupt.
+
+* ADCtest shows how to use the ADC. First it measures the internal bandgap voltage of 1.2V and can then estimate VDD from it. Then it constantly measures and outputs the ADC value on PA.0.
+
 
 **INSERT IC**
 
