@@ -11,6 +11,8 @@
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
 #define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_IHRC_L8
 
+#define EASY_PDK_USE_FACTORY_BGTR() { _bgtr = *((const unsigned char*)(0x83f6)); }
+
 //IO register definitions
 __sfr __at(0x00) _flag;
 //0x01
@@ -217,7 +219,7 @@ __sfr16          _t16c;
 #define TM2S_SCALE_DIV32             0x1F
 
 //gpcc definitions
-#define GPCC_COMP_PLUS_VINT          0x00
+#define GPCC_COMP_PLUS_VINT_R        0x00
 #define GPCC_COMP_PLUS_PA4           0x01
 #define GPCC_COMP_MINUS_PA3          0x00
 #define GPCC_COMP_MINUS_PA4          0x02
