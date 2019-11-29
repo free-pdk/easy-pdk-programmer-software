@@ -15,6 +15,7 @@ PFS173:
 	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/serialecho_pfs173.ihx serialecho.c
 	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/comptest_pfs173.ihx comptest.c
 	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/adctest_pfs173.ihx adctest.c
+	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/polysound_pfs173.ihx polysound.c
 
 PMS150C:
 	mkdir -p $(OUTDIR)
