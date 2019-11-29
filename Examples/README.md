@@ -9,6 +9,7 @@ Easy PDK programmer can capture serial data and shows it as output in easypdkpro
 
 * ADCtest shows how to use the ADC. First it measures the internal bandgap voltage of 1.2V and can then estimate VDD from it. Then it constantly measures and outputs the ADC value on PA.0.
 
+* COMPtest shows how to use the comparator to estimate VDD using internal bandgap voltage of 1.2V and the internal resistor ladder.
 
 **INSERT IC**
 
