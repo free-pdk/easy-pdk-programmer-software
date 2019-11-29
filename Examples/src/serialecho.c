@@ -87,7 +87,7 @@ unsigned char _sdcc_external_startup(void)
 
 void main(void)
 {
-  //setup timer2 (TM2) interrupt for 115200 baud
+  //setup timer2 (TM2) interrupt for serial
   TM2C = TM2C_CLK_IHRC;                         //use IHRC -> (2 * 7.8336MHz) = 15.6672MHz
   TM2S = TM2S_PRESCALE_NONE | TM2S_SCALE_NONE;  //no prescale, no scale
   TM2B = 33;                                    //divide by (33+1) ~> 230400 Hz (/4 phases = 57600)

@@ -52,9 +52,6 @@ void main(void)
   __engint();                                   //enable global interrupts
 
   //setup ADC
-  PAC &= ~(1<<0);                               //disable PA.0 GPIO output
-  PAPH &= ~(1<<0);                              //disable pull up on PA.0, NOTE: also disable PxPL if available (e.g. on port B)
-  PADIER &= ~(1<<0);                            //disable PA.0 GPIO input
   ADCRGC = ADCRG_ADC_REF_VDD;                   //ADC reference voltage is VDD
   ADCM = ADCM_CLK_SYSCLK_DIV16;                 //SYSCLK 8MHZ/16 -> 500 kHz ADC clock
   ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD16_BANDGAP;//enable ADC and use channel 16 (internal bandgap voltage 1.2V)
@@ -72,7 +69,10 @@ void main(void)
   printf("%lu mV\n",vdd);
 
 
-  //switch to other ADC channel
+  //setup and switch to other ADC channel
+  PAC &= ~(1<<0);                               //disable PA.0 GPIO output
+  PAPH &= ~(1<<0);                              //disable pull up on PA.0, NOTE: also disable PxPL if available (e.g. on port B)
+  PADIER &= ~(1<<0);                            //disable PA.0 GPIO input
   ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD10_PA0;    //enable ADC and use channel 10 (PA.0)
                                                 //NOTE: a delay of 400usec is required after initialization, before first ADC conversion can start
   printf("Start ADC on PA.0\n");
