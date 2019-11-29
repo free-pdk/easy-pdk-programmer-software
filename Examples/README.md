@@ -11,6 +11,8 @@ Easy PDK programmer can capture serial data and shows it as output in easypdkpro
 
 * COMPtest shows how to use the comparator to estimate VDD using internal bandgap voltage of 1.2V and the internal resistor ladder.
 
+* PolySound is PWM based sound player emulating the 4 channel NES sound chip. Connect a speaker to PA.3 and GND. Original project from Joel Yliluoma : https://bisqwit.iki.fi/jutut/kuvat/programming_examples/pic/
+
 **INSERT IC**
 
 You can insert any SOP based PMS150C/PFS154/PFS173 IC into a SOP socket connected directly to Easy PDK programmer.
