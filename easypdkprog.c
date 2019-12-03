@@ -535,15 +535,17 @@ int main( int argc, const char * argv [] )
             return -17;
           }
 
+          printf("calibration result: ");
           switch( calibdata[calib].type )
           {
             case FPDKCALIB_IHRC:
             case FPDKCALIB_ILRC:
-              printf("calibration result: %dHz (0x%02X)  ", fcalfreq, fcalval); 
+              printf("%dHz ", fcalfreq);
               break;
             case FPDKCALIB_BG: 
               break;
           }
+          printf("(0x%02X)  ", fcalval);
 
           if( FPDKCALIB_RemoveCalibration( &calibdata[calib], data, fcalval) )
           {
