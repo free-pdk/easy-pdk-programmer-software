@@ -77,7 +77,7 @@ int      FPDKCOM_IC_Verify(const int fd, const uint16_t icid, const FPDKICTYPE t
 
 
 bool     FPDKCOM_IC_Calibrate(const int fd, const uint32_t type, const uint32_t vdd, const uint32_t freq, const uint32_t mult, 
-                              uint8_t* fcalval, uint32_t* fcalfreq, uint8_t* bgcalval);
+                              uint8_t* fcalval, uint32_t* fcalfreq);
 
 
 bool     FPDKCOM_IC_StartExecution(const int fd, const float vdd);

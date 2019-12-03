@@ -398,18 +398,17 @@ int FPDKCOM_IC_Verify(const int fd,
 }
 
 bool FPDKCOM_IC_Calibrate(const int fd, const uint32_t type, const uint32_t vdd, const uint32_t freq, const uint32_t mult,
-                          uint8_t* fcalval, uint32_t* fcalfreq, uint8_t* bgcalval)
+                          uint8_t* fcalval, uint32_t* fcalfreq)
 {
   uint8_t dat[] = {type,type>>8,type>>16,type>>24, vdd,vdd>>8,vdd>>16,vdd>>24, 
                    freq,freq>>8,freq>>16,freq>>24, mult,mult>>8,mult>>16,mult>>24};
 
-  uint8_t resp[3+3*sizeof(uint32_t)];
+  uint8_t resp[3+2*sizeof(uint32_t)];
   if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_CALIBRATEIC, (uint8_t*)dat, sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_CALIBRATEIC_TIMEOUT) )
     return false;
 
   *fcalval = resp[3];
   *fcalfreq = resp[ 7] | (((uint32_t)resp[ 8])<<8) | (((uint32_t)resp[ 9])<<16) | (((uint32_t)resp[10])<<24);
-  *bgcalval = resp[11];
 
   return true;
 }

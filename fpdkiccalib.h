@@ -24,16 +24,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef enum FPDKCALIBTYPE
 {
-  FPDKCALIB_IHRC,
-  FPDKCALIB_ILRC,
-  FPDKCALIB_BG,
-  FPDKCALIB_IHRC_BG,
-  FPDKCALIB_ILRC_BG,
+  FPDKCALIB_IHRC = 1,
+  FPDKCALIB_ILRC = 2,
+  FPDKCALIB_BG   = 3,
 
 } FPDKCALIBTYPE;
 
-bool FPDKCALIB_InsertCalibration(const FPDKICDATA* icdata, uint8_t* code, const uint16_t len, uint32_t* frequency, uint32_t* millivolt, FPDKCALIBTYPE* type, uint8_t* algo, uint32_t* loopcycles, uint16_t* pos);
-bool FPDKCALIB_RemoveCalibration(const uint8_t algo, uint8_t* code, const uint16_t pos, const uint8_t val);
+typedef struct FPDKCALIBDATA
+{
+  FPDKCALIBTYPE type;
+  uint8_t       algo;
+  uint32_t      loopcycles;
+  uint16_t      pos;
+  uint32_t      frequency;
+  uint32_t      millivolt;
 
+} FPDKCALIBDATA;
+
+bool FPDKCALIB_InsertCalibration(const FPDKICDATA* icdata, uint8_t* code, const uint16_t len, FPDKCALIBDATA* calibdata);
+bool FPDKCALIB_RemoveCalibration(const FPDKCALIBDATA* calibdata, uint8_t* code, const uint8_t val);
 
 #endif //__FPDKICCALIB_H__

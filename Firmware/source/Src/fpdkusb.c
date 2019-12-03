@@ -384,9 +384,9 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
         FPDK_SetLed(FPDK_LED_IC,true);
 
-        uint8_t fcalval, bgcalval;
+        uint8_t fcalval;
         uint32_t fcalfreq;
-        if( !FPDK_Calibrate(type, vdd, freq, mult, &fcalval, &fcalfreq, &bgcalval) )
+        if( !FPDK_Calibrate(type, vdd, freq, mult, &fcalval, &fcalfreq) )
         {
           FPDK_SetLed(FPDK_LED_IC,false);
           return false;
@@ -394,7 +394,7 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
         FPDK_SetLed(FPDK_LED_IC,false);
 
-        uint32_t r[] = {fcalval, fcalfreq, bgcalval}; 
+        uint32_t r[] = {fcalval, fcalfreq};
         _FPDKUSB_Ack((uint8_t*)&r, sizeof(r));
       }
       break;
@@ -410,7 +410,7 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
         if( !FPDK_SetVDD(vdd, 0) )
           return false;
-        
+
         FPDKUART_Init();
 
         FPDK_SetLed(FPDK_LED_IC,true);

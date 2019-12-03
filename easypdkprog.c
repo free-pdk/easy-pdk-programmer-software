@@ -409,17 +409,19 @@ int main( int argc, const char * argv [] )
         break;
       }
 
-      bool do_calibration = false;
-
-      uint32_t       calibrate_frequency = 0;
-      uint32_t       calibrate_millivolt = 5000;
-      FPDKCALIBTYPE  calibrate_prg_type;
-      uint8_t        calibrate_prg_algo;
-      uint32_t       calibrate_prg_loopcycles;
-      uint16_t       calibrate_prg_pos;
+      #define MAX_CALIBRATIONS 8
+      uint32_t calibrations = 0;
+      FPDKCALIBDATA  calibdata[MAX_CALIBRATIONS];
+      memset(calibdata, 0, sizeof(calibdata));
 
       if( !arguments.nocalibrate )
-        do_calibration = FPDKCALIB_InsertCalibration(icdata, data, len, &calibrate_frequency, &calibrate_millivolt, &calibrate_prg_type, &calibrate_prg_algo, &calibrate_prg_loopcycles, &calibrate_prg_pos);
+      {
+        for( calibrations=0; calibrations<MAX_CALIBRATIONS; calibrations++ )
+        {
+          if( !FPDKCALIB_InsertCalibration(icdata, data, len, &calibdata[calibrations]) )
+            break;
+        }
+      }
 
       int inserts = FPDKSERIAL_InsertSerial(icdata, data, len, arguments.serial);
 
@@ -507,73 +509,77 @@ int main( int argc, const char * argv [] )
         printf("done.\n");
       }
 
-      if( do_calibration )
+      if( calibrations>0 )
       {
-        printf("Calibrating IC (@%.2fV ", (float)calibrate_millivolt/1000.0);
-        switch( calibrate_prg_type )
+        printf("Calibrating IC\n");
+        for( uint32_t calib = 0; calib<calibrations; calib++ )
         {
-          case FPDKCALIB_IHRC:         printf("IHRC SYSCLK=%dHz", calibrate_frequency); break;
-          case FPDKCALIB_ILRC:         printf("ILRC SYSCLK=%dHz", calibrate_frequency); break;
-          case FPDKCALIB_BG:           printf("BG"); break;
-          case FPDKCALIB_IHRC_BG:      printf("BG / IHRC SYSCLK=%dHz", calibrate_frequency); break;
-          case FPDKCALIB_ILRC_BG:      printf("BG / ILRC SYSCLK=%dHz", calibrate_frequency); break;
-        }
-        printf(")... ");
-
-        uint8_t fcalval, bgcalval;
-        uint32_t fcalfreq;
-
-        if( !FPDKCOM_IC_Calibrate(comfd, calibrate_prg_type, calibrate_millivolt, calibrate_frequency, calibrate_prg_loopcycles, &fcalval, &fcalfreq, &bgcalval) )
-        {
-          printf("failed.\n");
-          break;
-        }
-
-        switch( calibrate_prg_type )
-        {
-          case FPDKCALIB_BG: 
-            break;
-          case FPDKCALIB_IHRC:         
-          case FPDKCALIB_ILRC:
-          case FPDKCALIB_IHRC_BG:
-          case FPDKCALIB_ILRC_BG:
-            printf("calibration result: %dHz (0x%02X)  ", fcalfreq, fcalval); 
-            break;
-        }
-
-        if( FPDKCALIB_RemoveCalibration(calibrate_prg_algo, data, calibrate_prg_pos, fcalval) )
-        {
-          //TODO: OPTIMIZE: only write part
-          if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
+          switch( calibdata[calib].type )
           {
-            fprintf(stderr, "ERROR: Could not send data to programmer\n");
-            return -16;
+            case FPDKCALIB_IHRC:         printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_ILRC:         printf("* ILRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_BG:           printf("* BandGap"); break;
+            default:
+              fprintf(stderr, "ERROR: Unknown calibration\n");
+              return -17;
+          }
+          printf("... ");
+
+          uint8_t fcalval;
+          uint32_t fcalfreq;
+
+          if( !FPDKCOM_IC_Calibrate(comfd, calibdata[calib].type, calibdata[calib].millivolt, calibdata[calib].frequency, calibdata[calib].loopcycles, &fcalval, &fcalfreq) )
+          {
+            printf("failed.\n");
+            fprintf(stderr, "ERROR: Calibration failed\n");
+            return -17;
           }
 
-          uint32_t codewords = (len+1)/2;
+          switch( calibdata[calib].type )
+          {
+            case FPDKCALIB_IHRC:
+            case FPDKCALIB_ILRC:
+              printf("calibration result: %dHz (0x%02X)  ", fcalfreq, fcalval); 
+              break;
+            case FPDKCALIB_BG: 
+              break;
+          }
 
-          int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
-                                   icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                                   0, icdata->addressbits, 0, icdata->codebits, codewords, 
-                                   icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
-          if( r>=FPDK_ERR_ERROR )
+          if( FPDKCALIB_RemoveCalibration( &calibdata[calib], data, fcalval) )
           {
-            fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
-            return -4;
+            //TODO: OPTIMIZE: only write part
+            if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
+            {
+              fprintf(stderr, "ERROR: Could not send data to programmer\n");
+              return -16;
+            }
+
+            uint32_t codewords = (len+1)/2;
+
+            int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
+                                     icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
+                                     0, icdata->addressbits, 0, icdata->codebits, codewords, 
+                                     icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
+            if( r>=FPDK_ERR_ERROR )
+            {
+              fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+              return -4;
+            }
+            if( r != icdata->id12bit )
+            {
+              fprintf(stderr, "ERROR: Write calibration failed.\n");
+              return -16;
+            }
           }
-          if( r != icdata->id12bit )
+          else
           {
-            fprintf(stderr, "ERROR: Write calibration failed.\n");
-            return -16;
+            fprintf(stderr, "ERROR: Removing calibration function.\n");
+            return -17;
           }
+          printf("done.\n");
         }
-        else
-        {
-          fprintf(stderr, "ERROR: Removing calibration function.\n");
-          return -17;
-        }
-        printf("done.\n");
       }
+
     }
     break;
 

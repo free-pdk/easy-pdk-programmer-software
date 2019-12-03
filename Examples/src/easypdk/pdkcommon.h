@@ -94,4 +94,18 @@ __asm__(                      \
   "and a, #0                  \n"\
 )
 
+#define EASY_PDK_CALIBRATE_BG_B63() \
+__asm__(                      \
+  "and a, #'B'                \n"\
+  "and a, #'6'                \n"\
+  "and a, #'3'                \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+)
+
+
 #endif //__PDKCOMMON_H__
