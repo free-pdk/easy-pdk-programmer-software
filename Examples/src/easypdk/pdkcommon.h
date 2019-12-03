@@ -18,12 +18,15 @@
 #define __set1(x,y)  __asm__("set1 "_ASMV(x)", #"_ASMD(y)"\n")
 
 //macros for clock setup
-#define EASY_PDK_INIT_SYSCLOCK_16MHZ()  {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC;}
-#define EASY_PDK_INIT_SYSCLOCK_8MHZ()   {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV2;}
-#define EASY_PDK_INIT_SYSCLOCK_4MHZ()   {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV4;}
-#define EASY_PDK_INIT_SYSCLOCK_2MHZ()   {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV8;}
-#define EASY_PDK_INIT_SYSCLOCK_1MHZ()   {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV16;}
-#define EASY_PDK_INIT_SYSCLOCK_512kHz() {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV32;}
+#define EASY_PDK_INIT_SYSCLOCK_16MHZ()      {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC;}
+#define EASY_PDK_INIT_SYSCLOCK_8MHZ()       {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV2;}
+#define EASY_PDK_INIT_SYSCLOCK_4MHZ()       {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV4;}
+#define EASY_PDK_INIT_SYSCLOCK_2MHZ()       {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV8;}
+#define EASY_PDK_INIT_SYSCLOCK_1MHZ()       {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV16;}
+#define EASY_PDK_INIT_SYSCLOCK_512kHz()     {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ENABLE_IHRC|CLKMD_IHRC_DIV32;}
+#define EASY_PDK_INIT_SYSCLOCK_ILRC()       {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ILRC;}
+#define EASY_PDK_INIT_SYSCLOCK_ILRC_DIV4()  {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ILRC_DIV4;}
+#define EASY_PDK_INIT_SYSCLOCK_ILRC_DIV16() {_clkmd=CLKMD_ENABLE_ILRC|CLKMD_ILRC_DIV16;}
 
 //place holder for EASYPDK serial inserted from easypdkprog
 #define EASY_PDK_SERIAL(sname) static const uint8_t sname[8] = {'F','P','S','E','R','I','A','L'}
@@ -52,6 +55,19 @@ __asm__(                      \
   "and a, #("#millivolt")     \n"\
   "and a, #("#millivolt">>8)  \n"\
 )
+
+#define EASY_PDK_CALIBRATE_ILRC_l8(frequency,millivolt) \
+__asm__(                      \
+  "and a, #'l'                \n"\
+  "and a, #'8'                \n"\
+  "and a, #("#frequency")     \n"\
+  "and a, #("#frequency">>8)  \n"\
+  "and a, #("#frequency">>16) \n"\
+  "and a, #("#frequency">>24) \n"\
+  "and a, #("#millivolt")     \n"\
+  "and a, #("#millivolt">>8)  \n"\
+)
+
 #define EASY_PDK_CALIBRATE_IHRC_H9(frequency,millivolt) \
 __asm__(                      \
   "and a, #'H'                \n"\

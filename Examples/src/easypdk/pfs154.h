@@ -9,7 +9,7 @@
 
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
-#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_IHRC_L8
+#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L8
 #define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { _ihrcr = *((const unsigned char*)(0x87ed)); }
 #define EASY_PDK_USE_FACTORY_BGTR() { _bgtr = *((const unsigned char*)(0x87ee)); }
 
