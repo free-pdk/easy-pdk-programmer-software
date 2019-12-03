@@ -248,9 +248,13 @@ bool FPDKCALIB_InsertCalibration(const FPDKICDATA* icdata, uint8_t* code, const 
 
   uint16_t algowords = _FPDKCALIB_GetAlgoLength(fpdk_calib_algos[calibdata->algo].algo);
 
-  //extract mvolt and freq
   calibdata->frequency = 0;
   calibdata->millivolt = 0;
+
+  if( FPDKCALIB_BG == calibdata->type )
+    calibdata->millivolt = 4270; //BG tuning uses case 1 / n=0 ==> VDD=4.27V
+
+  //extract mvolt and freq
   for( uint16_t x=0; x<algowords; x++ )
   {
     switch(fpdk_calib_algos[calibdata->algo].algo[x].cocf & 0xFF)
