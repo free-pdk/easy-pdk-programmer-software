@@ -169,26 +169,3 @@ void fpdkutil_waitfdorkeypress(const int fd, const int timeout)
 #else
 #error unknown OS (not unix or windows)
 #endif
-
-
-/*DEL
-#if defined(_WIN32) || defined(__MSYS__)
-#include <windows.h>
-void fpdkutil_usleep(int64_t usec)
-{
-  HANDLE timer;
-  LARGE_INTEGER ft;
-  ft.QuadPart = -(10*usec);
-  timer = CreateWaitableTimer(NULL, TRUE, NULL);
-  SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
-  WaitForSingleObject(timer, INFINITE);
-  CloseHandle(timer);
-}
-#else
-void fpdkutil_usleep(int64_t usec)
-{
-//  usleep(usec);
-  nanosleep(&(struct timespec){usec / 1000000, (usec * 1000) % 1000000UL}, NULL);
-}
-#endif
-*/
