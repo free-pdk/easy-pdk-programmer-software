@@ -4,6 +4,9 @@
 #ifndef PFS173
 #define PFS173
 #endif
+#if !defined __SDCC_pdk15
+#error "PFS173 needs PDK15 backend. Compile with -mpdk15"
+#endif
 
 #include "pdkcommon.h"
 

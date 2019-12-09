@@ -4,6 +4,9 @@
 #ifndef PMS150C
 #define PMS150C
 #endif
+#if !defined __SDCC_pdk13
+#error "PMS150C needs PDK13 backend. Compile with -mpdk13"
+#endif
 
 #include "pdkcommon.h"
 

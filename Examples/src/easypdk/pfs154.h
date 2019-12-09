@@ -4,6 +4,9 @@
 #ifndef PFS154
 #define PFS154
 #endif
+#if !defined __SDCC_pdk14
+#error "PFS54 needs PDK14 backend. Compile with -mpdk14"
+#endif
 
 #include "pdkcommon.h"
 
