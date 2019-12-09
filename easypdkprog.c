@@ -512,8 +512,20 @@ int main( int argc, const char * argv [] )
       if( calibrations>0 )
       {
         printf("Calibrating IC\n");
-        for( uint32_t calib = 0; calib<calibrations; calib++ )
+        for( uint32_t c=0; c<calibrations; c++ )
         {
+          uint32_t posmin = 0xFFFF;
+          uint32_t calib = 0xFFFF;
+          for( uint32_t s=0; s<calibrations; s++ )
+          {
+            if( (calibdata[s].type) && (calibdata[s].pos<posmin) )
+            {
+              calib = s;
+              posmin = calibdata[s].pos;
+            }
+          }
+          if( 0xFFFF == calib )
+            break;
           switch( calibdata[calib].type )
           {
             case FPDKCALIB_IHRC:         printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
@@ -572,6 +584,8 @@ int main( int argc, const char * argv [] )
               fprintf(stderr, "ERROR: Write calibration failed.\n");
               return -16;
             }
+
+            calibdata[calib].type = 0;
           }
           else
           {
