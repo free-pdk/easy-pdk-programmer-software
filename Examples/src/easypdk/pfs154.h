@@ -10,8 +10,8 @@
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
 #define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L8
-#define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { _ihrcr = *((const unsigned char*)(0x87ed)); }
-#define EASY_PDK_USE_FACTORY_BGTR() { _bgtr = *((const unsigned char*)(0x87ee)); }
+#define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
+#define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }
 
 //IO register definitions
 __sfr __at(0x00) _flag;
