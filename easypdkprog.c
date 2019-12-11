@@ -415,10 +415,11 @@ int main( int argc, const char * argv [] )
         data[len-1]=0xFF; data[len-2]=0xFF; len -= 2;
       }
 
-      #define MAX_CALIBRATIONS 8
-      uint32_t calibrations = 0;
+      #define MAX_CALIBRATIONS 16
       FPDKCALIBDATA  calibdata[MAX_CALIBRATIONS];
       memset(calibdata, 0, sizeof(calibdata));
+
+      uint32_t calibrations = 0;
 
       if( !arguments.nocalibrate )
       {
