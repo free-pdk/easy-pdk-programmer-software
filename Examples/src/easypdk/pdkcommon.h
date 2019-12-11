@@ -105,6 +105,11 @@ __asm__(                      \
   "and a, #0                  \n"\
   "and a, #0                  \n"\
   "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
+  "and a, #0                  \n"\
 )
 
 

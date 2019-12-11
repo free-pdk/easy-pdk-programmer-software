@@ -23,6 +23,7 @@
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H9
 #define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L9
+#define EASY_PDK_CALIBRATE_BG   EASY_PDK_CALIBRATE_BG_B63
 #define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0xbed\n mov "_ASMV(IHRCR)",a\n"); }
 #define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0xbee\n mov "_ASMV(BGTR)",a\n"); }
 
