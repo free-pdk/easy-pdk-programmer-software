@@ -452,9 +452,9 @@ int main( int argc, const char * argv [] )
 
       uint32_t codewords = (len+1)/2;
 
-      int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
+      int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
                                icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                               0, icdata->addressbits, 0, icdata->codebits, codewords, 
+                               0, icdata->addressbits, 0, icdata->codebits, codewords,
                                icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
       if( r>=FPDK_ERR_ERROR )
       {
@@ -483,43 +483,6 @@ int main( int argc, const char * argv [] )
           return -13;
         }
         verbose_printf("done.\n");
-      }
-
-      if( 0xFFFF != arguments.fuse )
-      {
-        if( (0==(arguments.fuse&1)) && !arguments.allowsecfuse )
-        {
-          printf("Setting of security fuse disabled. Use '--allowsecfuse' to set security fuse.\n");
-          arguments.fuse |= 1;
-        }
-
-        printf("Writing IC Fuse... (0x%04X) ", arguments.fuse);
-
-        uint8_t fusedata[] = {arguments.fuse, arguments.fuse>>8};
-
-        uint16_t fuseaddr = icdata->codewords-1;
-
-        if( !FPDKCOM_SetBuffer(comfd, fuseaddr*2, fusedata, sizeof(fusedata)) )
-        {
-          fprintf(stderr, "ERROR: Could not send data to programmer\n");
-          return -14;
-        }
-
-        int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
-                                 icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                                 fuseaddr, icdata->addressbits, fuseaddr, icdata->codebits, 1, 
-                                 icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
-        if( r>=FPDK_ERR_ERROR )
-        {
-          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
-          return -4;
-        }
-        if( r != icdata->id12bit )
-        {
-          fprintf(stderr, "ERROR: Write fuse failed.\n");
-          return -15;
-        }
-        printf("done.\n");
       }
 
       if( calibrations>0 )
@@ -582,9 +545,9 @@ int main( int argc, const char * argv [] )
 
             uint32_t codewords = (len+1)/2;
 
-            int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
+            int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
                                      icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                                     0, icdata->addressbits, 0, icdata->codebits, codewords, 
+                                     0, icdata->addressbits, 0, icdata->codebits, codewords,
                                      icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
             if( r>=FPDK_ERR_ERROR )
             {
@@ -606,6 +569,43 @@ int main( int argc, const char * argv [] )
           }
           printf("done.\n");
         }
+      }
+
+      if( 0xFFFF != arguments.fuse )
+      {
+        if( (0==(arguments.fuse&1)) && !arguments.allowsecfuse )
+        {
+          printf("Setting of security fuse disabled. Use '--allowsecfuse' to set security fuse.\n");
+          arguments.fuse |= 1;
+        }
+
+        printf("Writing IC Fuse... (0x%04X) ", arguments.fuse);
+
+        uint8_t fusedata[] = {arguments.fuse, arguments.fuse>>8};
+
+        uint16_t fuseaddr = icdata->codewords-1;
+
+        if( !FPDKCOM_SetBuffer(comfd, fuseaddr*2, fusedata, sizeof(fusedata)) )
+        {
+          fprintf(stderr, "ERROR: Could not send data to programmer\n");
+          return -14;
+        }
+
+        int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
+                                 icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
+                                 fuseaddr, icdata->addressbits, fuseaddr, icdata->codebits, 1, 
+                                 icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
+        if( r>=FPDK_ERR_ERROR )
+        {
+          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+          return -4;
+        }
+        if( r != icdata->id12bit )
+        {
+          fprintf(stderr, "ERROR: Write fuse failed.\n");
+          return -15;
+        }
+        printf("done.\n");
       }
 
     }
