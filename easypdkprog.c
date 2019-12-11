@@ -409,13 +409,10 @@ int main( int argc, const char * argv [] )
         break;
       }
 
-      if( (0xFFFF == arguments.fuse) && (icdata->codewords == len) )
-        arguments.fuse = (((uint16_t)data[(icdata->codewords-1)*2+1])<<8) | data[(icdata->codewords-1)*2];
-
-      if( (0==(arguments.fuse&1)) && !arguments.allowsecfuse )
+      if( (0xFFFF == arguments.fuse) && (icdata->codewords*2 == len) )
       {
-        printf("Setting of security fuse disabled. Use '--allowsecfuse' to set security fuse.\n");
-        arguments.fuse |= 1;
+        arguments.fuse = (((uint16_t)data[len-1])<<8) | data[len-2];
+        data[len-1]=0xFF; data[len-2]=0xFF; len -= 2;
       }
 
       #define MAX_CALIBRATIONS 8
@@ -490,7 +487,13 @@ int main( int argc, const char * argv [] )
 
       if( 0xFFFF != arguments.fuse )
       {
-        printf("Writing IC Fuse... ");
+        if( (0==(arguments.fuse&1)) && !arguments.allowsecfuse )
+        {
+          printf("Setting of security fuse disabled. Use '--allowsecfuse' to set security fuse.\n");
+          arguments.fuse |= 1;
+        }
+
+        printf("Writing IC Fuse... (0x%04X) ", arguments.fuse);
 
         uint8_t fusedata[] = {arguments.fuse, arguments.fuse>>8};
 
