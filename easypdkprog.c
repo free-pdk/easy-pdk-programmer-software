@@ -529,7 +529,16 @@ int main( int argc, const char * argv [] )
           {
             case FPDKCALIB_IHRC:
             case FPDKCALIB_ILRC:
-              printf("%dHz ", fcalfreq);
+              {
+                printf("%dHz ", fcalfreq);
+                //found valid tuning (max 10% drift) ?
+                if( abs( (int32_t)fcalfreq - (int32_t)calibdata[calib].frequency ) > (calibdata[calib].frequency/10) )
+                {
+                  printf("out of range.\n");
+                  fprintf(stderr, "ERROR: Calibration failed\n");
+                  return -18;
+                }
+              }
               break;
             case FPDKCALIB_BG: 
               break;

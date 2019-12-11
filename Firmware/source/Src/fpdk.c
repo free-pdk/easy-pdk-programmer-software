@@ -968,16 +968,12 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
     {
       case 1: //IHRC
         *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
-        //found valid tuning (max 10% drift) ?
-        if( abs( *freq_tuned - frequency ) < (frequency/10) )
-          ret = true;
+        ret = true;
         break;
 
       case 2: //ILRC
         *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0xFF, 0x10, freq_tuned ); //only upper 4 bits are used
-        //found valid tuning (max 10% drift) ?
-        if( abs( *freq_tuned - frequency ) < (frequency/10) )
-          ret = true;
+        ret = true;
         break;
 
       case 3: //BG
