@@ -34,19 +34,20 @@ static const char easypdkprog_doc[]             = "easypdkprog -- read, write an
 static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start [FILE]";
 
 static struct argp_option easypdkprog_options[] = {
-  {"verbose",     'v', 0,        0,  "Verbose output" },
-  {"port",        'p', "PORT",   0,  "COM port of programmer. Default: Auto search" },
-  {"bin",         'b', 0,        0,  "Binary file output. Default: ihex8" },
-  {"noerase",    555,  0,        0,  "Skip erase before write" },
-  {"noblankchk", 666,  0,        0,  "Skip blank check before write" },
-  {"securefill", 777,  0,        0,  "Fill unused space with 0 (NOP) to prevent readout" },
-  {"noverify",   888,  0,        0,  "Skip verify after write" },
-  {"nocalibrate",999,  0,        0,  "Skip calibration after write." },
-  {"fuse",        'f', "FUSE",   0,  "FUSE value, e.g. 0x31FD"},
-  {"runvdd",      'r', "VDD",    0,  "Voltage for running the IC. Default: 5.0" },
-  {"icname",      'n', "NAME",   0,  "IC name, e.g. PFS154" },
-  {"icid",        'i', "ID",     0,  "IC ID 12 bit, e.g. 0xAA1" },
-  {"serial",      's', "SERIAL", 0,  "SERIAL value (64bit), e.g. 0x123456789ABCDEF0"},
+  {"verbose",      'v', 0,        0,  "Verbose output" },
+  {"port",         'p', "PORT",   0,  "COM port of programmer. Default: Auto search" },
+  {"bin",          'b', 0,        0,  "Binary file output. Default: ihex8" },
+  {"noerase",     555,  0,        0,  "Skip erase before write" },
+  {"noblankchk",  666,  0,        0,  "Skip blank check before write" },
+  {"securefill",  777,  0,        0,  "Fill unused space with 0 (NOP) to prevent readout" },
+  {"noverify",    888,  0,        0,  "Skip verify after write" },
+  {"nocalibrate" ,999,  0,        0,  "Skip calibration after write." },
+  {"fuse",         'f', "FUSE",   0,  "FUSE value, e.g. 0x31FD"},
+  {"allowsecfuse",444,  0,        0,  "Allow setting the security fuse."},
+  {"runvdd",       'r', "VDD",    0,  "Voltage for running the IC. Default: 5.0" },
+  {"icname",       'n', "NAME",   0,  "IC name, e.g. PFS154" },
+  {"icid",         'i', "ID",     0,  "IC ID 12 bit, e.g. 0xAA1" },
+  {"serial",       's', "SERIAL", 0,  "SERIAL value (64bit), e.g. 0x123456789ABCDEF0"},
   { 0 }
 };
 
@@ -61,6 +62,7 @@ struct easypdkprog_args {
   int      noerase;
   int      noblankcheck;
   int      noverify;
+  int      allowsecfuse;
   uint16_t fuse;
   uint64_t serial;
   float    runvdd;
@@ -86,6 +88,7 @@ static error_t easypdkprog_parse_opt(int key, char *arg, struct argp_state *stat
     case 'i': if(arg) arguments->icid = strtol(arg,NULL,16); break;
     case 'r': if(arg) sscanf(arg,"%f",&arguments->runvdd); break;
     case 's': if(arg) arguments->serial = strtoull(arg,NULL,16); break;
+    case 444: arguments->allowsecfuse = 1; break;
 
     case ARGP_KEY_ARG:
       if(0 == state->arg_num)
@@ -379,9 +382,6 @@ int main( int argc, const char * argv [] )
         verbose_printf("done.\n");
       }
 
-      //TODO: OPTIMIZE: loop through data and only write used regions
-
-      //QUICK IMPLEMENTATION FOR NOW: find end of data and program everything
       uint8_t data[0x1800];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
       uint32_t len = 0;
@@ -407,6 +407,15 @@ int main( int argc, const char * argv [] )
       {
         printf("Nothing to write\n");
         break;
+      }
+
+      if( (0xFFFF == arguments.fuse) && (icdata->codewords == len) )
+        arguments.fuse = (((uint16_t)data[(icdata->codewords-1)*2+1])<<8) | data[(icdata->codewords-1)*2];
+
+      if( (0==(arguments.fuse&1)) && !arguments.allowsecfuse )
+      {
+        printf("Setting of security fuse disabled. Use '--allowsecfuse' to set security fuse.\n");
+        arguments.fuse |= 1;
       }
 
       #define MAX_CALIBRATIONS 8
@@ -482,6 +491,7 @@ int main( int argc, const char * argv [] )
       if( 0xFFFF != arguments.fuse )
       {
         printf("Writing IC Fuse... ");
+
         uint8_t fusedata[] = {arguments.fuse, arguments.fuse>>8};
 
         uint16_t fuseaddr = icdata->codewords-1;
@@ -561,7 +571,6 @@ int main( int argc, const char * argv [] )
 
           if( FPDKCALIB_RemoveCalibration( &calibdata[calib], data, fcalval) )
           {
-            //TODO: OPTIMIZE: only write part
             if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
             {
               fprintf(stderr, "ERROR: Could not send data to programmer\n");
