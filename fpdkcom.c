@@ -32,7 +32,7 @@ static const char FPDK_VERSCAN[] = "FREE-PDK EASY PROG - HW:%u.%u SW:%u.%u PROTO
 #define FPDKCOM_CMDRSP_READIC_TIMEOUT       500
 #define FPDKCOM_CMDRSP_ERASE_TIMEOUT        1000
 #define FPDKCOM_CMDRSP_WRITE_TIMEOUT        2000
-#define FPDKCOM_CMDRSP_CALIBRATEIC_TIMEOUT  20000
+#define FPDKCOM_CMDRSP_CALIBRATEIC_TIMEOUT  10000
 
 static bool _FPDKCOM_SendCommand(const int fd, const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint8_t len)
 {

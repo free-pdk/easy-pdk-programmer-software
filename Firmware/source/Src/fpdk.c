@@ -812,55 +812,72 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
 static uint8_t _spiDMARxBuffer[SPI_BLOCK_SIZE_MAX];
 static uint8_t _spiDMATxBuffer[SPI_BLOCK_SIZE_MAX];
 
-static uint32_t _spiBlockSize;
-static volatile int32_t  _spiBlocksMeasure;
-static volatile bool     _spiSendPulseStartMeasure;
-static volatile int32_t  _spiFreqMeasureCounter;
-static volatile uint32_t _spiFrequency;
+static uint32_t           _spiBlockSize;
+static volatile int32_t   _spiBlocksMeasure;
+static volatile uint32_t  _spiSendPulses;
+static volatile int32_t   _spiMeasureBlockCounter;
+static volatile uint32_t  _spiFrequency;
 
 void HAL_SPI_TxRxHalfCpltCallback(SPI_HandleTypeDef *hspi)
 {
-  if( _spiSendPulseStartMeasure )
+  if( _spiSendPulses )
   {
-    _spiSendPulseStartMeasure = false;
-    _spiFreqMeasureCounter = -SPI_BLOCKS_IGNORE;
-    _spiDMATxBuffer[0] = 1; //set single one bit
+    uint32_t pulses = (1<<_spiSendPulses)-1;
+    _spiDMATxBuffer[0] = (pulses)&0xFF;
+    _spiDMATxBuffer[1] = (pulses>>8)&0xFF;
+    _spiSendPulses = 0;
+    _spiMeasureBlockCounter = -SPI_BLOCKS_IGNORE;
   }
   else
-    _spiDMATxBuffer[0] = 0; //reset single one bit
+  {
+    _spiDMATxBuffer[0] = 0; //reset pulses
+    _spiDMATxBuffer[1] = 0;
+  }
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-  if( !_spiFreqMeasureCounter )
+  if( !_spiMeasureBlockCounter )
     __HAL_TIM_SET_COUNTER(&htim2,0);
 
-  if( _spiFreqMeasureCounter <= _spiBlocksMeasure )
-    _spiFreqMeasureCounter++;
+  if( _spiMeasureBlockCounter <= _spiBlocksMeasure )
+    _spiMeasureBlockCounter++;
 
-  if( _spiBlocksMeasure == _spiFreqMeasureCounter )
+  if( _spiBlocksMeasure == _spiMeasureBlockCounter )
   {
     uint32_t c = __HAL_TIM_GET_COUNTER(&htim2);
     _spiFrequency = (48000000ULL*8*_spiBlockSize*(_spiBlocksMeasure-1))/c;
   }
 }
 
-static void _FPDK_CalibrateNext()
+static void _FPDK_CalibrateNext(uint32_t steps)
 {
-  _spiSendPulseStartMeasure = true;
-
-  uint32_t timeoutTick = HAL_GetTick() + 100;
-  for( ; HAL_GetTick()<timeoutTick; )
+  for( ; steps>0; )
   {
-    if( !_spiSendPulseStartMeasure && (_spiFreqMeasureCounter>=_spiBlocksMeasure) )
-      break;
+    if( steps>16 )
+    {
+      _spiSendPulses = 16;
+      steps -= 16;
+    }
+    else
+    {
+      _spiSendPulses = steps;
+      steps = 0;
+    }
+
+    uint32_t timeoutTick = HAL_GetTick() + 1000;
+    for( ; HAL_GetTick()<timeoutTick; )
+    {
+      if( !_spiSendPulses && (_spiMeasureBlockCounter>0) )
+        break;
+    }
   }
 }
 
 static uint32_t _FPDK_CalibrateGetNextFreqeuncy()
 {
   _spiFrequency = 0;
-  _spiSendPulseStartMeasure = true;
+  _spiSendPulses = 1;
 
   uint32_t timeoutTick = HAL_GetTick() + 1000;
   for( ; HAL_GetTick()<timeoutTick; )
@@ -878,14 +895,12 @@ static uint8_t _FPDK_CalibrateSingleFrequency(const uint32_t tune_frequency, con
 
   int32_t bestDistance = 100000000; //100MHz, can not be reached
   uint8_t bestMatch = 0;
-  for( uint16_t t=0; t<=maxval; t++ )
-  {
-    if( t<minval )
-    {
-      _FPDK_CalibrateNext();
-      continue;
-    }
 
+  if( minval>0 )
+    _FPDK_CalibrateNext(minval);
+
+  for( uint16_t t=minval; t<=maxval; t+=step )
+  {
     uint32_t measured_frequency = multiplier * _FPDK_CalibrateGetNextFreqeuncy();
 
     if( 0 == measured_frequency )
@@ -898,11 +913,9 @@ static uint8_t _FPDK_CalibrateSingleFrequency(const uint32_t tune_frequency, con
       bestMatch = t;
       *actual_frequency = measured_frequency;
     }
-    for( uint8_t s=1; s<step; s++ )
-    {
-      _FPDK_CalibrateNext();
-      t++;
-    }
+
+    if( step>1 )
+      _FPDK_CalibrateNext(step-1);
   }
   return bestMatch;
 }
@@ -912,22 +925,16 @@ static int _FPDK_CalibrateBG(const uint8_t minval, const uint8_t maxval, const u
   _spiBlocksMeasure = 1;
   _FPDK_SetPA0Incoming();
 
-  for( uint16_t t=0; t<=maxval; t++ )
-  {
-    _FPDK_CalibrateNext();
-    if( t<minval )
-      continue;
+  _FPDK_CalibrateNext(1+minval);
 
+  for( uint16_t t=minval; t<=maxval; t+=step )
+  {
     _FPDK_DelayUS(500);
 
     if( !HAL_GPIO_ReadPin(IC_IO_PA0_UART1_TX_GPIO_Port, IC_IO_PA0_UART1_TX_Pin) )
       return t;
 
-    for( uint8_t s=1; s<step; s++ )
-    {
-      _FPDK_CalibrateNext();
-      t++;
-    }
+    _FPDK_CalibrateNext(step);
   }
   return -1;
 }
@@ -939,15 +946,15 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
   bool ret = false;
 
   //select measurement window based on frequency
-  _spiBlocksMeasure = 8;
+  _spiBlocksMeasure = 16;
   _spiBlockSize = SPI_BLOCK_SIZE_MAX;
   if( frequency<=4000000 )
-    _spiBlocksMeasure = 6;
+    _spiBlocksMeasure = 8;
   if( frequency<=1000000 )
     _spiBlocksMeasure = 4;
   if( frequency<=100000 )
   {
-    _spiBlockSize = 2;
+    _spiBlockSize = 4;
     _spiBlocksMeasure = 2;
   }
 
@@ -972,7 +979,7 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
         break;
 
       case 2: //ILRC
-        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0xFF, 0x10, freq_tuned ); //only upper 4 bits are used
+        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0xF0, 0x10, freq_tuned ); //only upper 4 bits are used
         ret = true;
         break;
 
