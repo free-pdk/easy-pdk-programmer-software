@@ -25,13 +25,15 @@ Install "dfu-util" on your computer: http://dfu-util.sourceforge.net
    Run-time device DFU version 011a
    Claiming USB DFU Interface...
    Setting Alternate Setting #0 ...
+   Determining device status: state = dfuERROR, status = 10
+   dfuERROR, clearing status
    Determining device status: state = dfuIDLE, status = 0
    dfuIDLE, continuing
    DFU mode device DFU version 011a
    Device returned transfer size 2048
    DfuSe interface name: "Internal Flash  "
-   Downloading to address = 0x08000000, size = 27635
-   Download  [=========================] 100%        27635 bytes
+   Downloading to address = 0x08000000, size = 29068
+   Download  [=========================] 100%        29068 bytes
    Download done.
    File downloaded successfully
 

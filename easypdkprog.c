@@ -34,19 +34,20 @@ static const char easypdkprog_doc[]             = "easypdkprog -- read, write an
 static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start [FILE]";
 
 static struct argp_option easypdkprog_options[] = {
-  {"verbose",     'v', 0,        0,  "Verbose output" },
-  {"port",        'p', "PORT",   0,  "COM port of programmer. Default: Auto search" },
-  {"bin",         'b', 0,        0,  "Binary file output. Default: ihex8" },
-  {"noerase",    555,  0,        0,  "Skip erase before write" },
-  {"noblankchk", 666,  0,        0,  "Skip blank check before write" },
-  {"securefill", 777,  0,        0,  "Fill unused space with 0 (NOP) to prevent readout" },
-  {"noverify",   888,  0,        0,  "Skip verify after write" },
-  {"nocalibrate",999,  0,        0,  "Skip calibration after write." },
-  {"fuse",        'f', "FUSE",   0,  "FUSE value, e.g. 0x31FD"},
-  {"runvdd",      'r', "VDD",    0,  "Voltage for running the IC. Default: 5.0" },
-  {"icname",      'n', "NAME",   0,  "IC name, e.g. PFS154" },
-  {"icid",        'i', "ID",     0,  "IC ID 12 bit, e.g. 0xAA1" },
-  {"serial",      's', "SERIAL", 0,  "SERIAL value (64bit), e.g. 0x123456789ABCDEF0"},
+  {"verbose",      'v', 0,        0,  "Verbose output" },
+  {"port",         'p', "PORT",   0,  "COM port of programmer. Default: Auto search" },
+  {"bin",          'b', 0,        0,  "Binary file output. Default: ihex8" },
+  {"noerase",     555,  0,        0,  "Skip erase before write" },
+  {"noblankchk",  666,  0,        0,  "Skip blank check before write" },
+  {"securefill",  777,  0,        0,  "Fill unused space with 0 (NOP) to prevent readout" },
+  {"noverify",    888,  0,        0,  "Skip verify after write" },
+  {"nocalibrate" ,999,  0,        0,  "Skip calibration after write." },
+  {"fuse",         'f', "FUSE",   0,  "FUSE value, e.g. 0x31FD"},
+  {"allowsecfuse",444,  0,        0,  "Allow setting the security fuse."},
+  {"runvdd",       'r', "VDD",    0,  "Voltage for running the IC. Default: 5.0" },
+  {"icname",       'n', "NAME",   0,  "IC name, e.g. PFS154" },
+  {"icid",         'i', "ID",     0,  "IC ID 12 bit, e.g. 0xAA1" },
+  {"serial",       's', "SERIAL", 0,  "SERIAL value (64bit), e.g. 0x123456789ABCDEF0"},
   { 0 }
 };
 
@@ -61,6 +62,7 @@ struct easypdkprog_args {
   int      noerase;
   int      noblankcheck;
   int      noverify;
+  int      allowsecfuse;
   uint16_t fuse;
   uint64_t serial;
   float    runvdd;
@@ -86,6 +88,7 @@ static error_t easypdkprog_parse_opt(int key, char *arg, struct argp_state *stat
     case 'i': if(arg) arguments->icid = strtol(arg,NULL,16); break;
     case 'r': if(arg) sscanf(arg,"%f",&arguments->runvdd); break;
     case 's': if(arg) arguments->serial = strtoull(arg,NULL,16); break;
+    case 444: arguments->allowsecfuse = 1; break;
 
     case ARGP_KEY_ARG:
       if(0 == state->arg_num)
@@ -379,9 +382,6 @@ int main( int argc, const char * argv [] )
         verbose_printf("done.\n");
       }
 
-      //TODO: OPTIMIZE: loop through data and only write used regions
-
-      //QUICK IMPLEMENTATION FOR NOW: find end of data and program everything
       uint8_t data[0x1800];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
       uint32_t len = 0;
@@ -409,17 +409,26 @@ int main( int argc, const char * argv [] )
         break;
       }
 
-      bool do_calibration = false;
+      if( (0xFFFF == arguments.fuse) && (icdata->codewords*2 == len) )
+      {
+        arguments.fuse = (((uint16_t)data[len-1])<<8) | data[len-2];
+        data[len-1]=0xFF; data[len-2]=0xFF; len -= 2;
+      }
 
-      uint32_t       calibrate_frequency = 0;
-      uint32_t       calibrate_millivolt = 5000;
-      FPDKCALIBTYPE  calibrate_prg_type;
-      uint8_t        calibrate_prg_algo;
-      uint32_t       calibrate_prg_loopcycles;
-      uint16_t       calibrate_prg_pos;
+      #define MAX_CALIBRATIONS 16
+      FPDKCALIBDATA  calibdata[MAX_CALIBRATIONS];
+      memset(calibdata, 0, sizeof(calibdata));
+
+      uint32_t calibrations = 0;
 
       if( !arguments.nocalibrate )
-        do_calibration = FPDKCALIB_InsertCalibration(icdata, data, len, &calibrate_frequency, &calibrate_millivolt, &calibrate_prg_type, &calibrate_prg_algo, &calibrate_prg_loopcycles, &calibrate_prg_pos);
+      {
+        for( calibrations=0; calibrations<MAX_CALIBRATIONS; calibrations++ )
+        {
+          if( !FPDKCALIB_InsertCalibration(icdata, data, len, &calibdata[calibrations]) )
+            break;
+        }
+      }
 
       int inserts = FPDKSERIAL_InsertSerial(icdata, data, len, arguments.serial);
 
@@ -444,9 +453,9 @@ int main( int argc, const char * argv [] )
 
       uint32_t codewords = (len+1)/2;
 
-      int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
+      int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
                                icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                               0, icdata->addressbits, 0, icdata->codebits, codewords, 
+                               0, icdata->addressbits, 0, icdata->codebits, codewords,
                                icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
       if( r>=FPDK_ERR_ERROR )
       {
@@ -477,9 +486,111 @@ int main( int argc, const char * argv [] )
         verbose_printf("done.\n");
       }
 
+      if( calibrations>0 )
+      {
+        printf("Calibrating IC\n");
+        for( uint32_t c=0; c<calibrations; c++ )
+        {
+          uint32_t posmin = 0xFFFF;
+          uint32_t calib = 0xFFFF;
+          for( uint32_t s=0; s<calibrations; s++ )
+          {
+            if( (calibdata[s].type) && (calibdata[s].pos<posmin) )
+            {
+              calib = s;
+              posmin = calibdata[s].pos;
+            }
+          }
+          if( 0xFFFF == calib )
+            break;
+          switch( calibdata[calib].type )
+          {
+            case FPDKCALIB_IHRC:         printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_ILRC:         printf("* ILRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_BG:           printf("* BandGap"); break;
+            default:
+              fprintf(stderr, "ERROR: Unknown calibration\n");
+              return -17;
+          }
+          printf("... ");
+
+          uint8_t fcalval;
+          uint32_t fcalfreq;
+
+          if( !FPDKCOM_IC_Calibrate(comfd, calibdata[calib].type, calibdata[calib].millivolt, calibdata[calib].frequency, calibdata[calib].loopcycles, &fcalval, &fcalfreq) )
+          {
+            printf("failed.\n");
+            fprintf(stderr, "ERROR: Calibration failed\n");
+            return -17;
+          }
+
+          printf("calibration result: ");
+          switch( calibdata[calib].type )
+          {
+            case FPDKCALIB_IHRC:
+            case FPDKCALIB_ILRC:
+              {
+                printf("%dHz ", fcalfreq);
+                //found valid tuning (max 10% drift) ?
+                if( abs( (int32_t)fcalfreq - (int32_t)calibdata[calib].frequency ) > (calibdata[calib].frequency/10) )
+                {
+                  printf("out of range.\n");
+                  fprintf(stderr, "ERROR: Calibration failed\n");
+                  return -18;
+                }
+              }
+              break;
+            case FPDKCALIB_BG: 
+              break;
+          }
+          printf("(0x%02X)  ", fcalval);
+
+          if( FPDKCALIB_RemoveCalibration( &calibdata[calib], data, fcalval) )
+          {
+            if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
+            {
+              fprintf(stderr, "ERROR: Could not send data to programmer\n");
+              return -16;
+            }
+
+            uint32_t codewords = (len+1)/2;
+
+            int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
+                                     icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
+                                     0, icdata->addressbits, 0, icdata->codebits, codewords,
+                                     icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
+            if( r>=FPDK_ERR_ERROR )
+            {
+              fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+              return -4;
+            }
+            if( r != icdata->id12bit )
+            {
+              fprintf(stderr, "ERROR: Write calibration failed.\n");
+              return -16;
+            }
+
+            calibdata[calib].type = 0;
+          }
+          else
+          {
+            fprintf(stderr, "ERROR: Removing calibration function.\n");
+            return -17;
+          }
+          printf("done.\n");
+        }
+      }
+
       if( 0xFFFF != arguments.fuse )
       {
-        printf("Writing IC Fuse... ");
+        if( (0==(arguments.fuse&1)) && !arguments.allowsecfuse )
+        {
+          printf("Setting of security fuse disabled. Use '--allowsecfuse' to set security fuse.\n");
+          arguments.fuse |= 1;
+        }
+
+        printf("Writing IC Fuse... (0x%04X) ", arguments.fuse);
+
         uint8_t fusedata[] = {arguments.fuse, arguments.fuse>>8};
 
         uint16_t fuseaddr = icdata->codewords-1;
@@ -507,73 +618,6 @@ int main( int argc, const char * argv [] )
         printf("done.\n");
       }
 
-      if( do_calibration )
-      {
-        printf("Calibrating IC (@%.2fV ", (float)calibrate_millivolt/1000.0);
-        switch( calibrate_prg_type )
-        {
-          case FPDKCALIB_IHRC:         printf("IHRC SYSCLK=%dHz", calibrate_frequency); break;
-          case FPDKCALIB_ILRC:         printf("ILRC SYSCLK=%dHz", calibrate_frequency); break;
-          case FPDKCALIB_BG:           printf("BG"); break;
-          case FPDKCALIB_IHRC_BG:      printf("BG / IHRC SYSCLK=%dHz", calibrate_frequency); break;
-          case FPDKCALIB_ILRC_BG:      printf("BG / ILRC SYSCLK=%dHz", calibrate_frequency); break;
-        }
-        printf(")... ");
-
-        uint8_t fcalval, bgcalval;
-        uint32_t fcalfreq;
-
-        if( !FPDKCOM_IC_Calibrate(comfd, calibrate_prg_type, calibrate_millivolt, calibrate_frequency, calibrate_prg_loopcycles, &fcalval, &fcalfreq, &bgcalval) )
-        {
-          printf("failed.\n");
-          break;
-        }
-
-        switch( calibrate_prg_type )
-        {
-          case FPDKCALIB_BG: 
-            break;
-          case FPDKCALIB_IHRC:         
-          case FPDKCALIB_ILRC:
-          case FPDKCALIB_IHRC_BG:
-          case FPDKCALIB_ILRC_BG:
-            printf("calibration result: %dHz (0x%02X)  ", fcalfreq, fcalval); 
-            break;
-        }
-
-        if( FPDKCALIB_RemoveCalibration(calibrate_prg_algo, data, calibrate_prg_pos, fcalval) )
-        {
-          //TODO: OPTIMIZE: only write part
-          if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
-          {
-            fprintf(stderr, "ERROR: Could not send data to programmer\n");
-            return -16;
-          }
-
-          uint32_t codewords = (len+1)/2;
-
-          int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
-                                   icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                                   0, icdata->addressbits, 0, icdata->codebits, codewords, 
-                                   icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
-          if( r>=FPDK_ERR_ERROR )
-          {
-            fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
-            return -4;
-          }
-          if( r != icdata->id12bit )
-          {
-            fprintf(stderr, "ERROR: Write calibration failed.\n");
-            return -16;
-          }
-        }
-        else
-        {
-          fprintf(stderr, "ERROR: Removing calibration function.\n");
-          return -17;
-        }
-        printf("done.\n");
-      }
     }
     break;
 

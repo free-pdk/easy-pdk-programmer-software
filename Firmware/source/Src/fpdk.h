@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <stdint.h>
 
-#define __FPDKSW__ "1.1"
+#define __FPDKSW__ "1.2"
 #define __FPDKHW__ "1.2"
 
 typedef enum FPDKICTYPE
@@ -88,7 +88,6 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id,
 
 bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
                     const uint32_t frequency, const uint32_t multiplier,
-                    uint8_t* fcalval1, uint32_t* freq1_tuned,
-                    uint8_t* bgcalval);
+                    uint8_t* fcalval1, uint32_t* freq1_tuned);
 
 #endif //__FPDK_H_

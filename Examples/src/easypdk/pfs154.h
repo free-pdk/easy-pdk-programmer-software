@@ -4,14 +4,30 @@
 #ifndef PFS154
 #define PFS154
 #endif
+#if !defined __SDCC_pdk14
+#error "PFS54 needs PDK14 backend. Compile with -mpdk14"
+#endif
 
 #include "pdkcommon.h"
+
+//fuse definitions
+#define FUSE_SECURITY_OFF  0x0001 //(S)
+#define FUSE_SECURITY_ON   0x0000
+#define FUSE_PB4PB5_NORMAL 0x0000 //(D)
+#define FUSE_PB4PB5_STRONG 0x0100
+#define FUSE_BOOTUP_SLOW   0x0000 //(B)
+#define FUSE_BOOTUP_FAST   0x0600
+#define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S => 0x30FC
+#define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
 #define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
 #define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L8
-#define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { _ihrcr = *((const unsigned char*)(0x87ed)); }
-#define EASY_PDK_USE_FACTORY_BGTR() { _bgtr = *((const unsigned char*)(0x87ee)); }
+#define EASY_PDK_CALIBRATE_BG   EASY_PDK_CALIBRATE_BG_B1A
+#define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
+#define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }
+
+#define ILRC_FREQ  55000
 
 //IO register definitions
 __sfr __at(0x00) _flag;

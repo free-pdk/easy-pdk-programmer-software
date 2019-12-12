@@ -10,18 +10,19 @@ Usage: easypdkprog [OPTION...] list|probe|read|write|erase|start [FILE]
 easypdkprog -- read, write and execute programs on PADAUK microcontroller
 https://free-pdk.github.io
 
+      --allowsecfuse         Allow setting the security fuse.
   -b, --bin                  Binary file output. Default: ihex8
   -f, --fuse=FUSE            FUSE value, e.g. 0x31FD
   -i, --icid=ID              IC ID 12 bit, e.g. 0xAA1
       --noblankchk           Skip blank check before write
       --nocalibrate          Skip calibration after write.
-  -n, --icname=NAME          IC name, e.g. PFS154
       --noerase              Skip erase before write
+  -n, --icname=NAME          IC name, e.g. PFS154
       --noverify             Skip verify after write
   -p, --port=PORT            COM port of programmer. Default: Auto search
   -r, --runvdd=VDD           Voltage for running the IC. Default: 5.0
-  -s, --serial=SERIAL        SERIAL value (64bit), e.g. 0x123456789ABCDEF0
       --securefill           Fill unused space with 0 (NOP) to prevent readout
+  -s, --serial=SERIAL        SERIAL value (64bit), e.g. 0x123456789ABCDEF0
   -v, --verbose              Verbose output
   -?, --help                 Give this help list
       --usage                Give a short usage message
