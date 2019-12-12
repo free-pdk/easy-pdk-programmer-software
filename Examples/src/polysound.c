@@ -9,6 +9,7 @@
 #define PWM_PORTC       PAC
 #define PWM_PIN         3
 #define SEND_SAMPLE(n)  {TM2B = n;}
+#define TMR0            TM3CT
 
 unsigned char _sdcc_external_startup(void)
 {
@@ -136,9 +137,6 @@ int main(void)
 
         enum { FLAG_TICK = 0x01, FLAG_CURVECHANGED = 0x02 };
 
-        static volatile uint8_t TMR0;
-        TMR0 = TM3CT; //workaround for SDCC bug (using TM3CT in compare statement does not work)
-
         if(prevmul == TMR0) continue;
 
         // Catch up as many cycles as we missed
@@ -150,8 +148,6 @@ int main(void)
             CurrentPhase[1] += CurrentRate[1];
             CurrentPhase[2] += CurrentRate[2];
             CurrentPhase[3] += CurrentRate[3];
-
-            TMR0 = TM3CT;
         } while(U ++prevmul != TMR0);
 
         /* This function returns a waveform for a given channel
