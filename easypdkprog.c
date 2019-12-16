@@ -295,7 +295,7 @@ int main( int argc, const char * argv [] )
         printf("done.\n");
         if( arguments.inoutfile )
         {
-          uint8_t buf[0x1800*2];
+          uint8_t buf[0x1000*2];
           if( FPDKCOM_GetBuffer(comfd, 0, buf, icdata->codewords*sizeof(uint16_t))>0 )
           {
             if( arguments.binout )
@@ -338,8 +338,8 @@ int main( int argc, const char * argv [] )
         fprintf(stderr, "Write for this IC not implemented yet.\n");
         return -20;
       }
-      uint16_t write_data[0x1800];
-      if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, 0x1800) < 0 )
+      uint16_t write_data[0x1000];
+      if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, 0x1000) < 0 )
       {
         fprintf(stderr, "ERROR: Invalid input file / not ihex8 format.\n");
         return -8;
@@ -382,7 +382,7 @@ int main( int argc, const char * argv [] )
         verbose_printf("done.\n");
       }
 
-      uint8_t data[0x1800];
+      uint8_t data[0x1000*2];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
       uint32_t len = 0;
       for( uint32_t p=0; p<sizeof(data); p++)
