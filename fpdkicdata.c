@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static const FPDKICDATA fpdk_ic_table[] =
 {
   { .name                         = "PMS131",
+    .name_variant_1               = "PMC131",
     .otpid                        = 0x0C83,
     .id12bit                      = 0xC83,          //OTP_WAY: 0x0F
     .type                         = FPDK_IC_OTP2_2,
@@ -257,6 +258,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   },
 
   { .name                         = "PMS271",
+    .name_variant_1               = "PMC271",
     .otpid                        = 0x0A58,
     .id12bit                      = 0xA58,          //OTP_WAY: 0x0A
     .type                         = FPDK_IC_OTP3_1,
