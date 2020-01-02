@@ -382,7 +382,7 @@ int main( int argc, const char * argv [] )
         verbose_printf("done.\n");
       }
 
-      uint8_t data[0x1000*2];
+      uint8_t data[0x1000];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
       uint32_t len = 0;
       for( uint32_t p=0; p<sizeof(data); p++)
