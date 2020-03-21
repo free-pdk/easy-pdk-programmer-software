@@ -572,10 +572,10 @@ __sfr16          _t16c;
 #define PWMG2C_OUT_PB5               0x0C
 
 //rop definitions
-//#define ROP_UNK_PB0                  0x00
-//#define ROP_UNK_PA4                  0x01
-//#define ROP_UNK_PA0                  0x02
-//#define ROP_UNK_PB5                  0x03
+#define ROP_INT_SRC_PB0                0x00
+#define ROP_INT_SRC_PA4                0x01
+#define ROP_INT_SRC_PA0                0x00
+#define ROP_INT_SRC_PB5                0x02
 #define ROP_TMX_6BIT                   0x00
 #define ROP_TMX_7BIT                   0x10
 #define ROP_TMX_16MHZ                  0x00
