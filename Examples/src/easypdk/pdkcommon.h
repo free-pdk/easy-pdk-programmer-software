@@ -14,6 +14,7 @@
 #define __disgint()  __asm__("disgint\n")
 #define __stopsys()  __asm__("stopsys\n")
 #define __stopexe()  __asm__("stopexe\nnop\n")
+#define __wdreset()  __asm__("wdreset\n")
 #define __set0(x,y)  __asm__("set0 "_ASMV(x)", #"_ASMD(y)"\n")
 #define __set1(x,y)  __asm__("set1 "_ASMV(x)", #"_ASMD(y)"\n")
 
