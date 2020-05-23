@@ -277,7 +277,7 @@ int main( int argc, const char * argv [] )
         printf("Read for this IC not implemented yet.\n");
         return -20;
       }
-      printf("Reading IC... ");
+      printf("Reading IC (%" PRIu32 " words)...", icdata->codewords);
       int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, 0, icdata->addressbits, 0, icdata->codebits, icdata->codewords);
       if( r>=FPDK_ERR_ERROR )
       {
@@ -443,15 +443,15 @@ int main( int argc, const char * argv [] )
         }
       }
 
-      printf("Writing IC... ");
+      uint32_t codewords = (len+1)/2;
+
+      printf("Writing IC (%" PRIu32 " words)... ", codewords);
 
       if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
       {
         fprintf(stderr, "ERROR: Could not send data to programmer\n");
         return -11;
       }
-
-      uint32_t codewords = (len+1)/2;
 
       int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
                                icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
