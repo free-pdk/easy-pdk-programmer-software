@@ -444,7 +444,7 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
     for( uint32_t p=0; p<count; p++ )
       _FPDK_SendBits32O2(data[p],data_bits);                                                       //write 1 word
 
-    _FPDK_SendBits32O2(addr,addr_bits);                                                            //send address to read from 
+    _FPDK_SendBits32O2(addr,addr_bits);                                                            //send address to write to 
     _FPDK_Commit2();                                                                               //send shift register commit + 1 clock
 
     ...
