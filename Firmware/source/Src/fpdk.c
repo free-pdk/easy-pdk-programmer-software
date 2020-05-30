@@ -290,6 +290,14 @@ static uint16_t _FPDK_SendCommand(const FPDKICTYPE type, const uint8_t command)
       _FPDK_Clock();                                                                               //1 extra clock
       break;
 
+    case FPDK_IC_FLASH_2:
+      _FPDK_SendBits32F(0xA5A5A5A0 | command, 32);                                                 //preamble+command
+      _FPDK_SetDatIncoming();                                                                      //set DAT incoming
+      ack = _FPDK_RecvBits32(17);                                                                  //receive ack
+      _FPDK_SetDatOutgoing();                                                                      //set DAT outgoing
+      _FPDK_Clock();                                                                               //1 extra clock
+      break;
+
     case FPDK_IC_OTP1_2:
       _FPDK_SendBits32O(0xA5A5A5A0 | command, 32);                                                 //preamble+command
       break;
@@ -363,6 +371,42 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
         }
 
         _FPDK_SetDatOutgoing();                                                                    //set DAT outgoing
+      }
+      break;
+
+    case FPDK_IC_FLASH_2:
+      {
+        _FPDK_SendBits32F(addr,addr_bits);                                                         //send address to write to
+
+        for( uint32_t p=0; p<count; p++ )
+          _FPDK_SendBits32F(data[p],data_bits);                                                    //write 1 word
+
+        _FPDK_SetDatIncoming();                                                                    //set DAT incoming
+        _FPDK_DelayUS(4);
+        _FPDK_Clock();                                                                             //1 extra clock
+        _FPDK_DelayUS(2);
+
+        for( uint32_t l=0; l<write_block_clock_groups; l++ )
+        {
+          for( uint32_t w=0; w<write_block_clocks_per_group; w++ )
+          {
+            _FPDK_CLK_UP();
+            _FPDK_DelayUS(20);
+            _FPDK_CLK_DOWN();
+            _FPDK_DelayUS(20);
+          }
+        }
+
+        for( uint32_t e=0; e<4; e++ )                                                              //4 extra clocks
+        {
+          _FPDK_CLK_UP();
+          _FPDK_DelayUS(2);
+          _FPDK_CLK_DOWN();
+          _FPDK_DelayUS(2);
+        }
+
+        _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
+
       }
       break;
 
@@ -686,7 +730,16 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
-  uint16_t resp = _FPDK_SendCommand(type,0x6);                                                     //send READ command
+  uint16_t resp;
+  switch( type )                                                                                   //send READ command
+  {
+    case FPDK_IC_FLASH_2: 
+      resp = _FPDK_SendCommand(type,0xC); 
+      break;
+    default:
+      resp = _FPDK_SendCommand(type,0x6); 
+      break;
+  }
   if( FPDK_IS_FLASH_TYPE(type) && (ic_id != (resp&0xFFF)) )
   {
     _FPDK_LeaveProgramingMode(type, 0);
@@ -724,7 +777,16 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
-  uint16_t resp = _FPDK_SendCommand(type,0x6);                                                     //send READ command
+  uint16_t resp;
+  switch( type )                                                                                   //send READ command
+  {
+    case FPDK_IC_FLASH_2: 
+      resp = _FPDK_SendCommand(type,0xC); 
+      break;
+    default:
+      resp = _FPDK_SendCommand(type,0x6); 
+      break;
+  }
   if( FPDK_IS_FLASH_TYPE(type) && (ic_id != (resp&0xFFF)) )
   {
     _FPDK_LeaveProgramingMode(type, 0);
@@ -782,7 +844,16 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
-  uint16_t resp = _FPDK_SendCommand(type,0x6);                                                     //send READ command
+  uint16_t resp;
+  switch( type )                                                                                   //send READ command
+  {
+    case FPDK_IC_FLASH_2: 
+      resp = _FPDK_SendCommand(type,0xC);
+      break;
+    default:
+      resp = _FPDK_SendCommand(type,0x6); 
+      break;
+  }
   if( FPDK_IS_FLASH_TYPE(type) && (ic_id != (resp&0xFFF)) )
   {
     _FPDK_LeaveProgramingMode(type, 0);
@@ -834,7 +905,15 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
     return FPDK_ERR_UKNOWN;
 
   uint16_t resp;
+  switch( type )                                                                                   //send ERASE command
+  {
+    case FPDK_IC_FLASH_2: 
+      resp = _FPDK_SendCommand(type,0x5);
+      break;
+    default:
       resp = _FPDK_SendCommand(type,0x3); 
+      break;
+  }
   if( ic_id != (resp&0xFFF) )
   {
     _FPDK_LeaveProgramingMode(type, 0);
@@ -883,7 +962,16 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
-  uint16_t resp = _FPDK_SendCommand(type,0x7);                                                     //send WRITE command
+  uint16_t resp;
+  switch( type )                                                                                   //send WRITE command
+  {
+    case FPDK_IC_FLASH_2: 
+      resp = _FPDK_SendCommand(type,0xB);
+      break;
+    default:
+      resp = _FPDK_SendCommand(type,0x7); 
+      break;
+  }
   if( FPDK_IS_FLASH_TYPE(type) && (ic_id != (resp&0xFFF)) )
   {
     _FPDK_LeaveProgramingMode(type, 0);

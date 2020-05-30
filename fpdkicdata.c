@@ -224,6 +224,34 @@ static const FPDKICDATA fpdk_ic_table[] =
 */
   },
 
+  { .name                         = "PFS172",
+    .otpid                        = 0x2AA6,
+    .id12bit                      = 0xCA6,
+    .type                         = FPDK_IC_FLASH_2,
+    .addressbits                  = 13,
+    .codebits                     = 14,
+    .codewords                    = 0x800,
+    .ramsize                      = 0x80,
+    .exclude_code_start           = 0x7E0, //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
+    .exclude_code_end             = 0x7F0,
+    .vdd_cmd_read                 = 2.5, //2.0
+    .vpp_cmd_read                 = 5.5, //4.5
+    .vdd_read_hv                  = 2.5, //5.5
+    .vpp_read_hv                  = 0.0, 
+    .vdd_cmd_write                = 2.5, //2.0
+    .vpp_cmd_write                = 5.5, //4.5
+    .vdd_write_hv                 = 8.3, //8.5,
+    .vpp_write_hv                 = 0.0, //0.0,
+    .write_block_size             = 4,
+    .write_block_clock_groups     = 1,
+    .write_block_clocks_per_group = 4,
+    .vdd_cmd_erase                = 2.5, //2.0
+    .vpp_cmd_erase                = 5.5, //4.5
+    .vdd_erase_hv                 = 5.3, //5.5,
+    .vpp_erase_hv                 = 0.0, //0.0,
+    .erase_clocks                 = 4, //4
+  },
+
   { .name                         = "PFS173",
     .otpid                        = 0x2AA2,
     .id12bit                      = 0xEA2,          //OTP_WAY: 0x13
