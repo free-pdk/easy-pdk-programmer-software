@@ -32,6 +32,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x600,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -56,6 +58,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x800,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -80,6 +84,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x1000,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -104,6 +110,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -125,6 +133,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x500,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -150,6 +160,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x800,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -162,7 +174,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PFS154",
     .otpid                        = 0x2AA1,
     .id12bit                      = 0xAA1,          //OTP_WAY: 0x13
-    .type                         = FPDK_IC_FLASH,
+    .type                         = FPDK_IC_FLASH_1,
     .addressbits                  = 13,
     .codebits                     = 14,
     .codewords                    = 0x800,
@@ -173,6 +185,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vpp_cmd_read                 = 5.5, //5.0
     .vdd_cmd_write                = 2.5, //3.0,
     .vpp_cmd_write                = 5.5, //5.0
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
     .vdd_write_hv                 = 5.8,
     .vpp_write_hv                 = 8.5,
     .write_block_size             = 4,
@@ -197,6 +211,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x600,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -211,7 +227,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PFS173",
     .otpid                        = 0x2AA2,
     .id12bit                      = 0xEA2,          //OTP_WAY: 0x13
-    .type                         = FPDK_IC_FLASH,
+    .type                         = FPDK_IC_FLASH_1,
     .addressbits                  = 13,
     .codebits                     = 15,
     .codewords                    = 0xC00,
@@ -220,6 +236,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0xBF0,
     .vdd_cmd_read                 = 2.5, //3.0
     .vpp_cmd_read                 = 5.5, //5.0
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
     .vdd_cmd_write                = 2.5,
     .vpp_cmd_write                = 5.5,
     .vdd_write_hv                 = 5.8,
@@ -246,6 +264,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 2.5, 
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -270,6 +290,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 2.5, 
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -293,6 +315,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x800,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -335,9 +359,17 @@ static FPDKICDATA* _FPDKICDATA_GetICDataById12BitAndCodebits(const FPDKICTYPE ty
   return 0;
 }
 
-FPDKICDATA* FPDKICDATA_GetICDataForOTPByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp)
+FPDKICDATA* FPDKICDATA_GetICDataByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp)
 {
   unsigned int shift;
+  
+  if( FPDK_IS_FLASH_TYPE(type) )
+  {
+    FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(cmdrsp);
+    if( !icdata )
+      icdata = FPDKICDATA_GetICDataById12Bit(cmdrsp<<1);
+    return icdata;
+  }
 
   switch( type )
   {

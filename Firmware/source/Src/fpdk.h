@@ -21,17 +21,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <stdint.h>
 
-#define __FPDKSW__ "1.2"
+#define __FPDKSW__ "1.3"
 #define __FPDKHW__ "1.2"
 
 typedef enum FPDKICTYPE
 {
-  FPDK_IC_FLASH   = 'F',
-  FPDK_IC_OTP1_2  = 0x12,
-  FPDK_IC_OTP2_1  = 0x21,
-  FPDK_IC_OTP2_2  = 0x22,
-  FPDK_IC_OTP3_1  = 0x31,
+  FPDK_IC_OTP1_2   = 0x12,
+  FPDK_IC_OTP2_1   = 0x21,
+  FPDK_IC_OTP2_2   = 0x22,
+  FPDK_IC_OTP3_1   = 0x31,
+  FPDK_IC_FLASH    = 0xF0,
+  FPDK_IC_FLASH_1  = 0xF1,
+  FPDK_IC_FLASH_2  = 0xF2,
 } FPDKICTYPE;
+
+#define  FPDK_IS_FLASH_TYPE(type) (type&0xF0)
 
 void     FPDK_Init(void);
 void     FPDK_DeInit(void);
@@ -51,6 +55,7 @@ uint32_t FPDK_ProbeIC(FPDKICTYPE* type, uint32_t* vpp_cmd, uint32_t* vdd_cmd);
 uint16_t FPDK_ReadIC(const uint16_t ic_id,
                      const FPDKICTYPE type,
                      const uint32_t vpp_cmd, const uint32_t vdd_cmd,
+                     const uint32_t vpp_read, const uint32_t vdd_read,
                      const uint32_t addr, const uint8_t addr_bits,
                      uint16_t* data, const uint8_t data_bits,
                      const uint32_t count);
@@ -58,6 +63,7 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id,
 uint16_t FPDK_VerifyIC(const uint16_t ic_id,
                        const FPDKICTYPE type,
                        const uint32_t vpp_cmd, const uint32_t vdd_cmd,
+                       const uint32_t vpp_read, const uint32_t vdd_read,
                        const uint32_t addr, const uint8_t addr_bits,
                        const uint16_t* data, const uint8_t data_bits,
                        const uint32_t count,
@@ -66,6 +72,7 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id,
 uint16_t FPDK_BlankCheckIC(const uint16_t ic_id,
                            const FPDKICTYPE type,
                            const uint32_t vpp_cmd, const uint32_t vdd_cmd,
+                           const uint32_t vpp_read, const uint32_t vdd_read,
                            const uint8_t addr_bits,
                            const uint8_t data_bits,
                            const uint32_t count,

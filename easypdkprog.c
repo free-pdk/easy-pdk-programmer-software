@@ -145,11 +145,11 @@ int main( int argc, const char * argv [] )
       FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(id);
       if( icdata )
       {
-        printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+        printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_1[0] )
-          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_1, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_1, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_2[0] )
-          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_2, icdata->id12bit, (FPDK_IC_FLASH==icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_2, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
       }
     }
     return 0;
@@ -245,13 +245,8 @@ int main( int argc, const char * argv [] )
       }
       else
       {
-        printf("found.\nTYPE:%s RSP:0x%X VPP=%.2f VDD=%.2f\n",(FPDK_IC_FLASH==type)?"FLASH":"OTP",icid,vpp,vdd);
-
-        if( FPDK_IC_FLASH==type )
-          icdata = FPDKICDATA_GetICDataById12Bit(icid);
-        else
-          icdata = FPDKICDATA_GetICDataForOTPByCmdResponse(type,icid);
-
+        printf("found.\nTYPE:%s RSP:0x%X VPP=%.2f VDD=%.2f\n",FPDK_IS_FLASH_TYPE(type)?"FLASH":"OTP",icid,vpp,vdd);
+        icdata = FPDKICDATA_GetICDataByCmdResponse(type,icid);
         if( icdata )
         {
           printf("IC is supported: %s", icdata->name);
@@ -278,7 +273,7 @@ int main( int argc, const char * argv [] )
         return -20;
       }
       printf("Reading IC (%" PRIu32 " words)...", icdata->codewords);
-      int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, 0, icdata->addressbits, 0, icdata->codebits, icdata->codewords);
+      int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, 0, icdata->addressbits, 0, icdata->codebits, icdata->codewords);
       if( r>=FPDK_ERR_ERROR )
       {
         fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -345,7 +340,7 @@ int main( int argc, const char * argv [] )
         return -8;
       }
 
-      if( (FPDK_IC_FLASH == icdata->type) && !arguments.noerase )
+      if( FPDK_IS_FLASH_TYPE(icdata->type) && !arguments.noerase )
       {
         printf("Erasing IC... ");
 
@@ -368,7 +363,7 @@ int main( int argc, const char * argv [] )
       if( !arguments.noblankcheck )
       {
         verbose_printf("Blank check IC... ");
-        int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+        int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
         if( r>=FPDK_ERR_ERROR )
         {
           fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -472,7 +467,7 @@ int main( int argc, const char * argv [] )
       if( !arguments.noverify )
       {
         verbose_printf("Verifiying IC... ");
-        int r = FPDKCOM_IC_Verify(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, 0, icdata->addressbits, 0, icdata->codebits, codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+        int r = FPDKCOM_IC_Verify(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, 0, icdata->addressbits, 0, icdata->codebits, codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
         if( r>=FPDK_ERR_ERROR )
         {
           printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -623,7 +618,7 @@ int main( int argc, const char * argv [] )
 
     case 'e': //erase
     {
-      if( FPDK_IC_FLASH != icdata->type )
+      if( !FPDK_IS_FLASH_TYPE(icdata->type) )
       {
         fprintf(stderr, "ERROR: Only FLASH type IC can get erased\n");
         return -18;
@@ -654,7 +649,7 @@ int main( int argc, const char * argv [] )
         if( !arguments.noblankcheck )
         {
           verbose_printf("Blank check IC... ");
-          int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+          int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
           if( r>=FPDK_ERR_ERROR )
           {
             fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
