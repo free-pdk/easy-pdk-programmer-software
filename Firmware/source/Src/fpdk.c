@@ -843,7 +843,10 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
 
   if( !FPDK_SetVPP(vpp_erase, FPDK_VPP_EW_STABELIZE_DELAYUS) ||                                    //set erase VPP and VDD
       !FPDK_SetVDD(vdd_erase, FPDK_VDD_EW_STABELIZE_DELAYUS)   )
+  {
+    _FPDK_LeaveProgramingMode(type, 0);
     return FPDK_ERR_HVPPHVDD;
+  }
 
   for( uint32_t e=0; e<erase_clocks; e++ )
   {
@@ -889,7 +892,10 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
 
   if( !FPDK_SetVPP(vpp_write, FPDK_VPP_EW_STABELIZE_DELAYUS) ||                                    //set write VPP and VDD
       !FPDK_SetVDD(vdd_write, FPDK_VDD_EW_STABELIZE_DELAYUS)   )
+  {
+    _FPDK_LeaveProgramingMode(type, 0);
     return FPDK_ERR_HVPPHVDD;
+  }
 
   uint32_t blank_value = (1<<data_bits)-1;
 
