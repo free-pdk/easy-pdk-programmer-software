@@ -328,7 +328,7 @@ int main( int argc, const char * argv [] )
 
     case 'w': //write
     {
-      if( !icdata->vdd_cmd_write  || !icdata->vpp_cmd_write || !icdata->vdd_write_hv || !icdata->vpp_write_hv )
+      if( !icdata->vdd_cmd_write  || !icdata->vpp_cmd_write || !icdata->vdd_write_hv )
       {
         fprintf(stderr, "Write for this IC not implemented yet.\n");
         return -20;
@@ -623,7 +623,7 @@ int main( int argc, const char * argv [] )
         fprintf(stderr, "ERROR: Only FLASH type IC can get erased\n");
         return -18;
       }
-      if( !icdata->vdd_cmd_erase  || !icdata->vpp_cmd_erase || !icdata->vdd_erase_hv || !icdata->vpp_erase_hv )
+      if( !icdata->vdd_cmd_erase  || !icdata->vpp_cmd_erase || !icdata->vdd_erase_hv )
       {
         fprintf(stderr, "Erase for this IC not implemented yet.\n");
         return -20;
