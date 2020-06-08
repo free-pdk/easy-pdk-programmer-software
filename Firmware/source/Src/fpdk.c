@@ -749,8 +749,9 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
 
   if( (vpp_cmd != vpp_read) || (vdd_cmd != vdd_read) )                                             //read uses different voltage than cmd?
   {
-    if( !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS) ||                                    //set read VPP and VDD
-        !FPDK_SetVDD(vdd_read, FPDK_VDD_R_STABELIZE_DELAYUS)   )
+    if( !FPDK_SetVDD(vdd_read, FPDK_VDD_R_STABELIZE_DELAYUS) ||                                    //set read VDD and VPP
+        !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS)
+      )
     {
       _FPDK_LeaveProgramingMode(type, 0);
       return FPDK_ERR_HVPPHVDD;
@@ -796,8 +797,9 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
 
   if( (vpp_cmd != vpp_read) || (vdd_cmd != vdd_read) )                                             //read uses different voltage than cmd?
   {
-    if( !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS) ||                                    //set read VPP and VDD
-        !FPDK_SetVDD(vdd_read, FPDK_VDD_R_STABELIZE_DELAYUS)   )
+    if( !FPDK_SetVDD(vdd_read, FPDK_VDD_R_STABELIZE_DELAYUS) ||                                    //set read VDD and VPP
+        !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS)
+      )
     {
       _FPDK_LeaveProgramingMode(type, 0);
       return FPDK_ERR_HVPPHVDD;
@@ -863,8 +865,9 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
 
   if( (vpp_cmd != vpp_read) || (vdd_cmd != vdd_read) )                                             //read uses different voltage than cmd?
   {
-    if( !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS) ||                                    //set read VPP and VDD
-        !FPDK_SetVDD(vdd_read, FPDK_VDD_R_STABELIZE_DELAYUS)   )
+    if( !FPDK_SetVDD(vdd_read, FPDK_VDD_R_STABELIZE_DELAYUS) ||                                    //set read VDD and VPP
+        !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS)
+      )
     {
       _FPDK_LeaveProgramingMode(type, 0);
       return FPDK_ERR_HVPPHVDD;
@@ -921,8 +924,9 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
     return FPDK_ERR_CMDRSP;
   }
 
-  if( !FPDK_SetVPP(vpp_erase, FPDK_VPP_EW_STABELIZE_DELAYUS) ||                                    //set erase VPP and VDD
-      !FPDK_SetVDD(vdd_erase, FPDK_VDD_EW_STABELIZE_DELAYUS)   )
+  if( !FPDK_SetVDD(vdd_erase, FPDK_VDD_EW_STABELIZE_DELAYUS) ||                                    //set erase VDD and VPP
+      !FPDK_SetVPP(vpp_erase, FPDK_VPP_EW_STABELIZE_DELAYUS)   
+    )
   {
     _FPDK_LeaveProgramingMode(type, 0);
     return FPDK_ERR_HVPPHVDD;
@@ -979,8 +983,9 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
     return FPDK_ERR_CMDRSP;
   }
 
-  if( !FPDK_SetVPP(vpp_write, FPDK_VPP_EW_STABELIZE_DELAYUS) ||                                    //set write VPP and VDD
-      !FPDK_SetVDD(vdd_write, FPDK_VDD_EW_STABELIZE_DELAYUS)   )
+  if( !FPDK_SetVDD(vdd_write, FPDK_VDD_EW_STABELIZE_DELAYUS) ||                                    //set write VPP and VDD
+      !FPDK_SetVPP(vpp_write, FPDK_VPP_EW_STABELIZE_DELAYUS)   
+    )
   {
     _FPDK_LeaveProgramingMode(type, 0);
     return FPDK_ERR_HVPPHVDD;
