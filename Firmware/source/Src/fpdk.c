@@ -139,6 +139,7 @@ static void _FPDK_SetDatOutgoing(void)
 
 static void _FPDK_SetDatIncoming(void)
 {
+  HAL_GPIO_WritePin( IC_IO_PA6_DAT_GPIO_Port, IC_IO_PA6_DAT_Pin, GPIO_PIN_RESET );
   GPIO_InitTypeDef GPIO_InitStruct = { .Pin=IC_IO_PA6_DAT_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLDOWN, .Speed=GPIO_SPEED_FREQ_HIGH };
   HAL_GPIO_Init(IC_IO_PA6_DAT_GPIO_Port, &GPIO_InitStruct);
 }
