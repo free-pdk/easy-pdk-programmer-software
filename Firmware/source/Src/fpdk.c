@@ -325,6 +325,8 @@ static uint32_t _FPDK_ReadAddr(const FPDKICTYPE type, const uint32_t addr, const
     case FPDK_IC_FLASH_2:
       _FPDK_SendBits32F(addr,addr_bits);                                                           //send address to read from 
       _FPDK_SetDatIncoming();                                                                      //set DAT incoming
+      _FPDK_CLK_UP();
+      _FPDK_DelayUS(5);
       dat = _FPDK_RecvBits32(data_bits);                                                           //receive data (Rising edge)
       _FPDK_SetDatOutgoing();                                                                      //set DAT outgoing
       _FPDK_Clock();                                                                               //1 extra clock
