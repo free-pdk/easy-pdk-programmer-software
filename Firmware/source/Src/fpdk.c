@@ -935,7 +935,7 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
   for( uint32_t e=0; e<erase_clocks; e++ )
   {
     _FPDK_CLK_UP();
-    _FPDK_DelayUS(5000);
+    _FPDK_DelayUS((FPDK_IC_FLASH_2==type)?40000:5000);
     _FPDK_CLK_DOWN();
     _FPDK_DelayUS(1);
     _FPDK_CLK_UP();
