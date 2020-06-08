@@ -383,31 +383,30 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
           _FPDK_SendBits32F(data[p],data_bits);                                                    //write 1 word
 
         _FPDK_SetDatIncoming();                                                                    //set DAT incoming
-        _FPDK_DelayUS(4);
-        _FPDK_Clock();                                                                             //1 extra clock
-        _FPDK_DelayUS(2);
 
         for( uint32_t l=0; l<write_block_clock_groups; l++ )
         {
+          _FPDK_Clock();                                                                             //1 extra clock
+          _FPDK_DelayUS(2);
+
           for( uint32_t w=0; w<write_block_clocks_per_group; w++ )
           {
             _FPDK_CLK_UP();
-            _FPDK_DelayUS(20);
+            _FPDK_DelayUS(40);
             _FPDK_CLK_DOWN();
-            _FPDK_DelayUS(20);
+            _FPDK_DelayUS(40);
+          }
+
+          for( uint32_t e=0; e<4; e++ )                                                              //4 extra clocks
+          {
+            _FPDK_CLK_UP();
+            _FPDK_DelayUS(2);
+            _FPDK_CLK_DOWN();
+            _FPDK_DelayUS(2);
           }
         }
 
-        for( uint32_t e=0; e<4; e++ )                                                              //4 extra clocks
-        {
-          _FPDK_CLK_UP();
-          _FPDK_DelayUS(2);
-          _FPDK_CLK_DOWN();
-          _FPDK_DelayUS(2);
-        }
-
         _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
-
       }
       break;
 
@@ -454,76 +453,6 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
     }
   }
   _FPDK_DelayUS(25);
-
-#if 0
-  {
-    for( uint32_t p=0; p<count; p++ )
-      _FPDK_SendBits32F(data[p],data_bits);                                                        //write 1 word
-
-    _FPDK_SendBits32F(addr,addr_bits);                                                             //send address to write to
-    _FPDK_SetDatIncoming();                                                                        //set DAT incoming
-
-    _FPDK_DelayUS(4);
-
-    for( uint32_t l=0; l<write_block_clock_groups; l++ )
-    {
-      for( uint32_t w=0; w<write_block_clocks_per_group; w++ )
-      {
-        _FPDK_CLK_UP();
-        _FPDK_DelayUS(15);
-        _FPDK_CLK_DOWN();
-        _FPDK_DelayUS(15);
-      }
-
-      _FPDK_Clock();                                                                               //1 extra clock
-      _FPDK_DelayUS(4);
-    }
-    _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
-    _FPDK_DelayUS(25);
-  }
-  else
-  if( FPDK_IC_OTP3_1 == type )
-  {
-    //TODO:
-/*
-    for( uint32_t p=0; p<count; p++ )
-      _FPDK_SendBits32O2(data[p],data_bits);                                                       //write 1 word
-
-    _FPDK_SendBits32O2(addr,addr_bits);                                                            //send address to write to 
-    _FPDK_Commit2();                                                                               //send shift register commit + 1 clock
-
-    ...
-*/
-  }
-  else
-  {
-    for( uint32_t p=0; p<count; p++ )
-      _FPDK_SendBits32O(data[p],data_bits);                                                        //write 1 word
-
-    _FPDK_SendBits32O(addr,addr_bits);                                                             //send address to write to
-
-    _FPDK_Clock();                                                                                 //1 extra clock 
-    _FPDK_DelayUS(4);
-
-    for( uint32_t l=0; l<write_block_clock_groups; l++ )
-    {
-      _FPDK_CLK_UP();
-      for( uint32_t w=0; w<write_block_clocks_per_group; w++ )
-      {
-        _FPDK_SET_DAT_O(1);
-        _FPDK_DelayUS(30);
-        _FPDK_SET_DAT_O(0);
-        _FPDK_DelayUS(30);
-      }
-      _FPDK_CLK_DOWN();
-      _FPDK_DelayUS(4);
-
-      _FPDK_Clock();                                                                               //1 extra clock
-      _FPDK_DelayUS(4);
-    }
-    _FPDK_DelayUS(25);
-  }
-#endif
 }
 
 
@@ -967,16 +896,8 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
-  uint16_t resp;
-  switch( type )                                                                                   //send WRITE command
-  {
-    case FPDK_IC_FLASH_2: 
-      resp = _FPDK_SendCommand(type,0xB);
-      break;
-    default:
-      resp = _FPDK_SendCommand(type,0x7); 
-      break;
-  }
+  uint16_t resp = _FPDK_SendCommand(type,0x7);                                                     //send WRITE command
+
   if( FPDK_IS_FLASH_TYPE(type) && (ic_id != (resp&0xFFF)) )
   {
     _FPDK_LeaveProgramingMode(type, 0);
