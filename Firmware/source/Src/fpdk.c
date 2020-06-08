@@ -45,15 +45,15 @@ extern UART_HandleTypeDef huart1;
 #define _FPDK_SET_CMT(bit)   HAL_GPIO_WritePin( IC_IO_PA7_USART1_RX_GPIO_Port, IC_IO_PA7_USART1_RX_Pin, bit?GPIO_PIN_SET:GPIO_PIN_RESET )
 
 //general macros for programing IO
-#define _FPDK_DelayUS(us)    { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,#1\nCMP R0,#0\nBNE 1b"::[loops]"r"(10*us):"memory"); }
-#define _FPDK_Clock()        { _FPDK_CLK_UP(); _FPDK_CLK_DOWN(); }
-#define _FPDK_Clock2()       { _FPDK_CLK2_UP(); _FPDK_CLK2_DOWN(); }
-#define _FPDK_Commit2()      { _FPDK_SET_CMT(1); _FPDK_SET_CMT(0); _FPDK_Clock2(); }
+void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,#1\nCMP R0,#0\nBNE 1b"::[loops]"r"(10*us):"memory"); }
+#define _FPDK_Clock()        { _FPDK_CLK_UP(); _FPDK_DelayUS(1); _FPDK_CLK_DOWN(); }
+#define _FPDK_Clock2()       { _FPDK_CLK2_UP(); _FPDK_DelayUS(1);_FPDK_CLK2_DOWN(); }
+#define _FPDK_Commit2()      { _FPDK_SET_CMT(1);_FPDK_DelayUS(1); _FPDK_SET_CMT(0); _FPDK_Clock2(); }
 #define _FPDK_SendBitO(bit)  { _FPDK_SET_DAT_O(bit); _FPDK_Clock(); }
 #define _FPDK_SendBitO2(bit) { _FPDK_SET_DAT_O(bit); _FPDK_Clock2(); }
 #define _FPDK_SendBitF(bit)  { _FPDK_SET_DAT_F(bit); _FPDK_Clock(); }
-#define _FPDK_RecvBit()      ({ _FPDK_CLK_UP(); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK_DOWN(); bit; })
-#define _FPDK_RecvBit2()     ({ _FPDK_CLK2_UP(); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK2_DOWN(); bit; })
+#define _FPDK_RecvBit()      ({ _FPDK_CLK_UP(); _FPDK_DelayUS(1); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK_DOWN(); bit; })
+#define _FPDK_RecvBit2()     ({ _FPDK_CLK2_UP(); _FPDK_DelayUS(1); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK2_DOWN(); bit; })
 
 //board specific max values (DAC max => mV max after opamp output / -30 mV DAC DC offset)
 #define FPDK_VDD_DAC_MAX_MV ( 6290 - 30)
