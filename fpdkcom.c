@@ -113,7 +113,10 @@ int FPDKCOM_OpenAuto(char portpath[64])
     sprintf( portpath, "/dev/ttyACM%d", i );
   #endif
 #elif defined(__APPLE__) && defined(__MACH__)
-    sprintf( portpath, "/dev/tty.usbmodem1234567855AA%d", i+1 );
+    if( 0==i )
+      sprintf( portpath, "/dev/tty.usbmodem1234567855AA" );
+    else
+      sprintf( portpath, "/dev/tty.usbmodem1234567855AA%d", i );
 #elif defined(_WIN32)
     if( (i+1)<10 )
       sprintf( portpath, "COM%d", i+1 );
