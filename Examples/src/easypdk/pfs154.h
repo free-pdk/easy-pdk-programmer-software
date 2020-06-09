@@ -13,8 +13,8 @@
 //fuse definitions
 #define FUSE_SECURITY_OFF  0x0001 //(S)
 #define FUSE_SECURITY_ON   0x0000
-#define FUSE_PB4PB5_NORMAL 0x0000 //(D)
-#define FUSE_PB4PB5_STRONG 0x0100
+#define FUSE_IO_DRV_NORMAL 0x0000 //(D)
+#define FUSE_IO_DRV_STRONG 0x0100
 #define FUSE_BOOTUP_SLOW   0x0000 //(B)
 #define FUSE_BOOTUP_FAST   0x0600
 #define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S => 0x30FC
@@ -236,7 +236,7 @@ __sfr16          _t16c;
 
 //padie definitions
 #define PADIE_PA0_WAKEUP_ENABLE      0x01
-#define PADIE_PA3_ENABLE             0x08
+#define PADIE_PA3_WAKEUP_ENABLE      0x08
 #define PADIE_PA4_WAKEUP_ENABLE      0x10
 #define PADIE_PA5_WAKEUP_ENABLE      0x20
 #define PADIE_PA6_WAKEUP_ENABLE      0x40
@@ -356,7 +356,7 @@ __sfr16          _t16c;
 #define TM3C_CLK_PA4_FALL            0xD0
 #define TM3C_OUT_DISABLE             0x00
 #define TM3C_OUT_PB5                 0x04
-#define TM3C_OUT_PA6                 0x08
+#define TM3C_OUT_PB6                 0x08
 #define TM3C_OUT_PB7                 0x0C
 #define TM3C_MODE_PERIOD             0x00
 #define TM3C_MODE_PWM                0x02
@@ -409,8 +409,8 @@ __sfr16          _t16c;
 #define GPCC_COMP_MINUS_PA4          0x02
 #define GPCC_COMP_MINUS_BANDGAP_1V2  0x04
 #define GPCC_COMP_MINUS_VINT_R       0x06
-#define GPCC_COMP_MINUS_PA6          0x08
-#define GPCC_COMP_MINUS_PA7          0x0A
+#define GPCC_COMP_MINUS_PB6          0x08
+#define GPCC_COMP_MINUS_PB7          0x0A
 #define GPCC_COMP_OUT_INVERT         0x10
 #define GPCC_COMP_OUT_TO_TM2CLK      0x20
 #define GPCC_COMP_RESULT_NEGATIV     0x00
