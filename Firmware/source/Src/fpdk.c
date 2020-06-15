@@ -941,6 +941,8 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
                       write_addr_aligned, addr_bits, write_buf, data_bits, 
                       write_block_size, write_block_clock_groups, write_block_clocks_per_group);
     }
+
+    _FPDK_DelayUS(100);                                                                            //wait a bit so voltage can stabelize again (makes writing much more reliable)
   }
 
   _FPDK_LeaveProgramingMode(type, 100000);
