@@ -33,6 +33,14 @@ Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
 ```
 
+PFS172:
+```
+$ ./easypdkprog --icname=PFS172  write helloworld_pfs172.ihx
+Erasing IC... done.
+Writing IC... done.
+Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
+```
+
 PFS173:
 ```
 $ ./easypdkprog --icname=PFS173  write helloworld_pfs173.ihx
