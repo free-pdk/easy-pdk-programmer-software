@@ -21,8 +21,8 @@
 #define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
-#define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
-#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L8
+#define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H10
+#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L3B
 #define EASY_PDK_CALIBRATE_BG   EASY_PDK_CALIBRATE_BG_B3C
 #define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
 #define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }

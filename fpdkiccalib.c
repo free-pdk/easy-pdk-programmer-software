@@ -126,6 +126,24 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
  },
 
  {
+  .type=FPDKCALIB_IHRC0,
+  .codebits=14,
+  .loopcycles=7,
+  .algo={
+    { .sopc=0x2C48, .smsk=0xFFFF, .copc=0x1ED1, .cocf=CO_REPL|CO_AC_NOP},                                //search: AND A, 'H'            /   calib: SET1 IO(0x11).3  (PAC.3)   /   after-calib: NOP
+    { .sopc=0x2C31, .smsk=0xFFFF, .copc=0x1F0D, .cocf=CO_REPL|CO_AC_NOP},                                //search: AND A, '1'            /   calib: SET1 IO(0x0D).4  (PADIER.4)/   after-calib: NOP
+    { .sopc=0x2C30, .smsk=0xFFFF, .copc=0x2FFF, .cocf=CO_REPL|CO_AC_SETIMM},                             //search: AND A, '0'            /   calib: MOV A, 0xFF                /   after-calib: MOV A, <val>
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x2801, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_00},                 //search: AND A, *   (FREQ_00)  /   calib: ADD A, 0x01                /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1ED0, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_08},                 //search: AND A, *   (FREQ_08)  /   calib: SET1 IO(0x10).3  (PA.3)    /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x018B, .cocf=CO_REPL|CO_VAL_FREQ_16},                           //search: AND A, *   (FREQ_16)  /   calib: MOV IO(0x0B), A  (IHRCR)   /   after-calib: stay same
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1910, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_24},                 //search: AND A, *   (FREQ_24)  /   calib: T0SN IO(0x10).4  (PA.4)    /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x2801, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_MVOL_00},                 //search: AND A, *   (MVOL_00)  /   calib: ADD A, 0x01                /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1CD0, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_MVOL_08},                 //search: AND A, *   (MVOL_08)  /   calib: SET0 IO(0x10).3  (PA.3)    /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFFFF, .copc=0x3004, .cocf=CO_REPL|CO_BC_FIXUP|CO_AC_NOP},                    //search: AND A, 0              /   calib: GOTO 0x004       <FIXUP>   /   after-calib: NOP
+  }
+ },
+
+ {
   .type=FPDKCALIB_ILRC,
   .codebits=14,
   .loopcycles=7,
@@ -154,6 +172,23 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
     { .sopc=0x2C00, .smsk=0xFF00, .copc=0x2801, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_24},                 //search: AND A, *   (FREQ_24)  /   calib: ADD A, 0x01                /   after-calib: NOP
     { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1CD0, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_MVOL_00},                 //search: AND A, *   (MVOL_00)  /   calib: SET0 IO(0x10).3  (PA.3)    /   after-calib: NOP
     { .sopc=0x2C00, .smsk=0xFF00, .copc=0x3002, .cocf=CO_REPL|CO_BC_FIXUP|CO_AC_NOP|CO_VAL_MVOL_08},     //search: AND A, *   (MVOL_08)  /   calib: GOTO 0x002       <FIXUP>   /   after-calib: NOP
+  }
+ },
+
+ {
+  .type=FPDKCALIB_ILRC,
+  .codebits=14,
+  .loopcycles=7,
+  .algo={
+    { .sopc=0x2C4C, .smsk=0xFFFF, .copc=0x1ED1, .cocf=CO_REPL|CO_AC_NOP},                                //search: AND A, 'L'            /   calib: SET1 IO(0x11).3  (PAC.3)   /   after-calib: NOP
+    { .sopc=0x2C33, .smsk=0xFFFF, .copc=0x1F0D, .cocf=CO_REPL|CO_AC_NOP},                                //search: AND A, '3'            /   calib: SET1 IO(0x0D).4  (PADIER.4)/   after-calib: NOP
+    { .sopc=0x2C42, .smsk=0xFFFF, .copc=0x2FFF, .cocf=CO_REPL|CO_AC_SETIMM},                             //search: AND A, 'B'            /   calib: MOV A, 0xFF                /   after-calib: MOV A, <val>
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1ED0, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_00},                 //search: AND A, *   (FREQ_00)  /   calib: SET1 IO(0x10).3  (PA.3)    /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x01BB, .cocf=CO_REPL|CO_VAL_FREQ_08},                           //search: AND A, *   (FREQ_08)  /   calib: MOV IO(0x3B), A  (ILRCR)   /   after-calib: stay same
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1910, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_16},                 //search: AND A, *   (FREQ_16)  /   calib: T0SN IO(0x10).4  (PA.4)    /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x2801, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_FREQ_24},                 //search: AND A, *   (FREQ_24)  /   calib: ADD A, 0x01                /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x1CD0, .cocf=CO_REPL|CO_AC_NOP|CO_VAL_MVOL_00},                 //search: AND A, *   (MVOL_00)  /   calib: SET0 IO(0x10).3  (PA.3)    /   after-calib: NOP
+    { .sopc=0x2C00, .smsk=0xFF00, .copc=0x3003, .cocf=CO_REPL|CO_BC_FIXUP|CO_AC_NOP|CO_VAL_MVOL_08},     //search: AND A, *   (MVOL_08)  /   calib: GOTO 0x003       <FIXUP>   /   after-calib: NOP
   }
  },
 

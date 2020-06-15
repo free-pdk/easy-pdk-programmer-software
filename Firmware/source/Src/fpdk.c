@@ -1034,7 +1034,7 @@ static uint32_t _FPDK_CalibrateGetNextFreqeuncy()
   return 0;
 }
 
-static uint8_t _FPDK_CalibrateSingleFrequency(const uint32_t tune_frequency, const uint32_t multiplier, const uint8_t minval, const uint8_t maxval, const uint8_t step, uint32_t* actual_frequency)
+static uint8_t _FPDK_CalibrateSingleFrequency(const uint32_t tune_frequency, const uint32_t multiplier, const uint8_t minval, const uint8_t maxval, const uint8_t step, const bool skipFirstStep, uint32_t* actual_frequency)
 {
   *actual_frequency = 0;
 
@@ -1044,7 +1044,7 @@ static uint8_t _FPDK_CalibrateSingleFrequency(const uint32_t tune_frequency, con
   if( minval>0 )
     _FPDK_CalibrateNext(minval);
 
-  for( uint16_t t=minval; t<=maxval; t+=step )
+  for( uint16_t t=minval+(skipFirstStep?1:0); t<=maxval; t+=step )
   {
     uint32_t measured_frequency = multiplier * _FPDK_CalibrateGetNextFreqeuncy();
 
@@ -1119,12 +1119,17 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
     switch( type)
     {
       case 1: //IHRC
-        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
+        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, false, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
+        ret = true;
+        break;
+
+      case 4: //IHRC0 
+        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, true, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
         ret = true;
         break;
 
       case 2: //ILRC
-        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0xF0, 0x10, freq_tuned ); //only upper 4 bits are used
+        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0xF0, 0x10, false, freq_tuned ); //only upper 4 bits are used
         ret = true;
         break;
 

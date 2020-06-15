@@ -500,7 +500,8 @@ int main( int argc, const char * argv [] )
             break;
           switch( calibdata[calib].type )
           {
-            case FPDKCALIB_IHRC:         printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_IHRC:
+            case FPDKCALIB_IHRC0:        printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
             case FPDKCALIB_ILRC:         printf("* ILRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
             case FPDKCALIB_BG:           printf("* BandGap"); break;
             default:
@@ -523,6 +524,7 @@ int main( int argc, const char * argv [] )
           switch( calibdata[calib].type )
           {
             case FPDKCALIB_IHRC:
+            case FPDKCALIB_IHRC0:
             case FPDKCALIB_ILRC:
               {
                 printf("%dHz ", fcalfreq);
