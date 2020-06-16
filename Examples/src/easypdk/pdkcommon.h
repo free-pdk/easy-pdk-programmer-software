@@ -171,6 +171,7 @@ __asm__(                                 \
   "and a, #0                          \n"\
   "and a, #0                          \n"\
   "and a, #0                          \n"\
+  "and a, #0                          \n"\
 )
 
 #define EASY_PDK_CALIBRATE_BG_B63() \
