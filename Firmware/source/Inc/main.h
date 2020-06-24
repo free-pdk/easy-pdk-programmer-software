@@ -58,6 +58,9 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define HW_VAR_ORIGINAL 1
+#define HW_VAR_MINI_PILL 2
+
 #define LED1_OUT_Pin GPIO_PIN_13
 #define LED1_OUT_GPIO_Port GPIOC
 #define LED2_OUT_Pin GPIO_PIN_14
@@ -80,6 +83,8 @@ void Error_Handler(void);
 #define IC_IO_PA0_UART1_TX_GPIO_Port GPIOB
 #define IC_IO_PA7_USART1_RX_Pin GPIO_PIN_7
 #define IC_IO_PA7_USART1_RX_GPIO_Port GPIOB
+#define HWID_MINI_PILL_Pin GPIO_PIN_9
+#define HWID_MINI_PILL_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

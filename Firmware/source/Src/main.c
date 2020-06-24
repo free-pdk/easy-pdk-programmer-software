@@ -62,6 +62,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static uint8_t MX_Get_HW_Variant(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_DAC_Init(void);
@@ -226,7 +227,10 @@ static void MX_ADC_Init(void)
   }
   /** Configure for the selected ADC regular channel to be converted. 
   */
-  sConfig.Channel = ADC_CHANNEL_8;
+  if( MX_Get_HW_Variant() == HW_VAR_MINI_PILL )
+    sConfig.Channel = ADC_CHANNEL_1;
+  else
+    sConfig.Channel = ADC_CHANNEL_8;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
   sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
@@ -235,7 +239,10 @@ static void MX_ADC_Init(void)
   }
   /** Configure for the selected ADC regular channel to be converted. 
   */
-  sConfig.Channel = ADC_CHANNEL_9;
+  if( MX_Get_HW_Variant() == HW_VAR_MINI_PILL )
+    sConfig.Channel = ADC_CHANNEL_2;
+  else
+    sConfig.Channel = ADC_CHANNEL_9;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -588,6 +595,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(USER_BTN_IN_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : HWID_MINI_PILL_Pin */
+  GPIO_InitStruct.Pin = HWID_MINI_PILL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(HWID_MINI_PILL_GPIO_Port, &GPIO_InitStruct);
+}
+
+static uint8_t MX_Get_HW_Variant(void)
+{
+	if( !(HAL_GPIO_ReadPin( HWID_MINI_PILL_GPIO_Port, HWID_MINI_PILL_Pin )) )
+		return HW_VAR_MINI_PILL;
+
+	return HW_VAR_ORIGINAL;
 }
 
 /* USER CODE BEGIN 4 */
