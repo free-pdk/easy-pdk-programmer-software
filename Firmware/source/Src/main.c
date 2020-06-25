@@ -228,7 +228,7 @@ static void MX_ADC_Init(void)
   /** Configure for the selected ADC regular channel to be converted. 
   */
   if( MX_Get_HW_Variant() == HW_VAR_MINI_PILL )
-    sConfig.Channel = ADC_CHANNEL_1;
+    sConfig.Channel = ADC_CHANNEL_0;
   else
     sConfig.Channel = ADC_CHANNEL_8;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
@@ -240,7 +240,7 @@ static void MX_ADC_Init(void)
   /** Configure for the selected ADC regular channel to be converted. 
   */
   if( MX_Get_HW_Variant() == HW_VAR_MINI_PILL )
-    sConfig.Channel = ADC_CHANNEL_2;
+    sConfig.Channel = ADC_CHANNEL_1;
   else
     sConfig.Channel = ADC_CHANNEL_9;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
