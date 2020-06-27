@@ -31,7 +31,7 @@ typedef enum FPDKICTYPE
   FPDK_IC_FLASH_2  = 0xF2,
 } FPDKICTYPE;
 
-#define FPDK_IS_FLASH_TYPE(type) (type&0xF0)
+#define FPDK_IS_FLASH_TYPE(type) (0xF0==(type&0xF0))
 
 typedef struct FPDKICDATA
 {
