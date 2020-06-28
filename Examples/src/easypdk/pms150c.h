@@ -179,7 +179,7 @@ __sfr16          _t16c;
 
 //padie definitions
 #define PADIE_PA0_WAKEUP_ENABLE      0x01
-#define PADIE_PA3_ENABLE             0x08
+#define PADIE_PA3_WAKEUP_ENABLE      0x08
 #define PADIE_PA4_WAKEUP_ENABLE      0x10
 #define PADIE_PA5_WAKEUP_ENABLE      0x20
 #define PADIE_PA6_WAKEUP_ENABLE      0x40

@@ -22,12 +22,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef enum FPDKICTYPE
 {
-  FPDK_IC_FLASH   = 'F',
   FPDK_IC_OTP1_2  = 0x12,
   FPDK_IC_OTP2_1  = 0x21,
   FPDK_IC_OTP2_2  = 0x22,
   FPDK_IC_OTP3_1  = 0x31,
+//  FPDK_IC_FLASH    = 0xF0,
+  FPDK_IC_FLASH_1  = 0xF1,
+  FPDK_IC_FLASH_2  = 0xF2,
 } FPDKICTYPE;
+
+#define FPDK_IS_FLASH_TYPE(type) (type&0xF0)
 
 typedef struct FPDKICDATA
 {
@@ -46,6 +50,8 @@ typedef struct FPDKICDATA
   uint16_t   exclude_code_end;
   float      vdd_cmd_read;
   float      vpp_cmd_read;
+  float      vdd_read_hv;
+  float      vpp_read_hv;
   float      vdd_cmd_write;
   float      vpp_cmd_write;
   float      vdd_write_hv;
@@ -62,7 +68,7 @@ typedef struct FPDKICDATA
 } FPDKICDATA;
 
 FPDKICDATA* FPDKICDATA_GetICDataById12Bit(const uint16_t id12bit);
-FPDKICDATA* FPDKICDATA_GetICDataForOTPByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp);
+FPDKICDATA* FPDKICDATA_GetICDataByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp);
 FPDKICDATA* FPDKICDATA_GetICDataByName(const char* name);
 
 #endif //__FPDKICDATA_H_

@@ -48,6 +48,7 @@ int      FPDKCOM_IC_Probe(const int fd, float* vpp_found, float* vdd_found, FPDK
 
 int      FPDKCOM_IC_BlankCheck(const int fd, const uint16_t icid, const FPDKICTYPE type,
                                const float vdd_cmd, const float vpp_cmd,
+                               const float vdd_read, const float vpp_read,
                                const uint8_t addr_bits, const uint8_t data_bits, const uint16_t count,
                                const bool exclude_first_instructionconst, uint16_t exclude_start, const uint16_t exclude_end);
 
@@ -56,6 +57,7 @@ int      FPDKCOM_IC_Erase(const int fd, const uint16_t icid, const FPDKICTYPE ty
 
 int      FPDKCOM_IC_Read(const int fd, const uint16_t icid, const FPDKICTYPE type,
                          const float vdd_cmd, const float vpp_cmd,
+                         const float vdd_read, const float vpp_read,
                          const uint16_t addr, const uint8_t addr_bits,
                          const uint16_t data_offs, const uint8_t data_bits,
                          const uint16_t count);
@@ -70,6 +72,7 @@ int      FPDKCOM_IC_Write(const int fd, const uint16_t icid, const FPDKICTYPE ty
 
 int      FPDKCOM_IC_Verify(const int fd, const uint16_t icid, const FPDKICTYPE type,
                            const float vdd_cmd, const float vpp_cmd,
+                           const float vdd_read, const float vpp_read,
                            const uint16_t addr, const uint8_t addr_bits,
                            const uint16_t data_offs, const uint8_t data_bits,
                            const uint16_t count,

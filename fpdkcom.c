@@ -29,8 +29,8 @@ static const char FPDK_VERSCAN[] = "FREE-PDK EASY PROG - HW:%u.%u SW:%u.%u PROTO
 
 #define FPDKCOM_CMDRSP_TIMEOUT              50
 #define FPDKCOM_CMDRSP_PROBEIC_TIMEOUT      3500
-#define FPDKCOM_CMDRSP_READIC_TIMEOUT       500
-#define FPDKCOM_CMDRSP_ERASE_TIMEOUT        1000
+#define FPDKCOM_CMDRSP_READIC_TIMEOUT       1000
+#define FPDKCOM_CMDRSP_ERASE_TIMEOUT        2000
 #define FPDKCOM_CMDRSP_WRITE_TIMEOUT        2000
 #define FPDKCOM_CMDRSP_CALIBRATEIC_TIMEOUT  10000
 
@@ -113,7 +113,10 @@ int FPDKCOM_OpenAuto(char portpath[64])
     sprintf( portpath, "/dev/ttyACM%d", i );
   #endif
 #elif defined(__APPLE__) && defined(__MACH__)
-    sprintf( portpath, "/dev/tty.usbmodem1234567855AA%d", i+1 );
+    if( 0==i )
+      sprintf( portpath, "/dev/tty.usbmodem1234567855AA" );
+    else
+      sprintf( portpath, "/dev/tty.usbmodem1234567855AA%d", i );
 #elif defined(_WIN32)
     if( (i+1)<10 )
       sprintf( portpath, "COM%d", i+1 );
@@ -144,7 +147,7 @@ int FPDKCOM_Open(const char* devname)
     serialcom_close(fd);
     return -2;
   }
-  if( FPDKPROTO_MAJOR != proto_major || FPDKPROTO_MINOR != proto_minor )
+  if( (FPDKPROTO_MAJOR != proto_major) || (FPDKPROTO_MINOR != proto_minor) )
   {
     serialcom_close(fd);
     return -3;
@@ -279,15 +282,19 @@ int FPDKCOM_IC_Probe(const int fd, float* vpp_found, float* vdd_found, FPDKICTYP
 int FPDKCOM_IC_BlankCheck(const int fd,
                           const uint16_t icid, const FPDKICTYPE type,
                           const float vdd_cmd, const float vpp_cmd,
+                          const float vdd_read, const float vpp_read,
                           const uint8_t addr_bits, const uint8_t data_bits,
                           const uint16_t count,
                           const bool exclude_first_instruction, const uint16_t exclude_start, const uint16_t exclude_end)
 {
-  uint32_t vdd_cmd_u = vdd_cmd*1000;
-  uint32_t vpp_cmd_u = vpp_cmd*1000;
+  uint32_t vdd_cmd_u  = vdd_cmd*1000;
+  uint32_t vpp_cmd_u  = vpp_cmd*1000;
+  uint32_t vdd_read_u = vdd_read*1000;
+  uint32_t vpp_read_u = vpp_read*1000;
 
   uint8_t dat[] = { icid,icid>>8, type,
                     vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24, vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
                     addr_bits, data_bits, count,count>>8, 
                     exclude_first_instruction, exclude_start,exclude_start>>8, exclude_end,exclude_end>>8 };
 
@@ -324,15 +331,19 @@ int FPDKCOM_IC_Erase(const int fd,
 int FPDKCOM_IC_Read(const int fd,
                     const uint16_t icid, const FPDKICTYPE type,
                     const float vdd_cmd, const float vpp_cmd,
+                    const float vdd_read, const float vpp_read,
                     const uint16_t addr, const uint8_t addr_bits,
                     const uint16_t data_offs, const uint8_t data_bits,
                     const uint16_t count)
 {
-  uint32_t vdd_cmd_u = vdd_cmd*1000;
-  uint32_t vpp_cmd_u = vpp_cmd*1000;
+  uint32_t vdd_cmd_u  = vdd_cmd*1000;
+  uint32_t vpp_cmd_u  = vpp_cmd*1000;
+  uint32_t vdd_read_u = vdd_read*1000;
+  uint32_t vpp_read_u = vpp_read*1000;
 
   uint8_t dat[] = { icid,icid>>8, type,
                     vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24, vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
                     addr,addr>>8, addr_bits,
                     data_offs,data_offs>>8, data_bits,
                     count,count>>8 };
@@ -375,16 +386,20 @@ int FPDKCOM_IC_Write(const int fd,
 int FPDKCOM_IC_Verify(const int fd,
                       const uint16_t icid, const FPDKICTYPE type,
                       const float vdd_cmd, const float vpp_cmd,
+                      const float vdd_read, const float vpp_read,
                       const uint16_t addr, const uint8_t addr_bits,
                       const uint16_t data_offs, const uint8_t data_bits,
                       const uint16_t count,
                       const bool exclude_first_instruction, const uint16_t exclude_start, const uint16_t exclude_end)
 {
-  uint32_t vdd_cmd_u = vdd_cmd*1000;
-  uint32_t vpp_cmd_u = vpp_cmd*1000;
+  uint32_t vdd_cmd_u  = vdd_cmd*1000;
+  uint32_t vpp_cmd_u  = vpp_cmd*1000;
+  uint32_t vdd_read_u = vdd_read*1000;
+  uint32_t vpp_read_u = vpp_read*1000;
 
   uint8_t dat[] = { icid,icid>>8, type,
                     vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24, vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
                     addr,addr>>8, addr_bits,
                     data_offs,data_offs>>8, data_bits,
                     count,count>>8,

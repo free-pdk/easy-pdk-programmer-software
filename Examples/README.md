@@ -5,8 +5,6 @@ Easy PDK programmer can capture serial data and shows it as output in easypdkpro
 
 * Helloworld is a sample program which shows how to setup the processor and how to send a "Hello World!" string over a software emulated serial output on PA7.
 
-* Serialecho is a simple example which shows how to receive (PA0) and send (PA7) at the same time. The baud rate is lowered to 57600 since higher baud rates consume more time in interrupt.
-
 * ADCtest shows how to use the ADC. First it measures the internal bandgap voltage of 1.2V and can then estimate VDD from it. Then it constantly measures and outputs the ADC value on PA.0.
 
 * COMPtest shows how to use the comparator to estimate VDD using internal bandgap voltage of 1.2V and the internal resistor ladder.
@@ -30,6 +28,14 @@ IC is supported: PFS154 ICID:0xAA1
 PFS154:
 ```
 $ ./easypdkprog --icname=PFS154  write helloworld_pfs154.ihx
+Erasing IC... done.
+Writing IC... done.
+Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
+```
+
+PFS172:
+```
+$ ./easypdkprog --icname=PFS172  write helloworld_pfs172.ihx
 Erasing IC... done.
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.

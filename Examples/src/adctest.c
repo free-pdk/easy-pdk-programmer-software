@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "easypdk/pfs173.h" 
+#include "easypdk/pdk.h" 
 
 volatile uint16_t txdata;                       //txdata, serial data shift register
 
@@ -52,7 +52,9 @@ void main(void)
   __engint();                                   //enable global interrupts
 
   //setup ADC
+#ifdef ADCRGC
   ADCRGC = ADCRG_ADC_REF_VDD;                   //ADC reference voltage is VDD
+#endif
   ADCM = ADCM_CLK_SYSCLK_DIV16;                 //SYSCLK 8MHZ/16 -> 500 kHz ADC clock
   ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD16_BANDGAP;//enable ADC and use channel 16 (internal bandgap voltage 1.2V)
                                                 //NOTE: a delay of 400usec is required after initialization, before first ADC conversion can start

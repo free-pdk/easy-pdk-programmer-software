@@ -20,8 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static const FPDKICDATA fpdk_ic_table[] =
 {
   { .name                         = "PMS131",
+    .name_variant_1               = "PMC131",
     .otpid                        = 0x0C83,
-    .id12bit                      = 0xC83,          //OTP_WAY: 0x0F
+    .id12bit                      = 0xC83,
     .type                         = FPDK_IC_OTP2_2,
     .addressbits                  = 12,
     .codebits                     = 14,
@@ -31,6 +32,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x600,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -45,7 +48,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PMS132",
     .name_variant_1               = "PMS132B",
     .otpid                        = 0x2F09,
-    .id12bit                      = 0x109,          //OTP_WAY: 0x11
+    .id12bit                      = 0x109,
     .type                         = FPDK_IC_OTP2_2,
     .addressbits                  = 12,
     .codebits                     = 14,
@@ -55,6 +58,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x800,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -69,7 +74,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PMS133",
     .name_variant_1               = "PMS134",
     .otpid                        = 0x2B19,
-    .id12bit                      = 0xC19,          //OTP_WAY: 0x14
+    .id12bit                      = 0xC19,
     .type                         = FPDK_IC_OTP2_1,
     .addressbits                  = 12,
     .codebits                     = 15,
@@ -79,6 +84,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x1000,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -93,7 +100,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PMS150C",
     .name_variant_1               = "PMS15A",
     .otpid                        = 0x2A16,
-    .id12bit                      = 0xA16,          //OTP_WAY: 0x12
+    .id12bit                      = 0xA16,
     .type                         = FPDK_IC_OTP1_2,
     .addressbits                  = 12,
     .codebits                     = 13,
@@ -103,6 +110,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -114,7 +123,7 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "PMS152",
     .otpid                        = 0x2A27,
-    .id12bit                      = 0xA27,          //OTP_WAY: 0x11
+    .id12bit                      = 0xA27,
     .type                         = FPDK_IC_OTP2_2,
     .addressbits                  = 12,
     .codebits                     = 14,
@@ -124,6 +133,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x500,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -136,7 +147,7 @@ static const FPDKICDATA fpdk_ic_table[] =
   { .name                         = "PMS154B",
     .name_variant_1               = "PMS154C",
     .otpid                        = 0x2C06,
-    .id12bit                      = 0xE06,          //OTP_WAY: 0x11
+    .id12bit                      = 0xE06,
     .type                         = FPDK_IC_OTP1_2,
     .addressbits                  = 12,
     .codebits                     = 14,
@@ -147,6 +158,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x800,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -158,25 +171,27 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "PFS154",
     .otpid                        = 0x2AA1,
-    .id12bit                      = 0xAA1,          //OTP_WAY: 0x13
-    .type                         = FPDK_IC_FLASH,
+    .id12bit                      = 0xAA1,
+    .type                         = FPDK_IC_FLASH_1,
     .addressbits                  = 13,
     .codebits                     = 14,
     .codewords                    = 0x800,
     .ramsize                      = 0x80,
     .exclude_code_start           = 0x7E0,  //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
     .exclude_code_end             = 0x7F0,
-    .vdd_cmd_read                 = 2.5, //3.0,
-    .vpp_cmd_read                 = 5.5, //5.0
-    .vdd_cmd_write                = 2.5, //3.0,
-    .vpp_cmd_write                = 5.5, //5.0
+    .vdd_cmd_read                 = 2.5,
+    .vpp_cmd_read                 = 5.5,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
+    .vdd_cmd_write                = 2.5,
+    .vpp_cmd_write                = 5.5,
     .vdd_write_hv                 = 5.8,
     .vpp_write_hv                 = 8.5,
     .write_block_size             = 4,
     .write_block_clock_groups     = 1,
     .write_block_clocks_per_group = 8,
-    .vdd_cmd_erase                = 2.5, //3.0
-    .vpp_cmd_erase                = 5.5, //5.0
+    .vdd_cmd_erase                = 2.5,
+    .vpp_cmd_erase                = 5.5,
     .vdd_erase_hv                 = 3.0,
     .vpp_erase_hv                 = 9.0,
     .erase_clocks                 = 2
@@ -184,7 +199,7 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "PMS171B",
     .otpid                        = 0x2D36,
-    .id12bit                      = 0xD36,          //OTP_WAY: 0x11
+    .id12bit                      = 0xD36,
     .type                         = FPDK_IC_OTP2_2,
     .addressbits                  = 12,
     .codebits                     = 14,
@@ -194,6 +209,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x600,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -205,27 +222,57 @@ static const FPDKICDATA fpdk_ic_table[] =
 */
   },
 
+  { .name                         = "PFS172",
+    .otpid                        = 0x2AA6,
+    .id12bit                      = 0xCA6,
+    .type                         = FPDK_IC_FLASH_2,
+    .addressbits                  = 13,
+    .codebits                     = 14,
+    .codewords                    = 0x800,
+    .ramsize                      = 0x80,
+    .exclude_code_start           = 0x7E0, //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
+    .exclude_code_end             = 0x7F0,
+    .vdd_cmd_read                 = 2.5,
+    .vpp_cmd_read                 = 5.5,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 0.0,
+    .vdd_cmd_write                = 2.5,
+    .vpp_cmd_write                = 5.5,
+    .vdd_write_hv                 = 5.3,
+    .vpp_write_hv                 = 0.0,
+    .write_block_size             = 4,
+    .write_block_clock_groups     = 1,
+    .write_block_clocks_per_group = 4,
+    .vdd_cmd_erase                = 2.5,
+    .vpp_cmd_erase                = 5.5,
+    .vdd_erase_hv                 = 5.3,
+    .vpp_erase_hv                 = 0.0,
+    .erase_clocks                 = 14, //2 (not sure why we need so many clocks)
+  },
+
   { .name                         = "PFS173",
     .otpid                        = 0x2AA2,
-    .id12bit                      = 0xEA2,          //OTP_WAY: 0x13
-    .type                         = FPDK_IC_FLASH,
+    .id12bit                      = 0xEA2,
+    .type                         = FPDK_IC_FLASH_1,
     .addressbits                  = 13,
     .codebits                     = 15,
     .codewords                    = 0xC00,
     .ramsize                      = 0x100,
     .exclude_code_start           = 0xBE0, //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
     .exclude_code_end             = 0xBF0,
-    .vdd_cmd_read                 = 2.5, //3.0
-    .vpp_cmd_read                 = 5.5, //5.0
-    .vdd_cmd_write                = 4.0,
-    .vpp_cmd_write                = 8.0,
+    .vdd_cmd_read                 = 2.5,
+    .vpp_cmd_read                 = 5.5,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
+    .vdd_cmd_write                = 2.5,
+    .vpp_cmd_write                = 5.5,
     .vdd_write_hv                 = 5.8,
-    .vpp_write_hv                 = 8.5,
+    .vpp_write_hv                 = 9.0,
     .write_block_size             = 4,
     .write_block_clock_groups     = 1,
     .write_block_clocks_per_group = 8,
-    .vdd_cmd_erase                = 2.5, //3.0,
-    .vpp_cmd_erase                = 5.5, //5.0
+    .vdd_cmd_erase                = 2.5,
+    .vpp_cmd_erase                = 5.5,
     .vdd_erase_hv                 = 3.0,
     .vpp_erase_hv                 = 9.0,
     .erase_clocks                 = 4
@@ -233,16 +280,18 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "PMC251",
     .otpid                        = 0x0058,
-    .id12bit                      = 0x058,          //OTP_WAY: 0x0A
+    .id12bit                      = 0x058,
     .type                         = FPDK_IC_OTP3_1,
     .addressbits                  = 13,
     .codebits                     = 16,
     .codewords                    = 0x400,
-    .ramsize                      = 0x60,
+    .ramsize                      = 0x3B,
     .exclude_code_start           = 0x3F9,
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 2.5, 
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -255,8 +304,9 @@ static const FPDKICDATA fpdk_ic_table[] =
   },
 
   { .name                         = "PMS271",
+    .name_variant_1               = "PMC271",
     .otpid                        = 0x0A58,
-    .id12bit                      = 0xA58,          //OTP_WAY: 0x0A
+    .id12bit                      = 0xA58,
     .type                         = FPDK_IC_OTP3_1,
     .addressbits                  = 13,
     .codebits                     = 16,
@@ -266,6 +316,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x400,
     .vdd_cmd_read                 = 2.5, 
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -279,7 +331,7 @@ static const FPDKICDATA fpdk_ic_table[] =
 
   { .name                         = "MCU390",
     .otpid                        = 0x2A31,
-    .id12bit                      = 0xC31,          //OTP_WAY: 0x15
+    .id12bit                      = 0xC31,
     .type                         = FPDK_IC_OTP1_2,
     .addressbits                  = 12,
     .codebits                     = 14,
@@ -289,6 +341,8 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x800,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
+    .vdd_read_hv                  = 3.0,
+    .vpp_read_hv                  = 5.0,
 /*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
@@ -331,9 +385,17 @@ static FPDKICDATA* _FPDKICDATA_GetICDataById12BitAndCodebits(const FPDKICTYPE ty
   return 0;
 }
 
-FPDKICDATA* FPDKICDATA_GetICDataForOTPByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp)
+FPDKICDATA* FPDKICDATA_GetICDataByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp)
 {
   unsigned int shift;
+
+  if( FPDK_IS_FLASH_TYPE(type) )
+  {
+    FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(cmdrsp);
+    if( !icdata )
+      icdata = FPDKICDATA_GetICDataById12Bit(cmdrsp<<1);
+    return icdata;
+  }
 
   switch( type )
   {

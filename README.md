@@ -2,7 +2,7 @@ EASY PDK PROGRAMMER SOFTWARE
 [![License](https://img.shields.io/:license-gpl3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.html) [![Build Status](https://travis-ci.org/free-pdk/easy-pdk-programmer-software.svg?branch=master)](https://travis-ci.org/free-pdk/easy-pdk-programmer-software) [![Downloads](https://img.shields.io/github/downloads/free-pdk/easy-pdk-programmer-software/total.svg?maxAge=3600)](https://github.com/free-pdk/easy-pdk-programmer-software/releases/latest)
 ----------------------------
 
-Download: [![Release](https://img.shields.io/github/release/free-pdk/easy-pdk-programmer-software.svg?maxAge=60)](https://github.com/free-pdk/easy-pdk-programmer-software/releases/latest)
+Download: [![Release](https://img.shields.io/github/release/free-pdk/easy-pdk-programmer-software.svg?maxAge=60)](https://github.com/free-pdk/easy-pdk-programmer-software/releases/latest) <== click here to download.
 
 
 ```

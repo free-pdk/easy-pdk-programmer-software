@@ -14,6 +14,7 @@
 #define __disgint()  __asm__("disgint\n")
 #define __stopsys()  __asm__("stopsys\n")
 #define __stopexe()  __asm__("stopexe\nnop\n")
+#define __wdreset()  __asm__("wdreset\n")
 #define __set0(x,y)  __asm__("set0 "_ASMV(x)", #"_ASMD(y)"\n")
 #define __set1(x,y)  __asm__("set1 "_ASMV(x)", #"_ASMD(y)"\n")
 
@@ -67,6 +68,19 @@ __asm__(                                 \
   "and a, #(("_ASMD(millivolt)")>>8)  \n"\
 )
 
+#define EASY_PDK_CALIBRATE_ILRC_L3B(frequency,millivolt) \
+__asm__(                                 \
+  "and a, #'L'                        \n"\
+  "and a, #'3'                        \n"\
+  "and a, #'B'                        \n"\
+  "and a, #(("_ASMD(frequency)"))     \n"\
+  "and a, #(("_ASMD(frequency)")>>8)  \n"\
+  "and a, #(("_ASMD(frequency)")>>16) \n"\
+  "and a, #(("_ASMD(frequency)")>>24) \n"\
+  "and a, #(("_ASMD(millivolt)"))     \n"\
+  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
+)
+
 #define EASY_PDK_CALIBRATE_IHRC_H9(frequency,millivolt) \
 __asm__(                                 \
   "and a, #'H'                        \n"\
@@ -93,6 +107,21 @@ __asm__(                                 \
   "and a, #0                          \n"\
 )
 
+#define EASY_PDK_CALIBRATE_IHRC_H10(frequency,millivolt) \
+__asm__(                                 \
+  "and a, #'H'                        \n"\
+  "and a, #'1'                        \n"\
+  "and a, #'0'                        \n"\
+  "and a, #(("_ASMD(frequency)"))     \n"\
+  "and a, #(("_ASMD(frequency)")>>8)  \n"\
+  "and a, #(("_ASMD(frequency)")>>16) \n"\
+  "and a, #(("_ASMD(frequency)")>>24) \n"\
+  "and a, #(("_ASMD(millivolt)"))     \n"\
+  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
+  "and a, #0                          \n"\
+)
+
+
 #define EASY_PDK_CALIBRATE_BG_B19() \
 __asm__(                                 \
   "and a, #'B'                        \n"\
@@ -115,6 +144,24 @@ __asm__(                                 \
   "and a, #'B'                        \n"\
   "and a, #'1'                        \n"\
   "and a, #'A'                        \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+  "and a, #0                          \n"\
+)
+
+#define EASY_PDK_CALIBRATE_BG_B3C() \
+__asm__(                                 \
+  "and a, #'B'                        \n"\
+  "and a, #'3'                        \n"\
+  "and a, #'C'                        \n"\
+  "and a, #0                          \n"\
   "and a, #0                          \n"\
   "and a, #0                          \n"\
   "and a, #0                          \n"\
