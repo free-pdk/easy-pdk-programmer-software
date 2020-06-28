@@ -1,5 +1,5 @@
-SDCC=../../sdcc/bin/sdcc
-OUTDIR=build
+SDCC = sdcc
+OUTDIR = build
 
 all: PFS154 PFS172 PFS173 PMS150C PMS152
 
@@ -28,7 +28,6 @@ PMS150C:
 PMS152:
 	mkdir -p $(OUTDIR)
 	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/helloworld_pms152.ihx helloworld.c
-	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/serialecho_pms152.ihx serialecho.c
 	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/comptest_pms152.ihx comptest.c
 
 clean:
