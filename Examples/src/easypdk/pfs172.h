@@ -11,8 +11,8 @@
 #include "pdkcommon.h"
 
 //fuse definitions
-#define FUSE_SECURITY_OFF  0x0001 //(S)
-#define FUSE_SECURITY_ON   0x0000
+#define FUSE_SECURITY_ON   0x0000 //(S)
+#define FUSE_SECURITY_OFF  0x0001
 #define FUSE_PB4PB7_NORMAL 0x0000 //(D)
 #define FUSE_PB4PB7_STRONG 0x0080
 #define FUSE_BOOTUP_SLOW   0x0000 //(B)
@@ -137,10 +137,10 @@ __sfr16          _t16c;
 #define T16C      _t16c
 
 //flag definitions
-#define FLAG_ZF 1
-#define FLAG_CF 2
-#define FLAG_AC 4
-#define FLAG_OV 8
+#define FLAG_ZF 0x01
+#define FLAG_CF 0x02
+#define FLAG_AC 0x04
+#define FLAG_OV 0x08
 #define FLAG_ZF_BIT 0
 #define FLAG_CF_BIT 1
 #define FLAG_AC_BIT 2
@@ -178,6 +178,17 @@ __sfr16          _t16c;
 #define INTEN_TM2                    0x40
 #define INTEN_TM3                    0x80
 
+#define INTEN_PA0_BIT                0
+#define INTEN_PB5_BIT                0
+#define INTEN_PB0_BIT                1
+#define INTEN_PA4_BIT                1
+#define INTEN_T16_BIT                2
+#define INTEN_ADC_BIT                3
+#define INTEN_COMP_BIT               4
+#define INTEN_PWMG_BIT               5
+#define INTEN_TM2_BIT                6
+#define INTEN_TM3_BIT                7
+
 //interrupt request definitions
 #define INTRQ_PA0                    0x01
 #define INTRQ_PB5                    0x01
@@ -189,6 +200,17 @@ __sfr16          _t16c;
 #define INTRQ_PWMG                   0x20
 #define INTRQ_TM2                    0x40
 #define INTRQ_TM3                    0x80
+
+#define INTRQ_PA0_BIT                0
+#define INTRQ_PB5_BIT                0
+#define INTRQ_PB0_BIT                1
+#define INTRQ_PA4_BIT                1
+#define INTRQ_T16_BIT                2
+#define INTRQ_ADC_BIT                3
+#define INTRQ_COMP_BIT               4
+#define INTRQ_PWMG_BIT               5
+#define INTRQ_TM2_BIT                6
+#define INTRQ_TM3_BIT                7
 
 //tm16 definitions
 #define T16_INTSRC_8BIT              0x00
