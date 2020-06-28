@@ -124,7 +124,6 @@ static const FPDKICDATA fpdk_ic_table[] =
     .exclude_code_end             = 0x500,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
-/*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -132,7 +131,6 @@ static const FPDKICDATA fpdk_ic_table[] =
     .write_block_size             = 2,
     .write_block_clock_groups     = 1,
     .write_block_clocks_per_group = 8,
-*/
   },
 
   { .name                         = "PMS154B",
