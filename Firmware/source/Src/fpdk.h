@@ -24,6 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __FPDKSW__ "1.3"
 #define __FPDKHW__ "1.2"
 
+typedef enum FPDKHWVARIANT
+{
+  FPDK_HWVAR_NONE = 0,
+  FPDK_HWVAR_MINI_PILL = 1,
+} FPDKHWVARIANT;
+
 typedef enum FPDKICTYPE
 {
   FPDK_IC_OTP1_2   = 0x12,
