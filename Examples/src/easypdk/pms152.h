@@ -149,7 +149,7 @@ __sfr16          _t16c;
 #define FLAG_OV_BIT 3
 
 //clkmd definitions
-#define CLKMD_ENABLE_PRSTB           0x01
+#define CLKMD_ENABLE_PA5RST          0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10
@@ -177,15 +177,6 @@ __sfr16          _t16c;
 #define INTEN_PWMG                   0x20
 #define INTEN_TM2                    0x40
 
-#define INTEN_PA0_BIT                0
-#define INTEN_PB5_BIT                0
-#define INTEN_PB0_BIT                1
-#define INTEN_PA4_BIT                1
-#define INTEN_T16_BIT                2
-#define INTEN_COMP_BIT               4
-#define INTEN_PWMG_BIT               5
-#define INTEN_TM2_BIT                6
-
 //interrupt request definitions
 #define INTRQ_PA0                    0x01
 #define INTRQ_PB5                    0x01
@@ -195,15 +186,6 @@ __sfr16          _t16c;
 #define INTRQ_COMP                   0x10
 #define INTRQ_PWMG                   0x20
 #define INTRQ_TM2                    0x40
-
-#define INTRQ_PA0_BIT                0
-#define INTRQ_PB5_BIT                0
-#define INTRQ_PB0_BIT                1
-#define INTRQ_PA4_BIT                1
-#define INTRQ_T16_BIT                2
-#define INTRQ_COMP_BIT               4
-#define INTRQ_PWMG_BIT               5
-#define INTRQ_TM2_BIT                6
 
 //tm16 definitions
 #define T16_INTSRC_8BIT              0x00
