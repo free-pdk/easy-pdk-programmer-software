@@ -161,7 +161,7 @@ __sfr16          _t16c;
 #define FLAG_OV_BIT 3
 
 //clkmd definitions
-#define CLKMD_ENABLE_PRSTB          0x01
+#define CLKMD_ENABLE_PRSTB           0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10
