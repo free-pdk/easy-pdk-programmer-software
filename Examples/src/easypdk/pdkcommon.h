@@ -33,157 +33,33 @@
 #define EASY_PDK_SERIAL(sname) static const uint8_t sname[8] = {'F','P','S','E','R','I','A','L'}
 
 //place holder for EASYPDK calibrations executed / replaced by easypdkprog
-#define EASY_PDK_CALIBRATE_IHRC_H8(frequency,millivolt) \
-__asm__(                                 \
-  "and a, #'H'                        \n"\
-  "and a, #'8'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-)
-#define EASY_PDK_CALIBRATE_ILRC_L8(frequency,millivolt) \
-__asm__(                                 \
-  "and a, #'L'                        \n"\
-  "and a, #'8'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-)
+#define EASY_PDK_CALTYPE_IHRC 1
+#define EASY_PDK_CALTYPE_ILRC 2
 
-#define EASY_PDK_CALIBRATE_ILRC_l8(frequency,millivolt) \
+#define EASY_PDK_CALIBRATE_RC_M(type,reg,frequency,millivolt) \
 __asm__(                                 \
-  "and a, #'l'                        \n"\
-  "and a, #'8'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-)
-
-#define EASY_PDK_CALIBRATE_ILRC_L3B(frequency,millivolt) \
-__asm__(                                 \
-  "and a, #'L'                        \n"\
-  "and a, #'3'                        \n"\
-  "and a, #'B'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-)
-
-#define EASY_PDK_CALIBRATE_IHRC_H9(frequency,millivolt) \
-__asm__(                                 \
-  "and a, #'H'                        \n"\
-  "and a, #'9'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-  "and a, #0                          \n"\
-)
-
-#define EASY_PDK_CALIBRATE_ILRC_L9(frequency,millivolt) \
-__asm__(                                 \
-  "and a, #'L'                        \n"\
-  "and a, #'9'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-  "and a, #0                          \n"\
-)
-
-#define EASY_PDK_CALIBRATE_IHRC_H10(frequency,millivolt) \
-__asm__(                                 \
-  "and a, #'H'                        \n"\
-  "and a, #'1'                        \n"\
-  "and a, #'0'                        \n"\
-  "and a, #(("_ASMD(frequency)"))     \n"\
-  "and a, #(("_ASMD(frequency)")>>8)  \n"\
-  "and a, #(("_ASMD(frequency)")>>16) \n"\
-  "and a, #(("_ASMD(frequency)")>>24) \n"\
-  "and a, #(("_ASMD(millivolt)"))     \n"\
-  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
-  "and a, #0                          \n"\
-)
-
-
-#define EASY_PDK_CALIBRATE_BG_B19() \
-__asm__(                                 \
-  "and a, #'B'                        \n"\
-  "and a, #'1'                        \n"\
-  "and a, #'9'                        \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-)
-
-#define EASY_PDK_CALIBRATE_BG_B1A() \
-__asm__(                                 \
-  "and a, #'B'                        \n"\
-  "and a, #'1'                        \n"\
-  "and a, #'A'                        \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-)
-
-#define EASY_PDK_CALIBRATE_BG_B3C() \
-__asm__(                                 \
-  "and a, #'B'                        \n"\
-  "and a, #'3'                        \n"\
+  "and a, #'R'                        \n"\
   "and a, #'C'                        \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
+  "and a, #(("_ASMD(type)"))          \n"\
+  "and a, #(("_ASMD(frequency)"))     \n"\
+  "and a, #(("_ASMD(frequency)")>>8)  \n"\
+  "and a, #(("_ASMD(frequency)")>>16) \n"\
+  "and a, #(("_ASMD(frequency)")>>24) \n"\
+  "and a, #(("_ASMD(millivolt)"))     \n"\
+  "and a, #(("_ASMD(millivolt)")>>8)  \n"\
+  "and a, #(("_ASMD(reg)"))           \n"\
 )
 
-#define EASY_PDK_CALIBRATE_BG_B63() \
+#define EASY_PDK_CALIBRATE_BG_M(bgtr,gpcc,gpcs) \
 __asm__(                                 \
   "and a, #'B'                        \n"\
-  "and a, #'6'                        \n"\
-  "and a, #'3'                        \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
-  "and a, #0                          \n"\
+  "and a, #'G'                        \n"\
+  "and a, #(3)                        \n"\
+  "and a, #(3950)                     \n"\
+  "and a, #(3950>>8)                  \n"\
+  "and a, #(("_ASMD(bgtr)"))          \n"\
+  "and a, #(("_ASMD(gpcc)"))          \n"\
+  "and a, #(("_ASMD(gpcs)"))          \n"\
   "and a, #0                          \n"\
   "and a, #0                          \n"\
   "and a, #0                          \n"\
@@ -191,6 +67,5 @@ __asm__(                                 \
   "and a, #0                          \n"\
   "and a, #0                          \n"\
 )
-
 
 #endif //__PDKCOMMON_H__
