@@ -5,19 +5,20 @@
 #define PFS154
 #endif
 #if !defined __SDCC_pdk14
-#error "PFS54 needs PDK14 backend. Compile with -mpdk14"
+#error "PFS154 needs PDK14 backend. Compile with -mpdk14"
 #endif
 
 #include "pdkcommon.h"
 
 //fuse definitions
-#define FUSE_SECURITY_OFF  0x0001 //(S)
-#define FUSE_SECURITY_ON   0x0000
-#define FUSE_IO_DRV_NORMAL 0x0000 //(D)
-#define FUSE_IO_DRV_STRONG 0x0100
+#define FUSE_SECURITY_ON   0x0000 //(S)
+#define FUSE_SECURITY_OFF  0x0001
+#define FUSE_IO_DRV_LOW    0x0000 //(D)
+#define FUSE_IO_DRV_NORMAL 0x0100
 #define FUSE_BOOTUP_SLOW   0x0000 //(B)
-#define FUSE_BOOTUP_FAST   0x0600
-#define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S => 0x30FC
+#define FUSE_BOOTUP_FAST   0x0C00
+#define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
+// Blank IC Values         0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
 #define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
@@ -45,7 +46,7 @@ __sfr __at(0x0b) _ihrcr;
 __sfr __at(0x0c) _integs;
 __sfr __at(0x0d) _padier;
 __sfr __at(0x0e) _pbdier;
-__sfr __at(0x0e) _misc2;
+__sfr __at(0x0f) _misc2;
 __sfr __at(0x10) _pa;
 __sfr __at(0x11) _pac;
 __sfr __at(0x12) _paph;
@@ -150,10 +151,10 @@ __sfr16          _t16c;
 #define T16C      _t16c
 
 //flag definitions
-#define FLAG_ZF 1
-#define FLAG_CF 2
-#define FLAG_AC 4
-#define FLAG_OV 8
+#define FLAG_ZF 0x01
+#define FLAG_CF 0x02
+#define FLAG_AC 0x04
+#define FLAG_OV 0x08
 #define FLAG_ZF_BIT 0
 #define FLAG_CF_BIT 1
 #define FLAG_AC_BIT 2
