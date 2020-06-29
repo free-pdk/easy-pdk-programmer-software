@@ -531,6 +531,7 @@ int main( int argc, const char * argv [] )
                 //found valid tuning (max 10% drift) ?
                 if( abs( (int32_t)fcalfreq - (int32_t)calibdata[calib].frequency ) > (calibdata[calib].frequency/10) )
                 {
+                  printf("(0x%02X)  ", fcalval);
                   printf("out of range.\n");
                   fprintf(stderr, "ERROR: Calibration failed\n");
                   return -18;
