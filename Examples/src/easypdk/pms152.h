@@ -251,7 +251,7 @@ __sfr16          _t16c;
 
 //padie definitions
 #define PADIE_PA0_WAKEUP_ENABLE      0x01
-#define PADIE_PA3_ENABLE             0x08
+#define PADIE_PA3_WAKEUP_ENABLE      0x08
 #define PADIE_PA4_WAKEUP_ENABLE      0x10
 #define PADIE_PA5_WAKEUP_ENABLE      0x20
 #define PADIE_PA6_WAKEUP_ENABLE      0x40
@@ -370,8 +370,8 @@ __sfr16          _t16c;
 #define GPCC_COMP_MINUS_PA4          0x02
 #define GPCC_COMP_MINUS_BANDGAP_1V2  0x04
 #define GPCC_COMP_MINUS_VINT_R       0x06
-#define GPCC_COMP_MINUS_PA6          0x08
-#define GPCC_COMP_MINUS_PA7          0x0A
+#define GPCC_COMP_MINUS_PB6          0x08
+#define GPCC_COMP_MINUS_PB7          0x0A
 #define GPCC_COMP_OUT_INVERT         0x10
 #define GPCC_COMP_OUT_TO_TM2CLK      0x20
 #define GPCC_COMP_RESULT_NEGATIV     0x00
