@@ -618,6 +618,9 @@ static uint32_t _FPDK_GetIDIC(const FPDKICTYPE type, const uint32_t vpp_cmd, con
        _FPDK_SendCommand(type, 0);
       ic_id = _FPDK_RecvBits32O2(databits+1+12);
       break;
+
+    default:
+      break;
   }
   _FPDK_LeaveProgramingMode(type, 0);                                                              //leave prog mode, abort write before it is executed
 
