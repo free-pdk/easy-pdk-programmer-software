@@ -486,8 +486,8 @@ void FPDK_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct1 = { .Pin=HW_VARIANT_DET1_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLUP, .Speed=GPIO_SPEED_FREQ_HIGH };
   HAL_GPIO_Init(HW_VARIANT_DET1_GPIO_Port, &GPIO_InitStruct1);
 
-  uint32_t hwdet = (HAL_GPIO_ReadPin(HW_VARIANT_DET0_GPIO_Port, HW_VARIANT_DET0_Pin)?1:0) |
-                   (HAL_GPIO_ReadPin(HW_VARIANT_DET1_GPIO_Port, HW_VARIANT_DET1_Pin)?2:0);
+  uint32_t hwdet = (HAL_GPIO_ReadPin(HW_VARIANT_DET0_GPIO_Port, HW_VARIANT_DET0_Pin)?0:1) |
+                   (HAL_GPIO_ReadPin(HW_VARIANT_DET1_GPIO_Port, HW_VARIANT_DET1_Pin)?0:2);
 
   switch( hwdet )
   {
