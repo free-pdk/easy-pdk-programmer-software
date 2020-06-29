@@ -76,6 +76,8 @@ void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,
 #define FPDK_LEAVE_PROG_MODE_DELAYUS    10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
 #define FPDK_VDD_CAL_STARTUP_DELAYUS    1000
 
+//FPDK hardware varaint
+static FPDKHWVARIANT _hw_variant;
 
 //current dac output values, we need to store them so we can set channels seperate
 static uint32_t _dac_vdd;
@@ -476,6 +478,39 @@ void FPDK_Init(void)
   HAL_DACEx_DualSetValue( &hdac, DAC_ALIGN_12B_R, _dac_vpp, _dac_vdd );                            //set 0 volt output for both channels
 
   HAL_GPIO_WritePin( DCDC15VOLT_ENABLE_OUT_GPIO_Port, DCDC15VOLT_ENABLE_OUT_Pin, GPIO_PIN_SET );   //enable DCDC 15V booster
+
+  _hw_variant = FPDK_HWVAR_NONE;                                                                   //test for hardware variants
+
+  GPIO_InitTypeDef GPIO_InitStruct0 = { .Pin=HW_VARIANT_DET0_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLUP, .Speed=GPIO_SPEED_FREQ_HIGH };
+  HAL_GPIO_Init(HW_VARIANT_DET0_GPIO_Port, &GPIO_InitStruct0);
+  GPIO_InitTypeDef GPIO_InitStruct1 = { .Pin=HW_VARIANT_DET1_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLUP, .Speed=GPIO_SPEED_FREQ_HIGH };
+  HAL_GPIO_Init(HW_VARIANT_DET1_GPIO_Port, &GPIO_InitStruct1);
+
+  uint32_t hwdet = (HAL_GPIO_ReadPin(HW_VARIANT_DET0_GPIO_Port, HW_VARIANT_DET0_Pin)?0:1) |
+                   (HAL_GPIO_ReadPin(HW_VARIANT_DET1_GPIO_Port, HW_VARIANT_DET1_Pin)?0:2);
+
+  switch( hwdet )
+  {
+    case 1: _hw_variant = FPDK_HWVAR_MINI_PILL; break;
+
+    default:
+      _hw_variant = FPDK_HWVAR_NONE;
+  }
+
+  if( FPDK_HWVAR_MINI_PILL == _hw_variant )                                                        //reconfigure ADC to match hardware variant
+  {
+    HAL_ADC_DeInit(&hadc);
+    HAL_ADC_Init(&hadc);
+    ADC_ChannelConfTypeDef sConfig = {0};
+    sConfig.Channel = ADC_CHANNEL_0;
+    sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
+    sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+    HAL_ADC_ConfigChannel(&hadc, &sConfig);
+    sConfig.Channel = ADC_CHANNEL_1;
+    HAL_ADC_ConfigChannel(&hadc, &sConfig);
+    sConfig.Channel = ADC_CHANNEL_VREFINT;
+    HAL_ADC_ConfigChannel(&hadc, &sConfig);
+  }
 
   _adc_vref = 0;
   _adc_vdd = 0;
