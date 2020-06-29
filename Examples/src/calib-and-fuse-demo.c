@@ -30,7 +30,7 @@ unsigned char _sdcc_external_startup(void)
   EASY_PDK_CALIBRATE_ILRC(ILRC_FREQ/16,3000);   //tune SYSCLK to 6kHz @ 3.000V (value for PFS173)
 #endif
 
-#if defined(PFS154) || defined(PFS173)
+#if defined(PFS154) || defined(PFS172) || defined(PFS173)
   // setup 8MHz sysclock and use factory calibration (available on PFS154 and PFS173)
   EASY_PDK_INIT_SYSCLOCK_8MHZ();                //use 8MHz sysclock
   EASY_PDK_USE_FACTORY_IHRCR_16MHZ();           //use factory calibration value

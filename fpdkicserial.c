@@ -58,7 +58,7 @@ int FPDKSERIAL_InsertSerial(const FPDKICDATA* icdata, uint8_t* code, const uint1
       code16[p+4] = (code16[p+4]&0xFF00) | ((serial>>32)&0xFF);
       code16[p+5] = (code16[p+5]&0xFF00) | ((serial>>40)&0xFF);
       code16[p+6] = (code16[p+6]&0xFF00) | ((serial>>48)&0xFF);
-      code16[p+7] = (code16[p+7]&0xFF00) | ((serial>>54)&0xFF);
+      code16[p+7] = (code16[p+7]&0xFF00) | ((serial>>56)&0xFF);
       inserts++;
     }
   }

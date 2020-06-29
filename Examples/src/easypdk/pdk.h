@@ -5,6 +5,8 @@
  #include "pms150c.h"
 #elif defined(PFS154)
  #include "pfs154.h"
+#elif defined(PFS172)
+ #include "pfs172.h"
 #elif defined(PFS173)
  #include "pfs173.h"
 #else
