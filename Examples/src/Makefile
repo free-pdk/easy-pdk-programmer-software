@@ -1,7 +1,7 @@
 SDCC=../../sdcc/bin/sdcc
 OUTDIR=build
 
-all: PFS154 PFS172 PFS173 PMS150C
+all: PFS154 PFS172 PFS173 PMS150C PMS171B
 
 PFS154:
 	mkdir -p $(OUTDIR)
