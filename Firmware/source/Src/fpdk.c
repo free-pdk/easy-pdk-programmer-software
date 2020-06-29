@@ -1122,11 +1122,6 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
     switch( type)
     {
       case 1: //IHRC
-        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, false, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
-        ret = true;
-        break;
-
-      case 4: //IHRC0 
         *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, true, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
         ret = true;
         break;
