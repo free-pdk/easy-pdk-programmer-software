@@ -1,14 +1,19 @@
-#ifndef __PFS154_H__
-#define __PFS154_H__
+#ifndef __PDK_IO_PFS154_H__
+#define __PDK_IO_PFS154_H__
 
-#ifndef PFS154
-#define PFS154
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/io_pfs154.h" by itself."
 #endif
+
+#ifndef __PDK__IO_XXX_H_
+#  define __PDK_IO_XXX_H_ "io_pfs154.h"
+#else
+#  error "Attempt to include more than one "pdk/io_XXX.h" file."
+#endif 
+
 #if !defined __SDCC_pdk14
-#error "PFS154 needs PDK14 backend. Compile with -mpdk14"
+#  error "PFS154 needs the PDK14 backend. You must compile with the -mpdk14 option."
 #endif
-
-#include "pdkcommon.h"
 
 //fuse definitions
 #define FUSE_SECURITY_ON   0x0000 //(S)
@@ -19,16 +24,20 @@
 #define FUSE_BOOTUP_FAST   0x0C00
 #define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
 // Blank IC Values         0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
-#define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
+#define PDK_DEFINE_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
-//set calibration macros
-#define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
-#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L8
-#define EASY_PDK_CALIBRATE_BG   EASY_PDK_CALIBRATE_BG_B1A
-#define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
-#define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }
+//factory calibration macros
+#define PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
+#define PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }
 
 #define ILRC_FREQ  55000
+
+//IO register address definitions
+#define IHRCR_ADDR      0x0b
+#define ILRCR_ADDR      0x39
+#define BGTR_ADDR       0x1a
+#define GPCC_ADDR       0x18
+#define GPCS_ADDR       0x19
 
 //IO register definitions
 __sfr __at(0x00) _flag;
@@ -42,7 +51,7 @@ __sfr __at(0x06) _t16m;
 __sfr __at(0x08) _misc;
 __sfr __at(0x09) _tm2b;
 __sfr __at(0x0a) _eoscr;
-__sfr __at(0x0b) _ihrcr;
+__sfr __at(IHRCR_ADDR) _ihrcr;
 __sfr __at(0x0c) _integs;
 __sfr __at(0x0d) _padier;
 __sfr __at(0x0e) _pbdier;
@@ -55,9 +64,9 @@ __sfr __at(0x14) _pb;
 __sfr __at(0x15) _pbc;
 __sfr __at(0x16) _pbph;
 __sfr __at(0x17) _tm2s;
-__sfr __at(0x18) _gpcc;
-__sfr __at(0x19) _gpcs;
-__sfr __at(0x1a) _bgtr;
+__sfr __at(GPCC_ADDR) _gpcc;
+__sfr __at(GPCS_ADDR) _gpcs;
+__sfr __at(BGTR_ADDR) _bgtr;
 __sfr __at(0x1b) _misclvr;
 __sfr __at(0x1c) _tm2c;
 __sfr __at(0x1d) _tm2ct;
@@ -88,7 +97,7 @@ __sfr __at(0x35) _tm3b;
 //0x36
 //0x37
 //0x38
-__sfr __at(0x39) _ilrcr;
+__sfr __at(ILRCR_ADDR) _ilrcr;
 //0x3a
 //0x3b
 //0x3c
@@ -583,4 +592,4 @@ __sfr16          _t16c;
 #define PWMG2_SCALE_DIV31            0x1E
 #define PWMG2_SCALE_DIV32            0x1F
 
-#endif //__PFS154_H__
+#endif //__PDK_IO_PFS154_H__

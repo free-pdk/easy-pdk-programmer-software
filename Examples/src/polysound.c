@@ -3,7 +3,8 @@
 //Connect a speaker to PA3 and GND
 
 #include <stdint.h>
-#include "easypdk/pfs173.h"
+#include "pdk/io.h"
+#include "easy-pdk/calibrate.h"
 
 #define PWM_PORT        PA
 #define PWM_PORTC       PAC
@@ -13,7 +14,7 @@
 
 unsigned char _sdcc_external_startup(void)
 {
-  EASY_PDK_INIT_SYSCLOCK_8MHZ();                                   //use 8MHz sysclock
+  PDK_USE_8MHZ_IHRC_SYSCLOCK();                                    //use 8MHz sysclock
   EASY_PDK_CALIBRATE_IHRC(10000000,5000);                          //tune SYSCLK to 10MHz (overclock) @5.00V
 
   //// PWM setup

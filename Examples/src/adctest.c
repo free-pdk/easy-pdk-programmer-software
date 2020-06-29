@@ -2,7 +2,8 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "easypdk/pdk.h" 
+#include "pdk/io.h"
+#include "easypdk/util.h"
 
 volatile uint16_t txdata;                       //txdata, serial data shift register
 
@@ -33,9 +34,9 @@ int putchar(int c)
 
 unsigned char _sdcc_external_startup(void)
 {
-  EASY_PDK_INIT_SYSCLOCK_8MHZ();                //use 8MHz sysclock
-  EASY_PDK_USE_FACTORY_IHRCR_16MHZ()            //use factory IHCR tuning value (tuned for 8MHz SYSCLK @ 5.0V)
-  EASY_PDK_USE_FACTORY_BGTR();                  //use factory BandGap tuning value (tuned @ 5.0V)
+  PDK_USE_8MHZ_IHRC_SYSCLOCK();                 //use 8MHz sysclock
+  PDK_USE_FACTORY_IHRCR_16MHZ()                 //use factory IHCR tuning value (tuned for 8MHz SYSCLK @ 5.0V)
+  PDK_USE_FACTORY_BGTR();                       //use factory BandGap tuning value (tuned @ 5.0V)
   return 0;                                     //perform normal initialization
 }
 

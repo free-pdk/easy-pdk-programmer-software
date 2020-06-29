@@ -1,14 +1,19 @@
-#ifndef __PMS150C_H__
-#define __PMS150C_H__
+#ifndef __PMS150C_IO_H__
+#define __PMS150C_IO_H__
 
-#ifndef PMS150C
-#define PMS150C
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/io_pms150c.h" by itself."
 #endif
+
+#ifndef __PDK__IO_XXX_H_
+#  define __PDK_IO_XXX_H_ "io_pms150c.h"
+#else
+#  error "Attempt to include more than one "pdk/io_XXX.h" file."
+#endif 
+
 #if !defined __SDCC_pdk13
-#error "PMS150C needs PDK13 backend. Compile with -mpdk13"
+#  error "PFS154 needs the PDK13 backend. You must compile with the -mpdk13 option."
 #endif
-
-#include "pdkcommon.h"
 
 //fuse definitions
 #define FUSE_SECURITY_ON   0x0000 //(S)
@@ -27,15 +32,19 @@
 #define FUSE_BOOTUP_FAST   0x0C00
 #define FUSE_RES_BITS_HIGH 0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
 // Blank IC Values         0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
-#define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x3ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
+#define PDK_DEFINE_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x3ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
-//set calibration macros
-#define EASY_PDK_CALIBRATE_IHRC EASY_PDK_CALIBRATE_IHRC_H8
-#define EASY_PDK_CALIBRATE_ILRC EASY_PDK_CALIBRATE_ILRC_L8
-#define EASY_PDK_CALIBRATE_BG   EASY_PDK_CALIBRATE_BG_B19
-#define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0x3f6\n mov "_ASMV(BGTR)",a\n"); }
+//factory calibration macros
+#define PDK_USE_FACTORY_BGTR() { __asm__("call #0x3f6\n mov "_ASMV(BGTR)",a\n"); }
 
 #define ILRC_FREQ  59000
+
+//IO register address definitions
+#define IHRCR_ADDR      0x0b
+#define ILRCR_ADDR      0x1f
+#define BGTR_ADDR       0x19
+#define GPCC_ADDR       0x1a
+#define GPCS_ADDR       0x1e
 
 //IO register definitions
 __sfr __at(0x00) _flag;
@@ -49,7 +58,7 @@ __sfr __at(0x06) _t16m;
 //0x08
 __sfr __at(0x09) _tm2b;
 __sfr __at(0x0a) _eoscr;
-__sfr __at(0x0b) _ihrcr;
+__sfr __at(IHRCR_ADDR) _ihrcr;
 __sfr __at(0x0c) _integs;
 __sfr __at(0x0d) _padier;
 //0x0e
@@ -63,13 +72,13 @@ __sfr __at(0x12) _paph;
 //0x16
 __sfr __at(0x17) _tm2s;
 //0x18
-__sfr __at(0x19) _bgtr;
-__sfr __at(0x1a) _gpcc;
+__sfr __at(BGTR_ADDR) _bgtr;
+__sfr __at(GPCC_ADDR) _gpcc;
 __sfr __at(0x1b) _misc;
 __sfr __at(0x1c) _tm2c;
 __sfr __at(0x1d) _tm2ct;
-__sfr __at(0x1e) _gpcs;
-__sfr __at(0x1f) _ilrcr;
+__sfr __at(GPCS_ADDR) _gpcs;
+__sfr __at(ILRCR_ADDR) _ilrcr;
 
 //T16C register
 __sfr16          _t16c;
@@ -265,4 +274,4 @@ __sfr16          _t16c;
 #define GPCS_COMP_WAKEUP_ENABLE      0x40
 #define GPCS_COMP_OUTPUT_PA0         0x80
 
-#endif //__PMS150C_H__
+#endif //__PMS150C_IO_H__
