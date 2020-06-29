@@ -127,6 +127,11 @@ static struct argp argp = { easypdkprog_options, easypdkprog_parse_opt, easypdkp
 
 #define PROTOCOL_MISMATCH_ERROR_STRING "Programmer protocol mismatch - Please update programmer firmware"
 
+static int qscmp(const void *p1, const void *p2)
+{
+  return strcmp(p1, p2);
+}
+
 int main( int argc, const char * argv [] )
 {
   //immediate output on stdout (no buffering)
@@ -140,18 +145,28 @@ int main( int argc, const char * argv [] )
   if( 'l'==arguments.command )
   {
     printf("Supported ICs:\n");
+
+    char mculist[100][128];
+    unsigned int idx=0;
+
     for( uint16_t id=1; id<0xFFF; id++ )
     {
       FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(id);
       if( icdata )
       {
-        printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+        sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_1[0] )
-          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_1, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_1, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_2[0] )
-          printf(" %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s\n", icdata->name_variant_2, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_2, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
       }
     }
+
+    qsort( mculist, idx, 128, qscmp );
+
+    for( unsigned int i=0; i<idx; i++ )
+      printf( "%s\n", mculist[i] );
+
     return 0;
   }
 
