@@ -1,5 +1,5 @@
-#ifndef __PFS173_IO_H__
-#define __PFS173_IO_H__
+#ifndef __PDK_IO_PFS173_H__
+#define __PDK_IO_PFS173_H__
 
 #if !defined(__PDK_IO_H__)
 #  error "You must #include "pdk/io.h" instead of "pdk/io_pfs173.h" by itself."
@@ -595,4 +595,4 @@ __sfr16          _t16c;
 #define ROP_PWM_16MHZ                  0x00
 #define ROP_PWM_32MHZ                  0x80
 
-#endif //__PFS173_IO_H__
+#endif //__PDK_IO_PFS173_H__

@@ -1,5 +1,5 @@
-#ifndef __PMS150C_IO_H__
-#define __PMS150C_IO_H__
+#ifndef __PDK_IO_PMS150C_H__
+#define __PDK_IO_PMS150C_H__
 
 #if !defined(__PDK_IO_H__)
 #  error "You must #include "pdk/io.h" instead of "pdk/io_pms150c.h" by itself."
@@ -274,4 +274,4 @@ __sfr16          _t16c;
 #define GPCS_COMP_WAKEUP_ENABLE      0x40
 #define GPCS_COMP_OUTPUT_PA0         0x80
 
-#endif //__PMS150C_IO_H__
+#endif //__PDK_IO_PMS150C_H__
