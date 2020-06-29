@@ -11,8 +11,8 @@
 #include "pdkcommon.h"
 
 //fuse definitions
-#define FUSE_SECURITY_OFF  0x0001 //(S)
-#define FUSE_SECURITY_ON   0x0000
+#define FUSE_SECURITY_ON   0x0000 //(S)
+#define FUSE_SECURITY_OFF  0x0001
 #define FUSE_LVR_4V        0x0000 //(L)
 #define FUSE_LVR_3V5       0x0004
 #define FUSE_LVR_3V        0x0008
@@ -21,11 +21,12 @@
 #define FUSE_LVR_1V8       0x0014
 #define FUSE_LVR_2V2       0x0018
 #define FUSE_LVR_2V        0x001C
-#define FUSE_IO_DRV_NORMAL 0x0000 //(D)
-#define FUSE_IO_DRV_STRONG 0x0080
+#define FUSE_IO_DRV_LOW    0x0000 //(D)
+#define FUSE_IO_DRV_NORMAL 0x0080
 #define FUSE_BOOTUP_SLOW   0x0000 //(B)
-#define FUSE_BOOTUP_FAST   0x0600
-#define FUSE_RES_BITS_HIGH 0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S => 0x0260
+#define FUSE_BOOTUP_FAST   0x0C00
+#define FUSE_RES_BITS_HIGH 0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
+// Blank IC Values         0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
 #define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x3ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
@@ -98,10 +99,10 @@ __sfr16          _t16c;
 #define T16C    _t16c
 
 //flag definitions
-#define FLAG_ZF 1
-#define FLAG_CF 2
-#define FLAG_AC 4
-#define FLAG_OV 8
+#define FLAG_ZF 0x01
+#define FLAG_CF 0x02
+#define FLAG_AC 0x04
+#define FLAG_OV 0x08
 #define FLAG_ZF_BIT 0
 #define FLAG_CF_BIT 1
 #define FLAG_AC_BIT 2
