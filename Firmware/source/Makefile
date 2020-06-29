@@ -43,7 +43,13 @@ Src/system_stm32f0xx.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c \
-Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c  
+Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c \
+Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_usb.c \
+Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_i2c.c \
+Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_i2c_ex.c \
+Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_pwr.c \
+Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_pwr_ex.c \
+Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_exti.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -106,7 +112,6 @@ C_INCLUDES =  \
 -IMiddlewares/ST/STM32_USB_Device_Library/Core/Inc \
 -IMiddlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc \
 -IDrivers/CMSIS/Device/ST/STM32F0xx/Include \
--IDrivers/CMSIS/Include \
 -IDrivers/CMSIS/Include
 
 # optimization

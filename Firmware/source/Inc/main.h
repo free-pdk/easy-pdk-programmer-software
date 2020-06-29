@@ -80,6 +80,10 @@ void Error_Handler(void);
 #define IC_IO_PA0_UART1_TX_GPIO_Port GPIOB
 #define IC_IO_PA7_USART1_RX_Pin GPIO_PIN_7
 #define IC_IO_PA7_USART1_RX_GPIO_Port GPIOB
+#define HW_VARIANT_DET0_Pin GPIO_PIN_8
+#define HW_VARIANT_DET0_GPIO_Port GPIOB
+#define HW_VARIANT_DET1_Pin GPIO_PIN_9
+#define HW_VARIANT_DET1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
