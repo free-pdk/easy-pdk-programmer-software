@@ -11,14 +11,13 @@
 #include "pdkcommon.h"
 
 //fuse definitions
-#define FUSE_SECURITY_ON   0x0000 //(S)
-#define FUSE_SECURITY_OFF  0x0001
+#define FUSE_SECURITY_OFF  0x0001 //(S)
+#define FUSE_SECURITY_ON   0x0000
 #define FUSE_PB4PB5_NORMAL 0x0000 //(D)
 #define FUSE_PB4PB5_STRONG 0x0100
 #define FUSE_BOOTUP_SLOW   0x0000 //(B)
 #define FUSE_BOOTUP_FAST   0x1800
-#define FUSE_RES_BITS_HIGH 0x62FC // - 1 1 B   B 0 1 D   1 1 1 1   1 1 0 S
-// Blank IC Values         0x7FFF // - 1 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, PB4/PB5 Strong IO Drive, Fast Boot-up)
+#define FUSE_RES_BITS_HIGH 0x62FC // - 1 1 B   B 0 1 D   1 1 1 1   1 1 0 S => 0x62FC
 #define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0xbff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
@@ -28,7 +27,7 @@
 #define EASY_PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0xbed\n mov "_ASMV(IHRCR)",a\n"); }
 #define EASY_PDK_USE_FACTORY_BGTR() { __asm__("call #0xbee\n mov "_ASMV(BGTR)",a\n"); }
 
-#define ILRC_FREQ  93000
+#define ILRC_FREQ  95000
 
 //IO register definitions
 __sfr __at(0x00) _flag;
@@ -180,17 +179,17 @@ __sfr16          _t16c;
 #define T16C      _t16c
 
 //flag definitions
-#define FLAG_ZF 0x01
-#define FLAG_CF 0x02
-#define FLAG_AC 0x04
-#define FLAG_OV 0x08
+#define FLAG_ZF 1
+#define FLAG_CF 2
+#define FLAG_AC 4
+#define FLAG_OV 8
 #define FLAG_ZF_BIT 0
 #define FLAG_CF_BIT 1
 #define FLAG_AC_BIT 2
 #define FLAG_OV_BIT 3
 
 //clkmd definitions
-#define CLKMD_ENABLE_PRSTB           0x01
+#define CLKMD_ENABLE_PA5RST          0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10
@@ -221,17 +220,6 @@ __sfr16          _t16c;
 #define INTEN_TM2                    0x40
 #define INTEN_TM3                    0x80
 
-#define INTEN_PA0_BIT                0
-#define INTEN_PB5_BIT                0
-#define INTEN_PB0_BIT                1
-#define INTEN_PA4_BIT                1
-#define INTEN_T16_BIT                2
-#define INTEN_ADC_BIT                3
-#define INTEN_COMP_BIT               4
-#define INTEN_PWMG_BIT               5
-#define INTEN_TM2_BIT                6
-#define INTEN_TM3_BIT                7
-
 //interrupt request definitions
 #define INTRQ_PA0                    0x01
 #define INTRQ_PB5                    0x01
@@ -243,17 +231,6 @@ __sfr16          _t16c;
 #define INTRQ_PWMG                   0x20
 #define INTRQ_TM2                    0x40
 #define INTRQ_TM3                    0x80
-
-#define INTRQ_PA0_BIT                0
-#define INTRQ_PB5_BIT                0
-#define INTRQ_PB0_BIT                1
-#define INTRQ_PA4_BIT                1
-#define INTRQ_T16_BIT                2
-#define INTRQ_ADC_BIT                3
-#define INTRQ_COMP_BIT               4
-#define INTRQ_PWMG_BIT               5
-#define INTRQ_TM2_BIT                6
-#define INTRQ_TM3_BIT                7
 
 //tm16 definitions
 #define T16_INTSRC_8BIT              0x00
@@ -381,7 +358,7 @@ __sfr16          _t16c;
 #define MISCLVR_2V3                  0x50
 #define MISCLVR_2V4                  0x60
 #define MISCLVR_2V5                  0x70
-#define MISCLVR_2V7                  0x80
+#define MISCLVR_2V75                 0x80
 #define MISCLVR_3V                   0x90
 #define MISCLVR_3V15                 0xA0
 #define MISCLVR_3V3                  0xB0

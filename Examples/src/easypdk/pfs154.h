@@ -5,20 +5,19 @@
 #define PFS154
 #endif
 #if !defined __SDCC_pdk14
-#error "PFS154 needs PDK14 backend. Compile with -mpdk14"
+#error "PFS54 needs PDK14 backend. Compile with -mpdk14"
 #endif
 
 #include "pdkcommon.h"
 
 //fuse definitions
-#define FUSE_SECURITY_ON   0x0000 //(S)
-#define FUSE_SECURITY_OFF  0x0001
-#define FUSE_IO_DRV_LOW    0x0000 //(D)
-#define FUSE_IO_DRV_NORMAL 0x0100
+#define FUSE_SECURITY_OFF  0x0001 //(S)
+#define FUSE_SECURITY_ON   0x0000
+#define FUSE_IO_DRV_NORMAL 0x0000 //(D)
+#define FUSE_IO_DRV_STRONG 0x0100
 #define FUSE_BOOTUP_SLOW   0x0000 //(B)
-#define FUSE_BOOTUP_FAST   0x0C00
-#define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
-// Blank IC Values         0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
+#define FUSE_BOOTUP_FAST   0x0600
+#define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S => 0x30FC
 #define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
@@ -46,7 +45,7 @@ __sfr __at(0x0b) _ihrcr;
 __sfr __at(0x0c) _integs;
 __sfr __at(0x0d) _padier;
 __sfr __at(0x0e) _pbdier;
-__sfr __at(0x0f) _misc2;
+__sfr __at(0x0e) _misc2;
 __sfr __at(0x10) _pa;
 __sfr __at(0x11) _pac;
 __sfr __at(0x12) _paph;
@@ -151,17 +150,17 @@ __sfr16          _t16c;
 #define T16C      _t16c
 
 //flag definitions
-#define FLAG_ZF 0x01
-#define FLAG_CF 0x02
-#define FLAG_AC 0x04
-#define FLAG_OV 0x08
+#define FLAG_ZF 1
+#define FLAG_CF 2
+#define FLAG_AC 4
+#define FLAG_OV 8
 #define FLAG_ZF_BIT 0
 #define FLAG_CF_BIT 1
 #define FLAG_AC_BIT 2
 #define FLAG_OV_BIT 3
 
 //clkmd definitions
-#define CLKMD_ENABLE_PRSTB           0x01
+#define CLKMD_ENABLE_PA5RST          0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10
@@ -188,14 +187,6 @@ __sfr16          _t16c;
 #define INTEN_TM2                    0x40
 #define INTEN_TM3                    0x80
 
-#define INTEN_PA0_BIT                0
-#define INTEN_PB0_BIT                1
-#define INTEN_T16_BIT                2
-#define INTEN_COMP_BIT               4
-#define INTEN_PWMG_BIT               5
-#define INTEN_TM2_BIT                6
-#define INTEN_TM3_BIT                7
-
 //interrupt request definitions
 #define INTRQ_PA0                    0x01
 #define INTRQ_PB0                    0x02
@@ -204,14 +195,6 @@ __sfr16          _t16c;
 #define INTRQ_PWMG                   0x20
 #define INTRQ_TM2                    0x40
 #define INTRQ_TM3                    0x80
-
-#define INTRQ_PA0_BIT                0
-#define INTRQ_PB0_BIT                1
-#define INTRQ_T16_BIT                2
-#define INTRQ_COMP_BIT               4
-#define INTRQ_PWMG_BIT               5
-#define INTRQ_TM2_BIT                6
-#define INTRQ_TM3_BIT                7
 
 //tm16 definitions
 #define T16_INTSRC_8BIT              0x00
@@ -279,13 +262,13 @@ __sfr16          _t16c;
 #define MISC_FAST_WAKEUP_ENABLE      0x20
 
 //misc2 definitions
-//#define MISC2_UNK_COMP               0x00
-//#define MISC2_UNK_PWMG1              0x08
-//#define MISC2_UNK_TM3                0x00
-//#define MISC2_UNK_PWMG2              0x10
 #define MISC2_COMP_EDGE_INT_BOTH     0x00
 #define MISC2_COMP_EDGE_INT_RISE     0x20
 #define MISC2_COMP_EDGE_INT_FALL     0x40
+//#define MISC2_UNK_TM3                0x00
+//#define MISC2_UNK_PWMG2              0x10
+//#define MISC2_UNK_COMP               0x00
+//#define MISC2_UNK_PWMG1              0x08
 
 //misc_lvr definitions
 #define MISCLVR_4V                   0x00
