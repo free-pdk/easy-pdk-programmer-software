@@ -1129,7 +1129,7 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
   bool ret = false;
 
   //select measurement window based on frequency
-  _spiBlocksMeasure = 16;
+  _spiBlocksMeasure = 24;
   _spiBlockSize = SPI_BLOCK_SIZE_MAX;
   if( frequency<=4000000 )
     _spiBlocksMeasure = 8;
