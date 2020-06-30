@@ -491,7 +491,7 @@ void FPDK_Init(void)
 
   switch( hwdet )
   {
-    case 1: _hw_variant = FPDK_HWVAR_MINI_PILL; break;
+    case 2: _hw_variant = FPDK_HWVAR_MINI_PILL; break;
 
     default:
       _hw_variant = FPDK_HWVAR_NONE;
