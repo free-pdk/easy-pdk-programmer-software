@@ -30,7 +30,7 @@
 #define PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
 #define PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }
 
-#define ILRC_FREQ  55000
+#define ILRC_FREQ           55000
 
 // Register address definitions
 #define FLAG_ADDR           0x00

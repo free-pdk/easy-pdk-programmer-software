@@ -37,7 +37,7 @@
 // Factory calibration macros
 #define PDK_USE_FACTORY_BGTR() { __asm__("call #0x3f6\n mov "_ASMV(BGTR)",a\n"); }
 
-#define ILRC_FREQ  59000
+#define ILRC_FREQ           59000
 
 // Register address definitions
 #define FLAG_ADDR           0x00
