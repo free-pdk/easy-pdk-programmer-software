@@ -15,110 +15,78 @@
 #  error "PFS154 needs the PDK13 backend. You must compile with the -mpdk13 option."
 #endif
 
-//fuse definitions
-#define FUSE_SECURITY_ON   0x0000 //(S)
-#define FUSE_SECURITY_OFF  0x0001
-#define FUSE_LVR_4V        0x0000 //(L)
-#define FUSE_LVR_3V5       0x0004
-#define FUSE_LVR_3V        0x0008
-#define FUSE_LVR_2V75      0x000C
-#define FUSE_LVR_2V5       0x0010
-#define FUSE_LVR_1V8       0x0014
-#define FUSE_LVR_2V2       0x0018
-#define FUSE_LVR_2V        0x001C
-#define FUSE_IO_DRV_LOW    0x0000 //(D)
-#define FUSE_IO_DRV_NORMAL 0x0080
-#define FUSE_BOOTUP_SLOW   0x0000 //(B)
-#define FUSE_BOOTUP_FAST   0x0C00
-#define FUSE_RES_BITS_HIGH 0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
-// Blank IC Values         0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
-#define PDK_DEFINE_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x3ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
+// FUSE definitions
+#define FUSE_SECURITY_ON    0x0000 //(S)
+#define FUSE_SECURITY_OFF   0x0001
+#define FUSE_LVR_4V         0x0000 //(L)
+#define FUSE_LVR_3V5        0x0004
+#define FUSE_LVR_3V         0x0008
+#define FUSE_LVR_2V75       0x000C
+#define FUSE_LVR_2V5        0x0010
+#define FUSE_LVR_1V8        0x0014
+#define FUSE_LVR_2V2        0x0018
+#define FUSE_LVR_2V         0x001C
+#define FUSE_IO_DRV_LOW     0x0000 //(D)
+#define FUSE_IO_DRV_NORMAL  0x0080
+#define FUSE_BOOTUP_SLOW    0x0000 //(B)
+#define FUSE_BOOTUP_FAST    0x0C00
+#define FUSE_RES_BITS_HIGH  0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
+// Blank IC Values          0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
+#define PDK_DEFINE_FUSE(f)  { __asm__(".area FUSE (ABS)\n.org (0x3ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
-//factory calibration macros
+// Factory calibration macros
 #define PDK_USE_FACTORY_BGTR() { __asm__("call #0x3f6\n mov "_ASMV(BGTR)",a\n"); }
 
 #define ILRC_FREQ  59000
 
-//IO register address definitions
-#define IHRCR_ADDR      0x0b
-#define ILRCR_ADDR      0x1f
-#define BGTR_ADDR       0x19
-#define GPCC_ADDR       0x1a
-#define GPCS_ADDR       0x1e
-
-//IO register definitions
-__sfr __at(0x00) _flag;
+// Register address definitions
+#define FLAG_ADDR           0x00
 //0x01
-__sfr __at(0x02) _sp;
-__sfr __at(0x03) _clkmd;
-__sfr __at(0x04) _inten;
-__sfr __at(0x05) _intrq;
-__sfr __at(0x06) _t16m;
+#define SP_ADDR             0x02
+#define CLKMD_ADDR          0x03
+#define INTEN_ADDR          0x04
+#define INTRQ_ADDR          0x05
+#define T16M_ADDR           0x06
 //0x07
 //0x08
-__sfr __at(0x09) _tm2b;
-__sfr __at(0x0a) _eoscr;
-__sfr __at(IHRCR_ADDR) _ihrcr;
-__sfr __at(0x0c) _integs;
-__sfr __at(0x0d) _padier;
+#define TM2B_ADDR           0x09
+#define EOSCR_ADDR          0x0a
+#define IHRCR_ADDR          0x0b
+#define INTEGS_ADDR         0x0c
+#define PADIER_ADDR         0x0d
 //0x0e
 //0x0f
-__sfr __at(0x10) _pa;
-__sfr __at(0x11) _pac;
-__sfr __at(0x12) _paph;
+#define PA_ADDR             0x10
+#define PAC_ADDR            0x11
+#define PAPH_ADDR           0x12
 //0x13
 //0x14
 //0x15
 //0x16
-__sfr __at(0x17) _tm2s;
+#define TM2S_ADDR           0x17
 //0x18
-__sfr __at(BGTR_ADDR) _bgtr;
-__sfr __at(GPCC_ADDR) _gpcc;
-__sfr __at(0x1b) _misc;
-__sfr __at(0x1c) _tm2c;
-__sfr __at(0x1d) _tm2ct;
-__sfr __at(GPCS_ADDR) _gpcs;
-__sfr __at(ILRCR_ADDR) _ilrcr;
+#define BGTR_ADDR           0x19
+#define GPCC_ADDR           0x1a
+#define MISC_ADDR           0x1b
+#define TM2C_ADDR           0x1c
+#define TM2CT_ADDR          0x1d
+#define GPCS_ADDR           0x1e
+#define ILRCR_ADDR          0x1f
 
-//T16C register
-__sfr16          _t16c;
 
-#define SP        _sp
-#define FLAG      _flag
-#define CLKMD   _clkmd
-#define INTEN   _inten
-#define INTRQ   _intrq
-#define T16M    _t16m
-#define TM2B    _tm2b
-#define EOSCR   _eoscr
-#define IHRCR   _ihrcr
-#define INTEGS  _integs
-#define PADIER  _padier
-#define PA      _pa
-#define PAC     _pac
-#define PAPH    _paph
-#define TM2S    _tm2s
-#define BGTR    _bgtr
-#define GPCC    _gpcc
-#define MISC    _misc
-#define TM2C    _tm2c
-#define TM2CT   _tm2ct
-#define GPCS    _gpcs
-#define ILRCR   _ilrcr
-#define T16C    _t16c
+// FLAG definitions
+#define FLAG_ZF_BIT                  0
+#define FLAG_CF_BIT                  1
+#define FLAG_AC_BIT                  2
+#define FLAG_OV_BIT                  3
 
-//flag definitions
-#define FLAG_ZF 0x01
-#define FLAG_CF 0x02
-#define FLAG_AC 0x04
-#define FLAG_OV 0x08
-#define FLAG_ZF_BIT 0
-#define FLAG_CF_BIT 1
-#define FLAG_AC_BIT 2
-#define FLAG_OV_BIT 3
+#define FLAG_ZF                      (1 << FLAG_ZF_BIT)
+#define FLAG_CF                      (1 << FLAG_CF_BIT)
+#define FLAG_AC                      (1 << FLAG_AC_BIT)
+#define FLAG_OV                      (1 << FLAG_OV_BIT)
 
-//clkmd definitions
-#define CLKMD_ENABLE_PA5RST          0x01
+// CLKMD definitions
+#define CLKMD_ENABLE_PRSTB           0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10

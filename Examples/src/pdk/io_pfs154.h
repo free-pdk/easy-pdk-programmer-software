@@ -15,89 +15,82 @@
 #  error "PFS154 needs the PDK14 backend. You must compile with the -mpdk14 option."
 #endif
 
-//fuse definitions
-#define FUSE_SECURITY_ON   0x0000 //(S)
-#define FUSE_SECURITY_OFF  0x0001
-#define FUSE_IO_DRV_LOW    0x0000 //(D)
-#define FUSE_IO_DRV_NORMAL 0x0100
-#define FUSE_BOOTUP_SLOW   0x0000 //(B)
-#define FUSE_BOOTUP_FAST   0x0C00
-#define FUSE_RES_BITS_HIGH 0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
-// Blank IC Values         0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
-#define PDK_DEFINE_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
+// FUSE definitions
+#define FUSE_SECURITY_ON    0x0000 //(S)
+#define FUSE_SECURITY_OFF   0x0001
+#define FUSE_IO_DRV_LOW     0x0000 //(D)
+#define FUSE_IO_DRV_NORMAL  0x0100
+#define FUSE_BOOTUP_SLOW    0x0000 //(B)
+#define FUSE_BOOTUP_FAST    0x0C00
+#define FUSE_RES_BITS_HIGH  0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
+// Blank IC Values          0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
+#define PDK_DEFINE_FUSE(f)  { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
-//factory calibration macros
+// Factory calibration macros
 #define PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0x7ed\n mov "_ASMV(IHRCR)",a\n"); }
 #define PDK_USE_FACTORY_BGTR() { __asm__("call #0x7ee\n mov "_ASMV(BGTR)",a\n"); }
 
 #define ILRC_FREQ  55000
 
-//IO register address definitions
-#define IHRCR_ADDR      0x0b
-#define ILRCR_ADDR      0x39
-#define BGTR_ADDR       0x1a
-#define GPCC_ADDR       0x18
-#define GPCS_ADDR       0x19
-
-//IO register definitions
-__sfr __at(0x00) _flag;
+// Register address definitions
+#define FLAG_ADDR           0x00
 //0x01
-__sfr __at(0x02) _sp;
-__sfr __at(0x03) _clkmd;
-__sfr __at(0x04) _inten;
-__sfr __at(0x05) _intrq;
-__sfr __at(0x06) _t16m;
+#define SP_ADDR             0x02
+#define CLKMD_ADDR          0x03
+#define INTEN_ADDR          0x04
+#define INTRQ_ADDR          0x05
+#define T16M_ADDR           0x06
 //0x07
-__sfr __at(0x08) _misc;
-__sfr __at(0x09) _tm2b;
-__sfr __at(0x0a) _eoscr;
-__sfr __at(IHRCR_ADDR) _ihrcr;
-__sfr __at(0x0c) _integs;
-__sfr __at(0x0d) _padier;
-__sfr __at(0x0e) _pbdier;
-__sfr __at(0x0f) _misc2;
-__sfr __at(0x10) _pa;
-__sfr __at(0x11) _pac;
-__sfr __at(0x12) _paph;
+#define MISC_ADDR           0x08
+#define TM2B_ADDR           0x09
+#define EOSCR_ADDR          0x0a
+#define IHRCR_ADDR          0x0b
+#define INTEGS_ADDR         0x0c
+#define PADIER_ADDR         0x0d
+#define PBDIER_ADDR         0x0e
+#define MISC2_ADDR          0x0f
+#define PA_ADDR             0x10
+#define PAC_ADDR            0x11
+#define PAPH_ADDR           0x12
 //0x13
-__sfr __at(0x14) _pb;
-__sfr __at(0x15) _pbc;
-__sfr __at(0x16) _pbph;
-__sfr __at(0x17) _tm2s;
-__sfr __at(GPCC_ADDR) _gpcc;
-__sfr __at(GPCS_ADDR) _gpcs;
-__sfr __at(BGTR_ADDR) _bgtr;
-__sfr __at(0x1b) _misclvr;
-__sfr __at(0x1c) _tm2c;
-__sfr __at(0x1d) _tm2ct;
+#define PB_ADDR             0x14
+#define PBC_ADDR            0x15
+#define PBPH_ADDR           0x16
+#define TM2S_ADDR           0x17
+#define GPCC_ADDR           0x18
+#define GPCS_ADDR           0x19
+#define BGTR_ADDR           0x1a
+#define MISCLVR_ADDR        0x1b
+#define TM2C_ADDR           0x1c
+#define TM2CT_ADDR          0x1d
 //0x1e
 //0x1f
-__sfr __at(0x20) _pwmg0c;
-__sfr __at(0x21) _pwmg0s;
-__sfr __at(0x22) _pwmg0dth;
-__sfr __at(0x23) _pwmg0dtl;
-__sfr __at(0x24) _pwmg0cubh;
-__sfr __at(0x25) _pwmg0cubl;
-__sfr __at(0x26) _pwmg1c;
-__sfr __at(0x27) _pwmg1s;
-__sfr __at(0x28) _pwmg1dth;
-__sfr __at(0x29) _pwmg1dtl;
-__sfr __at(0x2a) _pwmg1cubh;
-__sfr __at(0x2b) _pwmg1cubl;
-__sfr __at(0x2c) _pwmg2c;
-__sfr __at(0x2d) _pwmg2s;
-__sfr __at(0x2e) _pwmg2dth;
-__sfr __at(0x2f) _pwmg2dtl;
-__sfr __at(0x30) _pwmg2cubh;
-__sfr __at(0x31) _pwmg2cubl;
-__sfr __at(0x32) _tm3c;
-__sfr __at(0x33) _tm3ct;
-__sfr __at(0x34) _tm3s;
-__sfr __at(0x35) _tm3b;
+#define PWMG0C_ADDR         0x20
+#define PWMG0S_ADDR         0x21
+#define PWMG0DTH_ADDR       0x22
+#define PWMG0DTL_ADDR       0x23
+#define PWMG0CUBH_ADDR      0x24
+#define PWMG0CUBL_ADDR      0x25
+#define PWMG1C_ADDR         0x26
+#define PWMG1S_ADDR         0x27
+#define PWMG1DTH_ADDR       0x28
+#define PWMG1DTL_ADDR       0x29
+#define PWMG1CUBH_ADDR      0x2a
+#define PWHG1CUBL_ADDR      0x2b
+#define PWMG2C_ADDR         0x2c
+#define PWMG2S_ADDR         0x2d
+#define PWMG2DTH_ADDR       0x2e
+#define PWMG2DTL_ADDR       0x2f
+#define PWMG2CUBH_ADDR      0x30
+#define PWHM2CUBL_ADDR      0x31
+#define TM3C_ADDR           0x32
+#define TM3CT_ADDR          0x33
+#define TM3S_ADDR           0x34
+#define TM3B_ADDR           0x35
 //0x36
 //0x37
 //0x38
-__sfr __at(ILRCR_ADDR) _ilrcr;
+#define ILRCR_ADDR          0x39
 //0x3a
 //0x3b
 //0x3c
@@ -105,72 +98,20 @@ __sfr __at(ILRCR_ADDR) _ilrcr;
 //0x3e
 //0x3f
 
-//T16C register
-__sfr16          _t16c;
 
-#define SP        _sp
-#define FLAG      _flag
-#define CLKMD     _clkmd
-#define INTEN     _inten
-#define INTRQ     _intrq
-#define T16M      _t16m
-#define TM2B      _tm2b
-#define EOSCR     _eoscr
-#define IHRCR     _ihrcr
-#define INTEGS    _integs
-#define PADIER    _padier
-#define PBDIER    _pbdier
-#define MISC2     _misc2
-#define PA        _pa
-#define PAC       _pac
-#define PAPH      _paph
-#define PB        _pb
-#define PBC       _pbc
-#define PBPH      _pbph
-#define TM2S      _tm2s
-#define GPCC      _gpcc
-#define GPCS      _gpcs
-#define BGTR      _bgtr
-#define MISCLVR   _misclvr
-#define TM2C      _tm2c
-#define TM2CT     _tm2ct
-#define PWMG0C    _pwmg0c
-#define PWMG0S    _pwmg0s
-#define PWMG0DTH  _pwmg0dth
-#define PWMG0DTL  _pwmg0dtl
-#define PWMG0CUBH _pwmg0cubh
-#define PWMG0CUBL _pwmg0cubl
-#define PWMG1C    _pwmg1c
-#define PWMG1S    _pwmg1s
-#define PWMG1DTH  _pwmg1dth
-#define PWMG1DTL  _pwmg1dtl
-#define PWMG1CUBH _pwmg1cubh
-#define PWMG1CUBL _pwmg1cubl
-#define PWMG2C    _pwmg2c
-#define PWMG2S    _pwmg2s
-#define PWMG2DTH  _pwmg2dth
-#define PWMG2DTL  _pwmg2dtl
-#define PWMG2CUBH _pwmg2cubh
-#define PWMG2CUBL _pwmg2cubl
-#define TM3C      _tm3c
-#define TM3CT     _tm3ct
-#define TM3S      _tm3s
-#define TM3B      _tm3b
-#define ILRCR     _ilrcr
-#define T16C      _t16c
+// FLAG definitions
+#define FLAG_ZF_BIT                  0
+#define FLAG_CF_BIT                  1
+#define FLAG_AC_BIT                  2
+#define FLAG_OV_BIT                  3
 
-//flag definitions
-#define FLAG_ZF 0x01
-#define FLAG_CF 0x02
-#define FLAG_AC 0x04
-#define FLAG_OV 0x08
-#define FLAG_ZF_BIT 0
-#define FLAG_CF_BIT 1
-#define FLAG_AC_BIT 2
-#define FLAG_OV_BIT 3
+#define FLAG_ZF                      (1 << FLAG_ZF_BIT)
+#define FLAG_CF                      (1 << FLAG_CF_BIT)
+#define FLAG_AC                      (1 << FLAG_AC_BIT)
+#define FLAG_OV                      (1 << FLAG_OV_BIT)
 
-//clkmd definitions
-#define CLKMD_ENABLE_PA5RST          0x01
+// CLKMD definitions
+#define CLKMD_ENABLE_PRSTB           0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10
@@ -188,7 +129,7 @@ __sfr16          _t16c;
 #define CLKMD_EOSC_DIV4              0x60
 #define CLKMD_EOSC_DIV8              0xa8
 
-//interrupt enable definitions
+// INTEN definitions
 #define INTEN_PA0                    0x01
 #define INTEN_PB0                    0x02
 #define INTEN_T16                    0x04
@@ -197,7 +138,7 @@ __sfr16          _t16c;
 #define INTEN_TM2                    0x40
 #define INTEN_TM3                    0x80
 
-//interrupt request definitions
+// INTRQ definitions
 #define INTRQ_PA0                    0x01
 #define INTRQ_PB0                    0x02
 #define INTRQ_T16                    0x04
@@ -206,7 +147,7 @@ __sfr16          _t16c;
 #define INTRQ_TM2                    0x40
 #define INTRQ_TM3                    0x80
 
-//tm16 definitions
+// T16 definitions
 #define T16_INTSRC_8BIT              0x00
 #define T16_INTSRC_9BIT              0x01
 #define T16_INTSRC_10BIT             0x02
@@ -227,14 +168,14 @@ __sfr16          _t16c;
 #define T16_CLK_ILRC                 0xC0
 #define T16_CLK_PA0_FALL             0xE0
 
-//eosc definitions
+// EOSC definitions
 #define EOSC_LVD_BANDGAP_SHUTDOWN    0x01
 #define EOSC_EXT_32KHZ               0x20
 #define EOSC_EXT_1MHZ                0x40
 #define EOSC_EXT_4MHZ                0x60
 #define EOSC_EXT_ENABLE              0x80
 
-//integs definitions
+// INTEGS definitions
 #define INTEGS_PA0_BOTH              0x00
 #define INTEGS_PA0_RISING            0x01
 #define INTEGS_PA0_FALLING           0x02
@@ -244,7 +185,7 @@ __sfr16          _t16c;
 #define INTEGS_T16_RISING            0x00
 #define INTEGS_T16_FALLING           0x10
 
-//padie definitions
+// PADIE definitions
 #define PADIE_PA0_WAKEUP_ENABLE      0x01
 #define PADIE_PA3_WAKEUP_ENABLE      0x08
 #define PADIE_PA4_WAKEUP_ENABLE      0x10
@@ -252,7 +193,7 @@ __sfr16          _t16c;
 #define PADIE_PA6_WAKEUP_ENABLE      0x40
 #define PADIE_PA7_WAKEUP_ENABLE      0x80
 
-//pbdie definitions
+// PBDIE definitions
 #define PBDIE_PB0_WAKEUP_ENABLE      0x01
 #define PBDIE_PB1_WAKEUP_ENABLE      0x02
 #define PBDIE_PB2_WAKEUP_ENABLE      0x04
@@ -262,7 +203,7 @@ __sfr16          _t16c;
 #define PBDIE_PB6_WAKEUP_ENABLE      0x40
 #define PBDIE_PB7_WAKEUP_ENABLE      0x80
 
-//misc definitions
+// MISC definitions
 #define MISC_WATCHDOG_8K_ILRC        0x00
 #define MISC_WATCHDOG_16K_ILRC       0x01
 #define MISC_WATCHDOG_64K_ILRC       0x02
@@ -271,7 +212,7 @@ __sfr16          _t16c;
 #define MISC_LCD_ENABLE              0x10
 #define MISC_FAST_WAKEUP_ENABLE      0x20
 
-//misc2 definitions
+// MISC2 definitions
 #define MISC2_COMP_EDGE_INT_BOTH     0x00
 #define MISC2_COMP_EDGE_INT_RISE     0x20
 #define MISC2_COMP_EDGE_INT_FALL     0x40
@@ -280,7 +221,7 @@ __sfr16          _t16c;
 //#define MISC2_UNK_COMP               0x00
 //#define MISC2_UNK_PWMG1              0x08
 
-//misc_lvr definitions
+// MISCLVR definitions
 #define MISCLVR_4V                   0x00
 #define MISCLVR_3V5                  0x20
 #define MISCLVR_3V                   0x40
@@ -290,7 +231,7 @@ __sfr16          _t16c;
 #define MISCLVR_2V2                  0xC0
 #define MISCLVR_2V                   0xE0
 
-//tm2c definitions
+// TM2C definitions
 #define TM2C_CLK_DISABLE             0x00
 #define TM2C_CLK_SYSCLK              0x10
 #define TM2C_CLK_IHRC                0x20
@@ -311,7 +252,7 @@ __sfr16          _t16c;
 #define TM2C_MODE_PWM                0x02
 #define TM2C_INVERT_OUT              0x01
 
-//tm2s definitions
+// TM2S definitions
 #define TM2S_PWM_RES_8BIT            0x00
 #define TM2S_PWM_RES_6BIT            0x80
 #define TM2S_PRESCALE_NONE           0x00
@@ -351,7 +292,7 @@ __sfr16          _t16c;
 #define TM2S_SCALE_DIV31             0x1E
 #define TM2S_SCALE_DIV32             0x1F
 
-//tm3c definitions
+// TM3C definitions
 #define TM3C_CLK_DISABLE             0x00
 #define TM3C_CLK_SYSCLK              0x10
 #define TM3C_CLK_IHRC                0x20
@@ -372,7 +313,7 @@ __sfr16          _t16c;
 #define TM3C_MODE_PWM                0x02
 #define TM3C_INVERT_OUT              0x01
 
-//tm3s definitions
+// TM3S definitions
 #define TM3S_PWM_RES_8BIT            0x00
 #define TM3S_PWM_RES_6BIT            0x80
 #define TM3S_PRESCALE_NONE           0x00
@@ -412,7 +353,7 @@ __sfr16          _t16c;
 #define TM3S_SCALE_DIV31             0x1E
 #define TM3S_SCALE_DIV32             0x1F
 
-//gpcc definitions
+// GPCC definitions
 #define GPCC_COMP_PLUS_VINT_R        0x00
 #define GPCC_COMP_PLUS_PA4           0x01
 #define GPCC_COMP_MINUS_PA3          0x00
@@ -427,7 +368,7 @@ __sfr16          _t16c;
 #define GPCC_COMP_RESULT_POSITIV     0x40
 #define GPCC_COMP_ENABLE             0x80
 
-//gpcs definitions
+// GPCS definitions
 #define GPCS_COMP_CASE1              0x00
 #define GPCS_COMP_CASE2              0x10
 #define GPCS_COMP_CASE3              0x20
@@ -435,7 +376,7 @@ __sfr16          _t16c;
 #define GPCS_COMP_WAKEUP_ENABLE      0x40
 #define GPCS_COMP_OUTPUT_PA0         0x80
 
-//pwmg0c definitions
+// PWMG0C definitions
 #define PWMG0C_ENABLE                0x80
 #define PWMG0C_OUT_STATUS            0x40
 #define PWMG0C_OUT_INVERT            0x20
@@ -447,7 +388,7 @@ __sfr16          _t16c;
 #define PWMG0C_CLK_SYSCLK            0x00
 #define PWMG0C_CLK_IHRC              0x01
 
-//pwmg0s definitions
+// PWMG0S definitions
 #define PWMG0_INT_AT_0               0x00
 #define PWMG0_INT_AT_DUTY            0x80
 #define PWMG0_PRESCALE_NONE          0x00
@@ -487,7 +428,7 @@ __sfr16          _t16c;
 #define PWMG0_SCALE_DIV31            0x1E
 #define PWMG0_SCALE_DIV32            0x1F
 
-//pwmg1c definitions
+// PWMG1C definitions
 #define PWMG1C_ENABLE                0x80
 #define PWMG1C_OUT_STATUS            0x40
 #define PWMG1C_OUT_INVERT            0x20
@@ -499,7 +440,7 @@ __sfr16          _t16c;
 #define PWMG1C_CLK_SYSCLK            0x00
 #define PWMG1C_CLK_IHRC              0x01
 
-//pwmg1s definitions
+// PWMG1S definitions
 #define PWMG1_INT_AT_0               0x00
 #define PWMG1_INT_AT_DUTY            0x80
 #define PWMG1_PRESCALE_NONE          0x00
@@ -539,7 +480,7 @@ __sfr16          _t16c;
 #define PWMG1_SCALE_DIV31            0x1E
 #define PWMG1_SCALE_DIV32            0x1F
 
-//pwmg2c definitions
+// PWMG2C definitions
 #define PWMG2C_ENABLE                0x80
 #define PWMG2C_OUT_STATUS            0x40
 #define PWMG2C_OUT_INVERT            0x20
@@ -552,7 +493,7 @@ __sfr16          _t16c;
 #define PWMG2C_CLK_SYSCLK            0x00
 #define PWMG2C_CLK_IHRC              0x01
 
-//pwmg2s definitions
+// PWMG2S definitions
 #define PWMG2_INT_AT_0               0x00
 #define PWMG2_INT_AT_DUTY            0x80
 #define PWMG2_PRESCALE_NONE          0x00
