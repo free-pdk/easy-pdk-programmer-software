@@ -18,11 +18,11 @@
 #define ILRC_FREQ           55000
 
 // Factory Calibration address locations
-#define FACTORY_IHRCR_ADDR  0x7ed
-#define FACTORY_BGTR_ADDR   0x7ee
+#define FACTORY_IHRCR_ADDR  0x07ed
+#define FACTORY_BGTR_ADDR   0x07ee
 
 // FUSE definitions
-#define FUSE_ADDR           0x7ff
+#define FUSE_WORD_ADDR      0x07ff
 #define FUSE_RES_BITS_HIGH  0x017C // - - B B   0 0 0 1   D 1 1 1   1 1 0 S => 0x017C
 #define FUSE_SECURITY_ON    0x0000 //(S)
 #define FUSE_SECURITY_OFF   0x0001

@@ -18,10 +18,10 @@
 #define ILRC_FREQ           59000
 
 // Factory Calibration address locations
-#define FACTORY_BGTR_ADDR   0x3f6
+#define FACTORY_BGTR_ADDR   0x03f6
 
 // FUSE definitions
-#define FUSE_ADDR           0x3ff
+#define FUSE_WORD_ADDR      0x03ff
 #define FUSE_RES_BITS_HIGH  0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
 // Blank IC Values          0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
 #define FUSE_SECURITY_ON    0x0000 //(S)
