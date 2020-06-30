@@ -34,22 +34,3 @@ Update firmware on Easy PDK Programmer:
 6. UNPLUG USB from Easy PDK programmer
 
 
-Special note for CubeMX:
-========================
-In case you use CubeMX with the provided EASYPDKPROG.ioc file an reconfigure / regenerate the project you will have to add the 3 fpdk source 
-code files to "C_SOURCES" in the regenerated "Makefile" manually:
-
-C_SOURCES =  \
-  ...
-  Src/fpdk.c \
-  Src/fpdkuart.c \
-  Src/fpdkusb.c \
-  ...
-
-You also need to change the USB serial number descriptor function "USBD_FS_SerialStrDescriptor" in "usbd_desc.c" manually:
-
-  uint8_t * USBD_FS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
-  {
-    USBD_GetString((uint8_t *)USBD_SERIALNUMBER_STRING_FS, USBD_StringSerial, length);
-    return (uint8_t *) USBD_StringSerial;
-  }
