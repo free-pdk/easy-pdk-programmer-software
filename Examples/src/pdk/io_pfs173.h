@@ -15,22 +15,22 @@
 #  error "PFS173 needs the PDK14 backend. You must compile with the -mpdk15 option."
 #endif
 
+#define ILRC_FREQ           95000
+
+// Factory Calibration address locations
+#define FACTORY_IHRCR_ADDR  0xbed
+#define FACTORY_BGTR_ADDR   0xbee
+
 // FUSE definitions
+#define FUSE_ADDR           0xbff
+#define FUSE_RES_BITS_HIGH  0x62FC // - 1 1 B   B 0 1 D   1 1 1 1   1 1 0 S
+// Blank IC Values          0x7FFF // - 1 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, PB4/PB5 Strong IO Drive, Fast Boot-up)
 #define FUSE_SECURITY_ON    0x0000 //(S)
 #define FUSE_SECURITY_OFF   0x0001
 #define FUSE_PB4PB5_NORMAL  0x0000 //(D)
 #define FUSE_PB4PB5_STRONG  0x0100
 #define FUSE_BOOTUP_SLOW    0x0000 //(B)
 #define FUSE_BOOTUP_FAST    0x1800
-#define FUSE_RES_BITS_HIGH  0x62FC // - 1 1 B   B 0 1 D   1 1 1 1   1 1 0 S
-// Blank IC Values          0x7FFF // - 1 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, PB4/PB5 Strong IO Drive, Fast Boot-up)
-#define PDK_DEFINE_FUSE(f)  { __asm__(".area FUSE (ABS)\n.org (0xbff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
-
-// Factory calibration macros
-#define PDK_USE_FACTORY_IHRCR_16MHZ() { __asm__("call #0xbed\n mov "_ASMV(IHRCR)",a\n"); }
-#define PDK_USE_FACTORY_BGTR() { __asm__("call #0xbee\n mov "_ASMV(BGTR)",a\n"); }
-
-#define ILRC_FREQ           95000
 
 // Register address definitions
 #define FLAG_ADDR           0x00

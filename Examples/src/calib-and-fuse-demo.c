@@ -8,7 +8,7 @@ unsigned char _sdcc_external_startup(void)
   // F U S E S
   //
   // Set specific FUSES (defines in IC specific header file, e.g. "pdk/io_pfs173.h"), easypdk programmer will set FUSE values after writing
-  PDK_DEFINE_FUSE(FUSE_SECURITY_OFF|FUSE_BOOTUP_FAST);
+  PDK_SET_FUSE(FUSE_SECURITY_OFF|FUSE_BOOTUP_FAST);
 
   //
   // C A L I B R A T I O N S

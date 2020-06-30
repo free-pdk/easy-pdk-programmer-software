@@ -15,7 +15,15 @@
 #  error "PFS154 needs the PDK13 backend. You must compile with the -mpdk13 option."
 #endif
 
+#define ILRC_FREQ           59000
+
+// Factory Calibration address locations
+#define FACTORY_BGTR_ADDR   0x3f6
+
 // FUSE definitions
+#define FUSE_ADDR           0x3ff
+#define FUSE_RES_BITS_HIGH  0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
+// Blank IC Values          0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
 #define FUSE_SECURITY_ON    0x0000 //(S)
 #define FUSE_SECURITY_OFF   0x0001
 #define FUSE_LVR_4V         0x0000 //(L)
@@ -30,14 +38,6 @@
 #define FUSE_IO_DRV_NORMAL  0x0080
 #define FUSE_BOOTUP_SLOW    0x0000 //(B)
 #define FUSE_BOOTUP_FAST    0x0C00
-#define FUSE_RES_BITS_HIGH  0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
-// Blank IC Values          0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
-#define PDK_DEFINE_FUSE(f)  { __asm__(".area FUSE (ABS)\n.org (0x3ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
-
-// Factory calibration macros
-#define PDK_USE_FACTORY_BGTR() { __asm__("call #0x3f6\n mov "_ASMV(BGTR)",a\n"); }
-
-#define ILRC_FREQ           59000
 
 // Register address definitions
 #define FLAG_ADDR           0x00

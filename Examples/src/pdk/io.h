@@ -16,6 +16,8 @@
 #endif
 
 #include "sfr_defs.h"
+#include "fuse.h"
+#include "factory_calibration.h"
 #include "sysclock.h"
 
 #endif //__PDK_IO_H__
