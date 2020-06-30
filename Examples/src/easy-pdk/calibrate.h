@@ -5,8 +5,6 @@
 #  error "You must #include "pdk/io.h" "
 #endif
 
-#include "util.h"
-
 //place holder for EASYPDK calibrations executed / replaced by easypdkprog
 #define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt)  EASY_PDK_CALIBRATE_RC_M(EASY_PDK_CALTYPE_IHRC, IHRCR_ADDR, frequency, millivolt)
 #define EASY_PDK_CALIBRATE_ILRC(frequency,millivolt)  EASY_PDK_CALIBRATE_RC_M(EASY_PDK_CALTYPE_ILRC, ILRCR_ADDR, frequency, millivolt)

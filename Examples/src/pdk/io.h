@@ -1,6 +1,8 @@
 #ifndef __PDK_IO_H__
 #define __PDK_IO_H__
 
+#include "util.h"
+
 #if defined(PMS150C)
   #include "io_pms150c.h"
 #elif defined(PFS154)
