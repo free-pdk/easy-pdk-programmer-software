@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "pdk/io.h"
-#include "easypdk/util.h"
 
 volatile uint16_t txdata;                       //txdata, serial data shift register
 
