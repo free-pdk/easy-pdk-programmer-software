@@ -124,7 +124,6 @@
 #define CLKMD_ENABLE_ILRC            (1 << CLKMD_ILRC_ENABLE_BIT)
 #define CLKMD_ENABLE_IHRC            (1 << CLKMD_IHRC_ENABLE_BIT)
 
-// - CLKMD[3] = 0
 #define CLKMD_MODE0(s)               (s << CLKMD_SYSCLK_BIT0)
 #define CLKMD_IHRC_DIV4              CLKMD_MODE0(0)
 #define CLKMD_IHRC_DIV2              CLKMD_MODE0(1)
@@ -134,7 +133,6 @@
 #define CLKMD_ILRC_DIV4              CLKMD_MODE0(6)
 #define CLKMD_ILRC                   CLKMD_MODE0(7)
 
-// - CLKMD[3] = 1
 #define CLKMD_MODE1(s)               ((s << CLKMD_SYSCLK_BIT0) & (1 << CLKMD_CLOCKTYPE_BIT))
 #define CLKMD_IHRC_DIV16             CLKMD_MODE1(0)
 #define CLKMD_IHRC_DIV8              CLKMD_MODE1(1)
@@ -185,7 +183,6 @@
 #define T16_CLK_DIV_BIT0             3
 #define T16_CLK_SRC_BIT0             5
 
-// - T16 Interrupt Source 
 #define T16_INTSRC_8BIT              0x00
 #define T16_INTSRC_9BIT              (1 << T16_INT_SRC_BIT0)
 #define T16_INTSRC_10BIT             (2 << T16_INT_SRC_BIT0)
@@ -194,14 +191,10 @@
 #define T16_INTSRC_13BIT             (5 << T16_INT_SRC_BIT0)
 #define T16_INTSRC_14BIT             (6 << T16_INT_SRC_BIT0)
 #define T16_INTSRC_15BIT             (7 << T16_INT_SRC_BIT0)
-
-// - T16 Clock Divider
 #define T16_CLK_DIV1                 0x00
 #define T16_CLK_DIV4                 (1 << T16_CLK_DIV_BIT0)
 #define T16_CLK_DIV16                (2 << T16_CLK_DIV_BIT0)
 #define T16_CLK_DIV64                (3 << T16_CLK_DIV_BIT0)
-
-// - T16 Clock Source
 #define T16_CLK_DISABLE              0x00
 #define T16_CLK_SYSCLK               (1 << T16_CLK_SRC_BIT0)
 #define T16_CLK_PA4_FALL             (3 << T16_CLK_SRC_BIT0)
@@ -482,12 +475,16 @@
 #define GPCC_COMP_ENABLE             (1 << GPCC_COMP_ENABLE_BIT)
 
 // GPCS definitions
-#define GPCS_COMP_CASE1              0x00
-#define GPCS_COMP_CASE2              0x10
-#define GPCS_COMP_CASE3              0x20
-#define GPCS_COMP_CASE4              0x30
-#define GPCS_COMP_WAKEUP_ENABLE      0x40
-#define GPCS_COMP_OUTPUT_PA0         0x80
+#define GPCS_COMP_VOLTAGE_LVL_BIT0   0
+#define GPCS_COMP_RANGE_SEL_BIT0     4
+#define GPCS_COMP_OUT_PA0_BIT        7
+
+#define GPCS_COMP_RANGE1             0x00
+#define GPCS_COMP_RANGE2             (1 << GPCS_COMP_RANGE_SEL_BIT0)
+#define GPCS_COMP_RANGE3             (2 << GPCS_COMP_RANGE_SEL_BIT0)
+#define GPCS_COMP_RANGE4             (3 << GPCS_COMP_RANGE_SEL_BIT0)
+//#define GPCS_COMP_WAKEUP_ENABLE      0x40
+#define GPCS_COMP_OUTPUT_PA0         (1 << GPCS_COMP_OUT_PA0_BIT)
 
 // PWMG0C definitions
 #define PWMG0C_ENABLE                0x80

@@ -235,10 +235,10 @@
 #define GPCC_COMP_ENABLE             0x80
 
 //gpcs definitions
-#define GPCS_COMP_CASE1              0x00
-#define GPCS_COMP_CASE2              0x10
-#define GPCS_COMP_CASE3              0x20
-#define GPCS_COMP_CASE4              0x30
+#define GPCS_COMP_RANGE1              0x00
+#define GPCS_COMP_RANGE2              0x10
+#define GPCS_COMP_RANGE3              0x20
+#define GPCS_COMP_RANGE4              0x30
 #define GPCS_COMP_WAKEUP_ENABLE      0x40
 #define GPCS_COMP_OUTPUT_PA0         0x80
 

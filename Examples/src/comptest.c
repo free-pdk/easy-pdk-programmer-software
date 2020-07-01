@@ -58,18 +58,18 @@ void main(void)
   INTEN = INTEN_TM2;                            //enable TM2 interrupt, send out initial stop bits and autobaud char
   __engint();                                   //enable global interrupts
 
-  //comparator VBandGap / VInt (case 3: VDD = [ 40 / (N+9) ] * 1.20 V ;
+  //comparator VBandGap / VInt (range 3: VDD = [ 40 / (N+9) ] * 1.20 V ;
   static const char vddcompstr[16][5] = {"5.33","4.80","4.36","4.00","3.69","3.43","3.20","3.00","2.82","2.67","2.53","2.40","2.29","2.18","2.09","2.00"};
 
   //setup COMPARATOR: IN- = VBandGap, IN+ = VInt (selected by GPCS)
-  GPCC = GPCC_COMP_ENABLE | GPCC_COMP_MINUS_BANDGAP_1V2 | GPCC_COMP_PLUS_VINT_R;
+  GPCC = (uint8_t)(GPCC_COMP_ENABLE | GPCC_COMP_MINUS_BANDGAP_1V2 | GPCC_COMP_PLUS_VINT_R);
 
   for(;;)
   {
     puts("VDD is:");
     for( uint8_t n=0; n<16; n++ )               //loop over all 16 values of the VInt_R resistor ladder
     {
-      GPCS = GPCS_COMP_CASE3 | n;               //case 3 covers 2.0V - 5.33V
+      GPCS = GPCS_COMP_RANGE3 | n;               //range 3 covers 2.0V - 5.33V
       for(uint32_t d=100; d>0; d--);            //small delay after GPCS setup required
 
       if( GPCC & GPCC_COMP_RESULT_POSITIV )     //test if comparator result is positiv
