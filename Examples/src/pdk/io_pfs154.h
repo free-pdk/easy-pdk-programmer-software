@@ -21,6 +21,7 @@
 #define FACTORY_IHRCR_ADDR  0x07ed
 #define FACTORY_BGTR_ADDR   0x07ee
 
+
 // FUSE definitions
 #define FUSE_WORD_ADDR      0x07ff
 #define FUSE_RES_BITS_HIGH  0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
@@ -31,6 +32,7 @@
 #define FUSE_IO_DRV_NORMAL  0x0100
 #define FUSE_BOOTUP_SLOW    0x0000 //(B)
 #define FUSE_BOOTUP_FAST    0x0C00
+
 
 // Register address definitions
 #define FLAG_ADDR           0x00
@@ -277,7 +279,6 @@
 #define MISC_WATCHDOG_16K_ILRC       (1 << MISC_WATCHDOG_BIT0)
 #define MISC_WATCHDOG_64K_ILRC       (2 << MISC_WATCHDOG_BIT0)
 #define MISC_WATCHDOG_256K_ILRC      (3 << MISC_WATCHDOG_BIT0)
-
 #define MISC_LVR_DISABLE             (1 << MISC_LVR_DISABLE_BIT)
 #define MISC_LCD_ENABLE              (1 << MISC_LCD_ENABLE_BIT)
 #define MISC_FAST_WAKEUP_ENABLE      (1 << MISC_FAST_WAKEUP_ENABLE_BIT)
@@ -319,7 +320,6 @@
 #define TM2C_OUT_PB2                 (1 << TM2C_OUTPUT_SEL_BIT0)
 #define TM2C_OUT_PA3                 (2 << TM2C_OUTPUT_SEL_BIT0)
 #define TM2C_OUT_PB4                 (3 << TM2C_OUTPUT_SEL_BIT0)
-
 #define TM2C_CLK_DISABLE             0x00
 #define TM2C_CLK_SYSCLK              (1 << TM2C_CLK_SRC_BIT0)
 #define TM2C_CLK_IHRC                (2 << TM2C_CLK_SRC_BIT0)
@@ -339,12 +339,6 @@
 #define TM2S_PRESCALE_BIT0           5
 #define TM2S_PWM_RES_SEL_BIT         7
 
-#define TM2S_PWM_RES_8BIT            0x00
-#define TM2S_PWM_RES_6BIT            (1 << TM2S_PWM_RES_SEL_BIT)
-#define TM2S_PRESCALE_NONE           0x00
-#define TM2S_PRESCALE_DIV4           (1 << TM2S_PRESCALE_BIT0)
-#define TM2S_PRESCALE_DIV16          (2 << TM2S_PRESCALE_BIT0)
-#define TM2S_PRESCALE_DIV64          (3 << TM2S_PRESCALE_BIT0)
 #define TM2S_SCALE_NONE              0x00
 #define TM2S_SCALE_DIV2              (1 << TM2S_SCALE_BIT0)
 #define TM2S_SCALE_DIV3              (2 << TM2S_SCALE_BIT0)
@@ -377,6 +371,12 @@
 #define TM2S_SCALE_DIV30             (29 << TM2S_SCALE_BIT0)
 #define TM2S_SCALE_DIV31             (30 << TM2S_SCALE_BIT0)
 #define TM2S_SCALE_DIV32             (31 << TM2S_SCALE_BIT0)
+#define TM2S_PRESCALE_NONE           0x00
+#define TM2S_PRESCALE_DIV4           (1 << TM2S_PRESCALE_BIT0)
+#define TM2S_PRESCALE_DIV16          (2 << TM2S_PRESCALE_BIT0)
+#define TM2S_PRESCALE_DIV64          (3 << TM2S_PRESCALE_BIT0)
+#define TM2S_PWM_RES_8BIT            0x00
+#define TM2S_PWM_RES_6BIT            (1 << TM2S_PWM_RES_SEL_BIT)
 
 
 // TM3C (Timer3 Control) register definitions
@@ -392,7 +392,6 @@
 #define TM3C_OUT_PB2                 (1 << TM3C_OUTPUT_SEL_BIT0)
 #define TM3C_OUT_PA3                 (2 << TM3C_OUTPUT_SEL_BIT0)
 #define TM3C_OUT_PB4                 (3 << TM3C_OUTPUT_SEL_BIT0)
-
 #define TM3C_CLK_DISABLE             0x00
 #define TM3C_CLK_SYSCLK              (1 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_IHRC                (2 << TM3C_CLK_SRC_BIT0)
@@ -412,12 +411,6 @@
 #define TM3S_PRESCALE_BIT0           5
 #define TM3S_PWM_RES_SEL_BIT         7
 
-#define TM3S_PWM_RES_8BIT            0x00
-#define TM3S_PWM_RES_6BIT            (1 << TM3S_PWM_RES_SEL_BIT)
-#define TM3S_PRESCALE_NONE           0x00
-#define TM3S_PRESCALE_DIV4           (1 << TM3S_PRESCALE_BIT0)
-#define TM3S_PRESCALE_DIV16          (2 << TM3S_PRESCALE_BIT0)
-#define TM3S_PRESCALE_DIV64          (3 << TM3S_PRESCALE_BIT0)
 #define TM3S_SCALE_NONE              0x00
 #define TM3S_SCALE_DIV2              (1 << TM3S_SCALE_BIT0)
 #define TM3S_SCALE_DIV3              (2 << TM3S_SCALE_BIT0)
@@ -450,6 +443,12 @@
 #define TM3S_SCALE_DIV30             (29 << TM3S_SCALE_BIT0)
 #define TM3S_SCALE_DIV31             (30 << TM3S_SCALE_BIT0)
 #define TM3S_SCALE_DIV32             (31 << TM3S_SCALE_BIT0)
+#define TM3S_PRESCALE_NONE           0x00
+#define TM3S_PRESCALE_DIV4           (1 << TM3S_PRESCALE_BIT0)
+#define TM3S_PRESCALE_DIV16          (2 << TM3S_PRESCALE_BIT0)
+#define TM3S_PRESCALE_DIV64          (3 << TM3S_PRESCALE_BIT0)
+#define TM3S_PWM_RES_8BIT            0x00
+#define TM3S_PWM_RES_6BIT            (1 << TM3S_PWM_RES_SEL_BIT)
 
 
 // GPCC (Comparator Control) register definitions
@@ -489,160 +488,197 @@
 
 
 // PWMG0C (PWMG0 Control) register definitions
-#define PWMG0C_ENABLE                0x80
-#define PWMG0C_OUT_STATUS            0x40
-#define PWMG0C_OUT_INVERT            0x20
-#define PWMG0C_RESET_COUNTER         0x10
-#define PWMG0C_OUT_NONE              0x00
-#define PWMG0C_OUT_PB5               0x02
-#define PWMG0C_OUT_PA0               0x06
-#define PWMG0C_OUT_PB4               0x08
+#define PWMG0C_CLK_SRC_BIT           0
+#define PWMG0C_OUT_PIN_SEL_BIT0      1
+#define PWMG0C_CTR_RST_BIT           4
+#define PWMG0C_INVERT_OUT_BIT        5
+#define PWMG0C_STATUS_OUT_BIT        6
+#define PWMG0C_ENABLE_BIT            7
+
 #define PWMG0C_CLK_SYSCLK            0x00
-#define PWMG0C_CLK_IHRC              0x01
+#define PWMG0C_CLK_IHRC              (1 << PWMG0C_CLK_SRC_BIT)
+#define PWMG0C_OUT_NONE              0x00
+#define PWMG0C_OUT_PB5               (1 << PWMG0C_OUT_PIN_SEL_BIT0)
+#define PWMG0C_OUT_PA0               (2 << PWMG0C_OUT_PIN_SEL_BIT0)
+#define PWMG0C_OUT_PB4               (3 << PWMG0C_OUT_PIN_SEL_BIT0)
+#define PWMG0C_RESET_COUNTER         (1 << PWMG0C_CTR_RST_BIT)
+#define PWMG0C_INVERT_OUT            (1 << PWMG0C_INVERT_OUT_BIT)
+#define PWMG0C_STATUS_OUT            (1 << PWMG0C_STATUS_OUT_BIT)
+#define PWMG0C_ENABLE                (1 << PWMG0C_ENABLE_BIT)
+
 
 // PWMG0S (PWMG0 Scalar) register definitions
-#define PWMG0_INT_AT_0               0x00
-#define PWMG0_INT_AT_DUTY            0x80
-#define PWMG0_PRESCALE_NONE          0x00
-#define PWMG0_PRESCALE_DIV4          0x20
-#define PWMG0_PRESCALE_DIV16         0x40
-#define PWMG0_PRESCALE_DIV64         0x60
-#define PWMG0_SCALE_NONE             0x00
-#define PWMG0_SCALE_DIV2             0x01
-#define PWMG0_SCALE_DIV3             0x02
-#define PWMG0_SCALE_DIV4             0x03
-#define PWMG0_SCALE_DIV5             0x04
-#define PWMG0_SCALE_DIV6             0x05
-#define PWMG0_SCALE_DIV7             0x06
-#define PWMG0_SCALE_DIV8             0x07
-#define PWMG0_SCALE_DIV9             0x08
-#define PWMG0_SCALE_DIV10            0x09
-#define PWMG0_SCALE_DIV11            0x0A
-#define PWMG0_SCALE_DIV12            0x0B
-#define PWMG0_SCALE_DIV13            0x0C
-#define PWMG0_SCALE_DIV14            0x0D
-#define PWMG0_SCALE_DIV15            0x0E
-#define PWMG0_SCALE_DIV16            0x0F
-#define PWMG0_SCALE_DIV17            0x10
-#define PWMG0_SCALE_DIV18            0x11
-#define PWMG0_SCALE_DIV19            0x12
-#define PWMG0_SCALE_DIV20            0x13
-#define PWMG0_SCALE_DIV21            0x14
-#define PWMG0_SCALE_DIV22            0x15
-#define PWMG0_SCALE_DIV23            0x16
-#define PWMG0_SCALE_DIV24            0x17
-#define PWMG0_SCALE_DIV25            0x18
-#define PWMG0_SCALE_DIV26            0x19
-#define PWMG0_SCALE_DIV27            0x1A
-#define PWMG0_SCALE_DIV28            0x1B
-#define PWMG0_SCALE_DIV29            0x1C
-#define PWMG0_SCALE_DIV30            0x1D
-#define PWMG0_SCALE_DIV31            0x1E
-#define PWMG0_SCALE_DIV32            0x1F
+#define PWMG0S_CLK_DIV_BIT0          0
+#define PWMG0S_PRESCALE_BIT0         5
+#define PWMG0S_INT_MODE_BIT          7
+
+#define PWMG0S_SCALE_NONE            0x00
+#define PWMG0S_SCALE_DIV2            (1 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV3            (2 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV4            (3 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV5            (4 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV6            (5 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV7            (6 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV8            (7 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV9            (8 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV10           (9 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV11           (10 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV12           (11 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV13           (12 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV14           (13 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV15           (14 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV16           (15 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV17           (16 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV18           (17 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV19           (18 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV20           (19 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV21           (20 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV22           (21 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV23           (22 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV24           (23 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV25           (24 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV26           (25 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV27           (26 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV28           (27 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV29           (28 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV30           (29 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV31           (30 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_SCALE_DIV32           (31 << PWMG0S_SCALE_BIT0)
+#define PWMG0S_PRESCALE_NONE         0x00
+#define PWMG0S_PRESCALE_DIV4         (1 << PWMG0S_PRESCALE_BIT0)
+#define PWMG0S_PRESCALE_DIV16        (2 << PWMG0S_PRESCALE_BIT0)
+#define PWMG0S_PRESCALE_DIV64        (3 << PWMG0S_PRESCALE_BIT0)
+#define PWMG0_INT_AT_DUTY            0x00
+#define PWMG0_INT_AT_0               (1 << PWMG0S_INT_MODE_BIT)
+
 
 // PWMG1C (PWMG1 Control) register definitions
-#define PWMG1C_ENABLE                0x80
-#define PWMG1C_OUT_STATUS            0x40
-#define PWMG1C_OUT_INVERT            0x20
-#define PWMG1C_RESET_COUNTER         0x10
-#define PWMG1C_OUT_NONE              0x00
-#define PWMG1C_OUT_PB6               0x02
-#define PWMG1C_OUT_PA4               0x06
-#define PWMG1C_OUT_PB7               0x08
+#define PWMG1C_CLK_SRC_BIT           0
+#define PWMG1C_OUT_PIN_SEL_BIT0      1
+#define PWMG1C_CTR_RST_BIT           4
+#define PWMG1C_INVERT_OUT_BIT        5
+#define PWMG1C_STATUS_OUT_BIT        6
+#define PWMG1C_ENABLE_BIT            7
+
 #define PWMG1C_CLK_SYSCLK            0x00
-#define PWMG1C_CLK_IHRC              0x01
+#define PWMG1C_CLK_IHRC              (1 << PWMG1C_CLK_SRC_BIT)
+#define PWMG1C_OUT_NONE              0x00
+#define PWMG1C_OUT_PB5               (1 << PWMG1C_OUT_PIN_SEL_BIT0)
+#define PWMG1C_OUT_PA0               (2 << PWMG1C_OUT_PIN_SEL_BIT0)
+#define PWMG1C_OUT_PB4               (3 << PWMG1C_OUT_PIN_SEL_BIT0)
+#define PWMG1C_RESET_COUNTER         (1 << PWMG1C_CTR_RST_BIT)
+#define PWMG1C_INVERT_OUT            (1 << PWMG1C_INVERT_OUT_BIT)
+#define PWMG1C_STATUS_OUT            (1 << PWMG1C_STATUS_OUT_BIT)
+#define PWMG1C_ENABLE                (1 << PWMG1C_ENABLE_BIT)
+
 
 // PWMG1S (PWMG1 Scalar) register definitions
-#define PWMG1_INT_AT_0               0x00
-#define PWMG1_INT_AT_DUTY            0x80
-#define PWMG1_PRESCALE_NONE          0x00
-#define PWMG1_PRESCALE_DIV4          0x20
-#define PWMG1_PRESCALE_DIV16         0x40
-#define PWMG1_PRESCALE_DIV64         0x60
-#define PWMG1_SCALE_NONE             0x00
-#define PWMG1_SCALE_DIV2             0x01
-#define PWMG1_SCALE_DIV3             0x02
-#define PWMG1_SCALE_DIV4             0x03
-#define PWMG1_SCALE_DIV5             0x04
-#define PWMG1_SCALE_DIV6             0x05
-#define PWMG1_SCALE_DIV7             0x06
-#define PWMG1_SCALE_DIV8             0x07
-#define PWMG1_SCALE_DIV9             0x08
-#define PWMG1_SCALE_DIV10            0x09
-#define PWMG1_SCALE_DIV11            0x0A
-#define PWMG1_SCALE_DIV12            0x0B
-#define PWMG1_SCALE_DIV13            0x0C
-#define PWMG1_SCALE_DIV14            0x0D
-#define PWMG1_SCALE_DIV15            0x0E
-#define PWMG1_SCALE_DIV16            0x0F
-#define PWMG1_SCALE_DIV17            0x10
-#define PWMG1_SCALE_DIV18            0x11
-#define PWMG1_SCALE_DIV19            0x12
-#define PWMG1_SCALE_DIV20            0x13
-#define PWMG1_SCALE_DIV21            0x14
-#define PWMG1_SCALE_DIV22            0x15
-#define PWMG1_SCALE_DIV23            0x16
-#define PWMG1_SCALE_DIV24            0x17
-#define PWMG1_SCALE_DIV25            0x18
-#define PWMG1_SCALE_DIV26            0x19
-#define PWMG1_SCALE_DIV27            0x1A
-#define PWMG1_SCALE_DIV28            0x1B
-#define PWMG1_SCALE_DIV29            0x1C
-#define PWMG1_SCALE_DIV30            0x1D
-#define PWMG1_SCALE_DIV31            0x1E
-#define PWMG1_SCALE_DIV32            0x1F
+#define PWMG1S_CLK_DIV_BIT0          0
+#define PWMG1S_PRESCALE_BIT0         5
+#define PWMG1S_INT_MODE_BIT          7
+
+#define PWMG1S_SCALE_NONE            0x00
+#define PWMG1S_SCALE_DIV2            (1 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV3            (2 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV4            (3 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV5            (4 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV6            (5 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV7            (6 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV8            (7 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV9            (8 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV10           (9 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV11           (10 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV12           (11 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV13           (12 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV14           (13 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV15           (14 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV16           (15 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV17           (16 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV18           (17 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV19           (18 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV20           (19 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV21           (20 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV22           (21 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV23           (22 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV24           (23 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV25           (24 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV26           (25 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV27           (26 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV28           (27 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV29           (28 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV30           (29 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV31           (30 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_SCALE_DIV32           (31 << PWMG1S_SCALE_BIT0)
+#define PWMG1S_PRESCALE_NONE         0x00
+#define PWMG1S_PRESCALE_DIV4         (1 << PWMG1S_PRESCALE_BIT0)
+#define PWMG1S_PRESCALE_DIV16        (2 << PWMG1S_PRESCALE_BIT0)
+#define PWMG1S_PRESCALE_DIV64        (3 << PWMG1S_PRESCALE_BIT0)
+#define PWMG1_INT_AT_DUTY            0x00
+#define PWMG1_INT_AT_0               (1 << PWMG1S_INT_MODE_BIT)
+
 
 // PWMG2C (PWMG2 Control) register definitions
-#define PWMG2C_ENABLE                0x80
-#define PWMG2C_OUT_STATUS            0x40
-#define PWMG2C_OUT_INVERT            0x20
-#define PWMG2C_RESET_COUNTER         0x10
-#define PWMG2C_OUT_NONE              0x00
-#define PWMG2C_OUT_PB3               0x02
-#define PWMG2C_OUT_PA3               0x06
-#define PWMG2C_OUT_PB2               0x08
-#define PWMG2C_OUT_PA5               0x0A
+#define PWMG2C_CLK_SRC_BIT           0
+#define PWMG2C_OUT_PIN_SEL_BIT0      1
+#define PWMG2C_CTR_RST_BIT           4
+#define PWMG2C_INVERT_OUT_BIT        5
+#define PWMG2C_STATUS_OUT_BIT        6
+#define PWMG2C_ENABLE_BIT            7
+
 #define PWMG2C_CLK_SYSCLK            0x00
-#define PWMG2C_CLK_IHRC              0x01
+#define PWMG2C_CLK_IHRC              (1 << PWMG2C_CLK_SRC_BIT)
+#define PWMG2C_OUT_NONE              0x00
+#define PWMG2C_OUT_PB5               (1 << PWMG2C_OUT_PIN_SEL_BIT0)
+#define PWMG2C_OUT_PA0               (2 << PWMG2C_OUT_PIN_SEL_BIT0)
+#define PWMG2C_OUT_PB4               (3 << PWMG2C_OUT_PIN_SEL_BIT0)
+#define PWMG2C_RESET_COUNTER         (1 << PWMG2C_CTR_RST_BIT)
+#define PWMG2C_INVERT_OUT            (1 << PWMG2C_INVERT_OUT_BIT)
+#define PWMG2C_STATUS_OUT            (1 << PWMG2C_STATUS_OUT_BIT)
+#define PWMG2C_ENABLE                (1 << PWMG2C_ENABLE_BIT)
+
 
 // PWMG2S (PWMG2 Scalar) register definitions
-#define PWMG2_INT_AT_0               0x00
-#define PWMG2_INT_AT_DUTY            0x80
-#define PWMG2_PRESCALE_NONE          0x00
-#define PWMG2_PRESCALE_DIV4          0x20
-#define PWMG2_PRESCALE_DIV16         0x40
-#define PWMG2_PRESCALE_DIV64         0x60
-#define PWMG2_SCALE_NONE             0x00
-#define PWMG2_SCALE_DIV2             0x01
-#define PWMG2_SCALE_DIV3             0x02
-#define PWMG2_SCALE_DIV4             0x03
-#define PWMG2_SCALE_DIV5             0x04
-#define PWMG2_SCALE_DIV6             0x05
-#define PWMG2_SCALE_DIV7             0x06
-#define PWMG2_SCALE_DIV8             0x07
-#define PWMG2_SCALE_DIV9             0x08
-#define PWMG2_SCALE_DIV10            0x09
-#define PWMG2_SCALE_DIV11            0x0A
-#define PWMG2_SCALE_DIV12            0x0B
-#define PWMG2_SCALE_DIV13            0x0C
-#define PWMG2_SCALE_DIV14            0x0D
-#define PWMG2_SCALE_DIV15            0x0E
-#define PWMG2_SCALE_DIV16            0x0F
-#define PWMG2_SCALE_DIV17            0x10
-#define PWMG2_SCALE_DIV18            0x11
-#define PWMG2_SCALE_DIV19            0x12
-#define PWMG2_SCALE_DIV20            0x13
-#define PWMG2_SCALE_DIV21            0x14
-#define PWMG2_SCALE_DIV22            0x15
-#define PWMG2_SCALE_DIV23            0x16
-#define PWMG2_SCALE_DIV24            0x17
-#define PWMG2_SCALE_DIV25            0x18
-#define PWMG2_SCALE_DIV26            0x19
-#define PWMG2_SCALE_DIV27            0x1A
-#define PWMG2_SCALE_DIV28            0x1B
-#define PWMG2_SCALE_DIV29            0x1C
-#define PWMG2_SCALE_DIV30            0x1D
-#define PWMG2_SCALE_DIV31            0x1E
-#define PWMG2_SCALE_DIV32            0x1F
+#define PWMG2S_CLK_DIV_BIT0          0
+#define PWMG2S_PRESCALE_BIT0         5
+#define PWMG2S_INT_MODE_BIT          7
+
+#define PWMG2S_SCALE_NONE            0x00
+#define PWMG2S_SCALE_DIV2            (1 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV3            (2 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV4            (3 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV5            (4 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV6            (5 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV7            (6 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV8            (7 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV9            (8 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV10           (9 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV11           (10 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV12           (11 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV13           (12 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV14           (13 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV15           (14 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV16           (15 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV17           (16 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV18           (17 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV19           (18 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV20           (19 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV21           (20 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV22           (21 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV23           (22 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV24           (23 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV25           (24 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV26           (25 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV27           (26 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV28           (27 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV29           (28 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV30           (29 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV31           (30 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_SCALE_DIV32           (31 << PWMG2S_SCALE_BIT0)
+#define PWMG2S_PRESCALE_NONE         0x00
+#define PWMG2S_PRESCALE_DIV4         (1 << PWMG2S_PRESCALE_BIT0)
+#define PWMG2S_PRESCALE_DIV16        (2 << PWMG2S_PRESCALE_BIT0)
+#define PWMG2S_PRESCALE_DIV64        (3 << PWMG2S_PRESCALE_BIT0)
+#define PWMG2_INT_AT_DUTY            0x00
+#define PWMG2_INT_AT_0               (1 << PWMG2S_INT_MODE_BIT)
 
 #endif //__PDK_IO_PFS154_H__
