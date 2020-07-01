@@ -6,7 +6,7 @@
 #define _STR_VAR(x)           "_"_STRINGIFY(x)
 #define _STR_DATA(x)          _STRINGIFY(x)
 #define _VAR(x)               _ ## x
-#define _DATA(x)              #x
+#define _DATA(x)              x
 
 //definitions for built in opcodes
 #define __nop()               __asm__("nop\n")
