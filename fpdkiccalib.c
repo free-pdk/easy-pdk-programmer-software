@@ -53,7 +53,7 @@ typedef struct FPDKCALIBCP
 
 typedef struct FPDKCALIBALGO
 {
-  FPDKCALIBTYPE type;
+  bool unknown;
   uint8_t codebits;
   uint32_t loopcycles;
   FPDKCALIBCP algo[FPDKCALIBCP_MAXWORDS];
@@ -176,6 +176,59 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
   }
  },
 
+ //undefined algos must be defined at the end, used to catch all unknown magic blocks to warn user
+ {
+  .unknown=true,
+  .codebits=13,
+  .algo={
+    { .sopc=0x1400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1400, .smsk=0xFF00 }, //search: AND A, *
+  }
+ },
+
+ {
+  .unknown=true,
+  .codebits=14,
+  .algo={
+    { .sopc=0x2C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x2C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x2C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x2C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x2C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x2C00, .smsk=0xFF00 }, //search: AND A, *
+  }
+ },
+
+ {
+  .unknown=true,
+  .codebits=15,
+  .algo={
+    { .sopc=0x5400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x5400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x5400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x5400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x5400, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x5400, .smsk=0xFF00 }, //search: AND A, *
+  }
+ },
+
+ {
+  .unknown=true,
+  .codebits=16,
+  .algo={
+    { .sopc=0x1C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1C00, .smsk=0xFF00 }, //search: AND A, *
+    { .sopc=0x1C00, .smsk=0xFF00 }, //search: AND A, *
+  }
+ },
+
 };
 
 static uint16_t _FPDKCALIB_GetAlgoLength(const FPDKCALIBCP* algo)
@@ -183,7 +236,7 @@ static uint16_t _FPDKCALIB_GetAlgoLength(const FPDKCALIBCP* algo)
   uint16_t algowords;
   for( algowords=0; algowords<FPDKCALIBCP_MAXWORDS; algowords++ )
   {
-    if( 0 == algo[algowords].cocf )
+    if( 0 == algo[algowords].sopc )
       break;
   }
   return algowords;
@@ -232,6 +285,12 @@ bool FPDKCALIB_InsertCalibration(const FPDKICDATA* icdata, uint8_t* code, const 
   }
   if( 0xFFFF == calibdata->pos )
     return false;
+  
+  if( fpdk_calib_algos[calibdata->algo].unknown )
+  {
+    calibdata->type = FPDKCALIB_UNKNOWN;
+    return true;
+  }
 
   uint16_t algowords = _FPDKCALIB_GetAlgoLength(fpdk_calib_algos[calibdata->algo].algo);
 
