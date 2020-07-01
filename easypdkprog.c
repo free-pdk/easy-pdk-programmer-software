@@ -355,43 +355,6 @@ int main( int argc, const char * argv [] )
         return -8;
       }
 
-      if( FPDK_IS_FLASH_TYPE(icdata->type) && !arguments.noerase )
-      {
-        printf("Erasing IC... ");
-
-        int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, icdata->erase_clocks );
-        if( r>=FPDK_ERR_ERROR )
-        {
-          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
-          return -4;
-        }
-        else
-        if( r != icdata->id12bit )
-        {
-          fprintf(stderr, "ERROR: Erase failed.\n");
-          return -9;
-        }
-        else
-          printf("done.\n");
-      }
-
-      if( !arguments.noblankcheck )
-      {
-        verbose_printf("Blank check IC... ");
-        int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
-        if( r>=FPDK_ERR_ERROR )
-        {
-          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
-          return -4;
-        }
-        if( r != icdata->id12bit )
-        {
-          fprintf(stderr, "ERROR: Blank check failed.\n");
-          return -10;
-        }
-        verbose_printf("done.\n");
-      }
-
       uint8_t data[0x1000*2];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
       uint32_t len = 0;
@@ -451,6 +414,43 @@ int main( int argc, const char * argv [] )
           fprintf(stderr, "ERROR: Firmware uses serial feature, but no serial specified. Use --serial option.\n");
           return -22;
         }
+      }
+
+      if( FPDK_IS_FLASH_TYPE(icdata->type) && !arguments.noerase )
+      {
+        printf("Erasing IC... ");
+
+        int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, icdata->erase_clocks );
+        if( r>=FPDK_ERR_ERROR )
+        {
+          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+          return -4;
+        }
+        else
+        if( r != icdata->id12bit )
+        {
+          fprintf(stderr, "ERROR: Erase failed.\n");
+          return -9;
+        }
+        else
+          printf("done.\n");
+      }
+
+      if( !arguments.noblankcheck )
+      {
+        verbose_printf("Blank check IC... ");
+        int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+        if( r>=FPDK_ERR_ERROR )
+        {
+          fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
+          return -4;
+        }
+        if( r != icdata->id12bit )
+        {
+          fprintf(stderr, "ERROR: Blank check failed.\n");
+          return -10;
+        }
+        verbose_printf("done.\n");
       }
 
       uint32_t codewords = (len+1)/2;
