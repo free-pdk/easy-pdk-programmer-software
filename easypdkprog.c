@@ -400,6 +400,12 @@ int main( int argc, const char * argv [] )
         {
           if( !FPDKCALIB_InsertCalibration(icdata, data, len, &calibdata[calibrations]) )
             break;
+
+          if( FPDKCALIB_UNKNOWN == calibdata[calibrations].type )
+          {
+            fprintf(stderr, "ERROR: Unknown calibration found. Please check that you have the latest programer software and firmware or recompile your application to match this version.\n");
+            return -17;
+          }
         }
       }
 
@@ -551,7 +557,8 @@ int main( int argc, const char * argv [] )
                 }
               }
               break;
-            case FPDKCALIB_BG: 
+
+            default:
               break;
           }
           printf("(0x%02X)  ", fcalval);
