@@ -1,5 +1,5 @@
-SDCC=../../sdcc/bin/sdcc
-OUTDIR=build
+SDCC	?= sdcc
+OUTDIR	?= .build
 
 all: PFS154 PFS172 PFS173 PMS150C
 
@@ -27,5 +27,8 @@ PMS150C:
 
 clean:
 	rm -rf $(OUTDIR)
+
+release: all
+	cp $(OUTDIR)/*.ihx ../
 
 .PHONY: all clean
