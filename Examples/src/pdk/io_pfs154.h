@@ -233,42 +233,6 @@
 #define INTEGS_T16_FALLING           (0 << INTEGS_T16_EDGE_SEL_BIT)
 
 
-// PADIE (Port A Digital Input Enable) register definitions
-#define PADIE_PA0_BIT                0
-#define PADIE_PA3_BIT                3
-#define PADIE_PA4_BIT                4
-#define PADIE_PA5_BIT                5
-#define PADIE_PA6_BIT                6
-#define PADIE_PA7_BIT                7
-
-#define PADIE_PA0_WAKEUP_ENABLE      (1 << PADIE_PA0_BIT)
-#define PADIE_PA3_WAKEUP_ENABLE      (1 << PADIE_PA3_BIT)
-#define PADIE_PA4_WAKEUP_ENABLE      (1 << PADIE_PA4_BIT)
-#define PADIE_PA5_WAKEUP_ENABLE      (1 << PADIE_PA5_BIT)
-#define PADIE_PA6_WAKEUP_ENABLE      (1 << PADIE_PA6_BIT)
-#define PADIE_PA7_WAKEUP_ENABLE      (1 << PADIE_PA7_BIT)
-
-
-// PBDIE (Port B Digital Input Enable) register definitions
-#define PADIE_PB0_BIT                0
-#define PADIE_PB1_BIT                1
-#define PADIE_PB2_BIT                2
-#define PADIE_PB3_BIT                3
-#define PADIE_PB4_BIT                4
-#define PADIE_PB5_BIT                5
-#define PADIE_PB6_BIT                6
-#define PADIE_PB7_BIT                7
-
-#define PADIE_PB0_WAKEUP_ENABLE      (1 << PADIE_PB0_BIT)
-#define PADIE_PB1_WAKEUP_ENABLE      (1 << PADIE_PB1_BIT)
-#define PADIE_PB2_WAKEUP_ENABLE      (1 << PADIE_PB2_BIT)
-#define PADIE_PB3_WAKEUP_ENABLE      (1 << PADIE_PB3_BIT)
-#define PADIE_PB4_WAKEUP_ENABLE      (1 << PADIE_PB4_BIT)
-#define PADIE_PB5_WAKEUP_ENABLE      (1 << PADIE_PB5_BIT)
-#define PADIE_PB6_WAKEUP_ENABLE      (1 << PADIE_PB6_BIT)
-#define PADIE_PB7_WAKEUP_ENABLE      (1 << PADIE_PB7_BIT)
-
-
 // MISC register definitions
 #define MISC_WATCHDOG_BIT0           0
 #define MISC_LVR_DISABLE_BIT         2
