@@ -99,7 +99,7 @@
 //0x3f
 
 
-// FLAG definitions
+// FLAG (ACC Status Flag) register definitions
 #define FLAG_Z_BIT                   0
 #define FLAG_C_BIT                   1
 #define FLAG_AC_BIT                  2
@@ -111,7 +111,7 @@
 #define FLAG_OV                      (1 << FLAG_OV_BIT)
 
 
-// CLKMD definitions
+// CLKMD (Clock Mode) register definitions
 #define CLKMD_PA5_PRSTB_BIT          0
 #define CLKMD_WATCHDOG_ENABLE_BIT    1
 #define CLKMD_ILRC_ENABLE_BIT        2
@@ -142,7 +142,7 @@
 #define CLKMD_EOSC_DIV8              CLKMD_MODE1(5)
 
 
-// INTEN definitions
+// INTEN (Interrupt Enable) register definitions
 #define INTEN_PA0_ENABLE_BIT         0
 #define INTEN_PB0_ENABLE_BIT         1
 #define INTEN_T16_ENABLE_BIT         2
@@ -160,7 +160,7 @@
 #define INTEN_TM3                    (1 << INTEN_TM3_ENABLE_BIT)
 
 
-// INTRQ definitions
+// INTRQ (Interrupt Request) register definitions
 #define INTRQ_PA0_BIT                0
 #define INTRQ_PB0_BIT                1
 #define INTRQ_T16_BIT                2
@@ -178,7 +178,7 @@
 #define INTRQ_TM3                    (1 << INTRQ_TM3_BIT)
 
 
-// T16 definitions
+// T16 (Timer16 Mode) register definitions
 #define T16_INT_SRC_BIT0             0
 #define T16_CLK_DIV_BIT0             3
 #define T16_CLK_SRC_BIT0             5
@@ -204,7 +204,7 @@
 #define T16_CLK_PA0_FALL             (7 << T16_CLK_SRC_BIT0)
 
 
-// EOSC definitions
+// EOSC (External Oscillator Setting) register definitions
 #define EOSC_BG_LVR_SHUTDOWN_BIT     0
 #define EOSC_CRYSTAL_SEL_BIT0        5
 #define EOSC_ENABLE_BIT              7
@@ -216,7 +216,7 @@
 #define EOSC_ENABLE                  (1 << EOSC_BG_LVR_SHUTDOWN_BIT)
 
 
-// INTEGS definitions
+// INTEGS (Interrupt Edge Select) register definitions
 #define INTEGS_PA0_EDGE_SEL_BIT0     0
 #define INTEGS_PB0_EDGE_SEL_BIT0     2
 #define INTEGS_T16_EDGE_SEL_BIT      4
@@ -231,7 +231,7 @@
 #define INTEGS_T16_FALLING           (0 << INTEGS_T16_EDGE_SEL_BIT)
 
 
-// PADIE definitions
+// PADIE (Port A Digital Input Enable) register definitions
 #define PADIE_PA0_BIT                0
 #define PADIE_PA3_BIT                3
 #define PADIE_PA4_BIT                4
@@ -247,7 +247,7 @@
 #define PADIE_PA7_WAKEUP_ENABLE      (1 << PADIE_PA7_BIT)
 
 
-// PBDIE definitions
+// PBDIE (Port B Digital Input Enable) register definitions
 #define PADIE_PB0_BIT                0
 #define PADIE_PB1_BIT                1
 #define PADIE_PB2_BIT                2
@@ -267,7 +267,7 @@
 #define PADIE_PB7_WAKEUP_ENABLE      (1 << PADIE_PB7_BIT)
 
 
-// MISC definitions
+// MISC register definitions
 #define MISC_WATCHDOG_BIT0           0
 #define MISC_LVR_DISABLE_BIT         2
 #define MISC_LCD_ENABLE_BIT          4
@@ -283,7 +283,7 @@
 #define MISC_FAST_WAKEUP_ENABLE      (1 << MISC_FAST_WAKEUP_ENABLE_BIT)
 
 
-// MISC2 definitions
+// MISC2 register definitions
 #define MISC2_COMP_EDGE_SEL_BIT0     5
 
 #define MISC2_COMP_EDGE_INT_BOTH     0x00
@@ -294,7 +294,7 @@
 //#define MISC2_UNK_COMP               0x00
 //#define MISC2_UNK_PWMG1              0x08
 
-// MISCLVR definitions
+// MISCLVR register definitions
 #define MISCLVR_LVR_BIT0             5
 
 #define MISCLVR_4V                   0x00
@@ -306,7 +306,7 @@
 #define MISCLVR_2V2                  (6 << MISCLVR_LVR_BIT0)
 #define MISCLVR_2V                   (7 << MISCLVR_LVR_BIT0)
 
-// TM2C definitions
+// TM2C (Timer2 Control) register definitions
 #define TM2C_INVERT_OUT_BIT          0
 #define TM2C_MODE_SEL_BIT            1
 #define TM2C_OUTPUT_SEL_BIT0         2
@@ -334,7 +334,7 @@
 #define TM2C_CLK_PA4_FALL            (13 << TM2C_CLK_SRC_BIT0)
 
 
-// TM2S definitions
+// TM2S (Timer2 Scalar) register definitions
 #define TM2S_SCALE_BIT0              0
 #define TM2S_PRESCALE_BIT0           5
 #define TM2S_PWM_RES_SEL_BIT         7
@@ -379,7 +379,7 @@
 #define TM2S_SCALE_DIV32             (31 << TM2S_SCALE_BIT0)
 
 
-// TM3C definitions
+// TM3C (Timer3 Control) register definitions
 #define TM3C_INVERT_OUT_BIT          0
 #define TM3C_MODE_SEL_BIT            1
 #define TM3C_OUTPUT_SEL_BIT0         2
@@ -407,7 +407,7 @@
 #define TM3C_CLK_PA4_FALL            (13 << TM3C_CLK_SRC_BIT0)
 
 
-// TM3S definitions
+// TM3S (Timer3 Scalar) register definitions
 #define TM3S_SCALE_BIT0              0
 #define TM3S_PRESCALE_BIT0           5
 #define TM3S_PWM_RES_SEL_BIT         7
@@ -452,7 +452,7 @@
 #define TM3S_SCALE_DIV32             (31 << TM3S_SCALE_BIT0)
 
 
-// GPCC definitions
+// GPCC (Comparator Control) register definitions
 #define GPCC_COMP_PLUS_BIT           0
 #define GPCC_COMP_MINUS_BIT0         1
 #define GPCC_COMP_INVERT_OUT_BIT     4
@@ -474,7 +474,8 @@
 #define GPCC_COMP_RESULT_POSITIV     (1 << GPCC_COMP_RESULT_BIT)
 #define GPCC_COMP_ENABLE             (1 << GPCC_COMP_ENABLE_BIT)
 
-// GPCS definitions
+
+// GPCS (Comparator Selection) register definitions
 #define GPCS_COMP_VOLTAGE_LVL_BIT0   0
 #define GPCS_COMP_RANGE_SEL_BIT0     4
 #define GPCS_COMP_OUT_PA0_BIT        7
@@ -486,7 +487,8 @@
 //#define GPCS_COMP_WAKEUP_ENABLE      0x40
 #define GPCS_COMP_OUTPUT_PA0         (1 << GPCS_COMP_OUT_PA0_BIT)
 
-// PWMG0C definitions
+
+// PWMG0C (PWMG0 Control) register definitions
 #define PWMG0C_ENABLE                0x80
 #define PWMG0C_OUT_STATUS            0x40
 #define PWMG0C_OUT_INVERT            0x20
@@ -498,7 +500,7 @@
 #define PWMG0C_CLK_SYSCLK            0x00
 #define PWMG0C_CLK_IHRC              0x01
 
-// PWMG0S definitions
+// PWMG0S (PWMG0 Scalar) register definitions
 #define PWMG0_INT_AT_0               0x00
 #define PWMG0_INT_AT_DUTY            0x80
 #define PWMG0_PRESCALE_NONE          0x00
@@ -538,7 +540,7 @@
 #define PWMG0_SCALE_DIV31            0x1E
 #define PWMG0_SCALE_DIV32            0x1F
 
-// PWMG1C definitions
+// PWMG1C (PWMG1 Control) register definitions
 #define PWMG1C_ENABLE                0x80
 #define PWMG1C_OUT_STATUS            0x40
 #define PWMG1C_OUT_INVERT            0x20
@@ -550,7 +552,7 @@
 #define PWMG1C_CLK_SYSCLK            0x00
 #define PWMG1C_CLK_IHRC              0x01
 
-// PWMG1S definitions
+// PWMG1S (PWMG1 Scalar) register definitions
 #define PWMG1_INT_AT_0               0x00
 #define PWMG1_INT_AT_DUTY            0x80
 #define PWMG1_PRESCALE_NONE          0x00
@@ -590,7 +592,7 @@
 #define PWMG1_SCALE_DIV31            0x1E
 #define PWMG1_SCALE_DIV32            0x1F
 
-// PWMG2C definitions
+// PWMG2C (PWMG2 Control) register definitions
 #define PWMG2C_ENABLE                0x80
 #define PWMG2C_OUT_STATUS            0x40
 #define PWMG2C_OUT_INVERT            0x20
@@ -603,7 +605,7 @@
 #define PWMG2C_CLK_SYSCLK            0x00
 #define PWMG2C_CLK_IHRC              0x01
 
-// PWMG2S definitions
+// PWMG2S (PWMG2 Scalar) register definitions
 #define PWMG2_INT_AT_0               0x00
 #define PWMG2_INT_AT_DUTY            0x80
 #define PWMG2_PRESCALE_NONE          0x00
