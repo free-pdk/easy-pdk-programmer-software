@@ -249,15 +249,18 @@
 
 
 // MISC2 register definitions
+#define MISC2_COMP_PWMG1_BIT0        3
+#define MISC2_TM3_PWMG2_BIT0         4
 #define MISC2_COMP_EDGE_SEL_BIT0     5
 
+//#define MISC2_UNK_COMP               0x00
+//#define MISC2_UNK_PWMG1              0x08
+//#define MISC2_UNK_TM3                0x00
+//#define MISC2_UNK_PWMG2              0x10
 #define MISC2_COMP_EDGE_INT_BOTH     0x00
 #define MISC2_COMP_EDGE_INT_RISE     (1 << MISC2_COMP_EDGE_SEL_BIT0)
 #define MISC2_COMP_EDGE_INT_FALL     (2 << MISC2_COMP_EDGE_SEL_BIT0)
-//#define MISC2_UNK_TM3                0x00
-//#define MISC2_UNK_PWMG2              0x10
-//#define MISC2_UNK_COMP               0x00
-//#define MISC2_UNK_PWMG1              0x08
+
 
 // MISCLVR register definitions
 #define MISCLVR_LVR_BIT0             5
@@ -270,6 +273,7 @@
 #define MISCLVR_1V8                  (5 << MISCLVR_LVR_BIT0)
 #define MISCLVR_2V2                  (6 << MISCLVR_LVR_BIT0)
 #define MISCLVR_2V                   (7 << MISCLVR_LVR_BIT0)
+
 
 // TM2C (Timer2 Control) register definitions
 #define TM2C_INVERT_OUT_BIT          0
