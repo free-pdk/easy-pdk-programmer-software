@@ -5,6 +5,11 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/misc.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(MISC_ADDR)         _misc;
+
+#define MISC                  _misc
+
 // MISC register definitions
 #define MISC_WATCHDOG_BIT0           0
 #define MISC_LVR_DISABLE_BIT         2

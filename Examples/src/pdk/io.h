@@ -19,7 +19,6 @@
 #  error "Unknown device. Please define device!"
 #endif
 
-#include "sfr_defs.h"
 #include "fuse.h"
 #include "factory_calibration.h"
 #include "sysclock.h"

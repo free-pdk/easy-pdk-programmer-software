@@ -94,24 +94,38 @@
 //0x3f
 
 
+// ROP register BIT definitions
+#define ROP_PB0_PA4_SEL_BIT          0
+#define ROP_PA0_PB5_SEL_BIT          1
+#define ROP_TMX_BIT_SEL_BIT          4
+#define ROP_TMX_FREQ_SEL_BIT         5
+#define ROP_PWM_SEL_BIT              6
+
+
 // Peripheral definitions
 #define HAS_EOSC
 #define HAS_PORTB
 #define HAS_PB5_PA4_INT
 #define HAS_TM3
 
+
 #include "periph/accumulator.h"
+#include "periph/stack.h"
 #include "periph/clock.h"
 #include "periph/external_oscillator.h"
 #include "periph/interrupt.h"
-#include "periph/timer16.h"
-#include "periph/timer2.h"
-#include "periph/timer3.h"
+#include "periph/port_a.h"
+#include "periph/port_b.h"
+#include "periph/timer_16.h"
+#include "periph/timer_2.h"
+#include "periph/timer_3.h"
+#include "periph/bandgap.h"
 #include "periph/comparator.h"
 #include "periph/adc.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
 #include "periph/misclvr.h"
+#include "periph/rop.h"
 
 // Additional MISC register definitions
 // TODO: verify these... they are in the PFS172.INC file but not the datasheet
@@ -124,27 +138,5 @@
 
 #define MISC2_PA6_TO_PA7             (1 << MISC2_PA6_TO_PA7_BIT)
 #define MISC2_PB3_TO_PB4             (1 << MISC2_PB3_TO_PB4_BIT)
-
-// ROP register definitions
-#define ROP_PB0_PA4_SEL_BIT          0
-#define ROP_PA0_PB5_SEL_BIT          1
-#define ROP_TMX_BIT_SEL_BIT          4
-#define ROP_TMX_FREQ_SEL_BIT         5
-#define ROP_PWM_SEL_BIT              6
-
-#define ROP_INT_SRC_PB0              0x00
-#define ROP_INT_SRC_PA4              (1 << ROP_PB0_PA4_SEL_BIT)
-
-#define ROP_INT_SRC_PA0              0x00
-#define ROP_INT_SRC_PB5              (1 << ROP_PA0_PB5_SEL_BIT)
-
-#define ROP_TMX_6BIT                 0x00
-#define ROP_TMX_7BIT                 (1 << ROP_TMX_BIT_SEL_BIT)
-
-#define ROP_TMX_16MHZ                0x00
-#define ROP_TMX_32MHZ                (1 << ROP_TMX_FREQ_SEL_BIT)
-
-#define ROP_PURE_PWM                 0x00
-#define ROP_GPC_PWM                  (1 << ROP_PWM_SEL_BIT)
 
 #endif //__PDK_DEVICE_PFS172_H__

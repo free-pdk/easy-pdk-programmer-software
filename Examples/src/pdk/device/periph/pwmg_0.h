@@ -1,9 +1,24 @@
-#ifndef __PDK_DEVICE_PERIPH_PWMG0_H__
-#define __PDK_DEVICE_PERIPH_PWMG0_H__
+#ifndef __PDK_DEVICE_PERIPH_PWMG_0_H__
+#define __PDK_DEVICE_PERIPH_PWMG_0_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/pwmg0.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/pwmg_0.h" by itself."
 #endif
+
+// __sfr definitions
+__sfr __at(PWMG0C_ADDR)       _pwmg0c;
+__sfr __at(PWMG0S_ADDR)       _pwmg0s;
+__sfr __at(PWMG0DTH_ADDR)     _pwmg0dth;
+__sfr __at(PWMG0DTL_ADDR)     _pwmg0dtl;
+__sfr __at(PWMG0CUBH_ADDR)    _pwmg0cubh;
+__sfr __at(PWMG0CUBL_ADDR)    _pwmg0cubl;
+
+#define PWMG0C                _pwmg0c
+#define PWMG0S                _pwmg0s
+#define PWMG0DTH              _pwmg0dth
+#define PWMG0DTL              _pwmg0dtl
+#define PWMG0CUBH             _pwmg0cubh
+#define PWMG0CUBL             _pwmg0cubl
 
 // PWMG0C (PWMG0 Control) register definitions
 #define PWMG0C_CLK_SRC_BIT           0
@@ -72,4 +87,4 @@
 #define PWMG0_INT_AT_DUTY            0x00
 #define PWMG0_INT_AT_0               (1 << PWMG0S_INT_MODE_BIT)
 
-#endif //__PDK_DEVICE_PERIPH_PWMG0_H__
+#endif //__PDK_DEVICE_PERIPH_PWMG_0_H__

@@ -5,6 +5,11 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/accumulator.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(FLAG_ADDR)         _flag;
+
+#define FLAG                  _flag
+
 // FLAG (ACC Status Flag) register definitions
 #define FLAG_Z_BIT                   0
 #define FLAG_C_BIT                   1

@@ -90,6 +90,15 @@
 //0x3f
 
 
+// ROP register BIT definitions
+#define ROP_PB0_PA4_SEL_BIT          0
+#define ROP_PA0_PB5_SEL_BIT          1
+#define ROP_TMX_BIT_SEL_BIT          4
+#define ROP_TMX_FREQ_SEL_BIT         5
+#define ROP_PWM_SEL_BIT              6
+#define ROP_PWM_FREQ_SEL_BIT         7
+
+
 // Peripheral definitions
 #define HAS_EOSC
 #define HAS_PORTB
@@ -97,15 +106,20 @@
 #define HAS_PWMG
 
 #include "periph/accumulator.h"
+#include "periph/stack.h"
 #include "periph/clock.h"
 #include "periph/external_oscillator.h"
 #include "periph/interrupt.h"
-#include "periph/timer16.h"
-#include "periph/timer2.h"
+#include "periph/port_a.h"
+#include "periph/port_b.h"
+#include "periph/timer_16.h"
+#include "periph/timer_2.h"
+#include "periph/bandgap.h"
 #include "periph/comparator.h"
 #include "periph/pwmg_basic.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
 #include "periph/misclvr.h"
+#include "periph/rop.h"
 
 #endif //__PDK_DEVICE_PMS152_H__

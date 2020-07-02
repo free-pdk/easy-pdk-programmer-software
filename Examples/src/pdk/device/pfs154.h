@@ -78,13 +78,13 @@
 #define PWMG1DTH_ADDR       0x28
 #define PWMG1DTL_ADDR       0x29
 #define PWMG1CUBH_ADDR      0x2a
-#define PWHG1CUBL_ADDR      0x2b
+#define PWMG1CUBL_ADDR      0x2b
 #define PWMG2C_ADDR         0x2c
 #define PWMG2S_ADDR         0x2d
 #define PWMG2DTH_ADDR       0x2e
 #define PWMG2DTL_ADDR       0x2f
 #define PWMG2CUBH_ADDR      0x30
-#define PWHM2CUBL_ADDR      0x31
+#define PWMG2CUBL_ADDR      0x31
 #define TM3C_ADDR           0x32
 #define TM3CT_ADDR          0x33
 #define TM3S_ADDR           0x34
@@ -106,16 +106,20 @@
 #define HAS_LCD
 
 #include "periph/accumulator.h"
+#include "periph/stack.h"
 #include "periph/clock.h"
 #include "periph/external_oscillator.h"
 #include "periph/interrupt.h"
-#include "periph/timer16.h"
-#include "periph/timer2.h"
-#include "periph/timer3.h"
+#include "periph/port_a.h"
+#include "periph/port_b.h"
+#include "periph/timer_16.h"
+#include "periph/timer_2.h"
+#include "periph/timer_3.h"
+#include "periph/bandgap.h"
 #include "periph/comparator.h"
-#include "periph/pwmg0.h"
-#include "periph/pwmg1.h"
-#include "periph/pwmg2.h"
+#include "periph/pwmg_0.h"
+#include "periph/pwmg_1.h"
+#include "periph/pwmg_2.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
 #include "periph/misclvr_basic.h"

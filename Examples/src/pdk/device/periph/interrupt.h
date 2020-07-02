@@ -5,6 +5,16 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/interrupt.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(INTEN_ADDR)        _inten;
+__sfr __at(INTRQ_ADDR)        _intrq;
+__sfr __at(INTEGS_ADDR)       _integs;
+
+#define INTEN                 _inten
+#define INTRQ                 _intrq
+#define INTEGS                _integs
+
+
 // INTEN (Interrupt Enable) register definitions
 #define INTEN_PA0_ENABLE_BIT         0
 #define INTEN_T16_ENABLE_BIT         2

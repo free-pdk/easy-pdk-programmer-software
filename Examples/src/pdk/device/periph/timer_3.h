@@ -1,9 +1,20 @@
-#ifndef __PDK_DEVICE_PERIPH_TIMER3_H__
-#define __PDK_DEVICE_PERIPH_TIMER3_H__
+#ifndef __PDK_DEVICE_PERIPH_TIMER_3_H__
+#define __PDK_DEVICE_PERIPH_TIMER_3_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/timer3.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/timer_3.h" by itself."
 #endif
+
+// __sfr definitions
+__sfr __at(TM3C_ADDR)        _tm3c;
+__sfr __at(TM3CT_ADDR)       _tm3ct;
+__sfr __at(TM3S_ADDR)        _tm3s;
+__sfr __at(TM3B_ADDR)         _tm3b;
+
+#define TM3C                 _tm3c
+#define TM3CT                _tm3ct
+#define TM3S                 _tm3s
+#define TM3B                  _tm3b
 
 // TM3C (Timer3 Control) register definitions
 #define TM3C_INVERT_OUT_BIT          0
@@ -88,4 +99,4 @@
 #define TM3S_PWM_RES_8BIT            0x00
 #define TM3S_PWM_RES_6BIT            (1 << TM3S_PWM_RES_SEL_BIT)
 
-#endif //__PDK_DEVICE_PERIPH_TIMER3_H__
+#endif //__PDK_DEVICE_PERIPH_TIMER_3_H__

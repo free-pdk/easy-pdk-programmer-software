@@ -1,9 +1,16 @@
-#ifndef __PDK_DEVICE_PERIPH_TIMER16_H__
-#define __PDK_DEVICE_PERIPH_TIMER16_H__
+#ifndef __PDK_DEVICE_PERIPH_TIMER_16_H__
+#define __PDK_DEVICE_PERIPH_TIMER_16_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/timer16.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/timer_16.h" by itself."
 #endif
+
+// __sfr definitions
+__sfr __at(T16M_ADDR)         _t16m;
+__sfr16                       _t16c;
+
+#define T16M                  _t16m
+#define T16C                  _t16c
 
 // T16 (Timer16 Mode) register definitions
 #define T16_INT_SRC_BIT0             0
@@ -38,4 +45,4 @@
 #define T16_CLK_ILRC                 (6 << T16_CLK_SRC_BIT0)
 #define T16_CLK_PA0_FALL             (7 << T16_CLK_SRC_BIT0)
 
-#endif //__PDK_DEVICE_PERIPH_TIMER16_H__
+#endif //__PDK_DEVICE_PERIPH_TIMER_16_H__

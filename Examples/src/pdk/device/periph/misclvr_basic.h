@@ -5,6 +5,11 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/misclvr_basic.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(MISCLVR_ADDR)      _misclvr;
+
+#define MISCLVR               _misclvr
+
 // MISCLVR register definitions
 #define MISCLVR_LVR_BIT0             5
 

@@ -5,6 +5,20 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/adc.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(ADCC_ADDR)         _adcc;
+__sfr __at(ADCM_ADDR)         _adcm;
+__sfr __at(ADCR_ADDR)         _adcr;
+
+#define ADCC                  _adcc
+#define ADCM                  _adcm
+#define ADCR                  _adcr
+
+#if defined(ADCRGC_ADDR)
+  __sfr __at(ADCRGC_ADDR)       _adcrgc;
+  #define ADCRGC                _adcrgc
+#endif
+
 // ADCC (ADC Control) register definitions
 #define ADCC_CHANNEL_SEL_BIT0        2
 #define ADCC_PROCESS_CONTROL_BIT     6
@@ -46,9 +60,11 @@
 #define ADCM_CLK_SYSCLK_DIV128       (7 << ADCM_CLK_SRC_BIT0)
 
 // ADCRGC (ADC Regulator Control) register definitions
-#define ADCRGC_CLK_SRC_BIT           7
+#if defined(ADCRGC_ADDR)
+  #define ADCRGC_CLK_SRC_BIT           7
 
-#define ADCRGC_ADC_REF_VDD           0x00
-#define ADCRGC_ADC_REF_PB1           (1 << ADCRGC_CLK_SRC_BIT)
+  #define ADCRGC_ADC_REF_VDD           0x00
+  #define ADCRGC_ADC_REF_PB1           (1 << ADCRGC_CLK_SRC_BIT)
+#endif
 
 #endif //__PDK_DEVICE_PERIPH_ADC_H__

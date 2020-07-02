@@ -5,6 +5,15 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/clock.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(CLKMD_ADDR)        _clkmd;
+__sfr __at(IHRCR_ADDR)        _ihrcr;
+__sfr __at(ILRCR_ADDR)        _ilrcr;
+
+#define CLKMD                 _clkmd
+#define IHRCR                 _ihrcr
+#define ILRCR                 _ilrcr
+
 // CLKMD (Clock Mode) register definitions
 #define CLKMD_PA5_PRSTB_BIT          0
 #define CLKMD_WATCHDOG_ENABLE_BIT    1

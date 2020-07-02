@@ -81,11 +81,14 @@
 #define HAS_COMP_WAKEUP
 
 #include "periph/accumulator.h"
+#include "periph/stack.h"
 #include "periph/clock.h"
 #include "periph/external_oscillator.h"
 #include "periph/interrupt.h"
-#include "periph/timer16.h"
-#include "periph/timer2.h"
+#include "periph/port_a.h"
+#include "periph/timer_16.h"
+#include "periph/timer_2.h"
+#include "periph/bandgap.h"
 #include "periph/comparator.h"
 #include "periph/misc.h"
 

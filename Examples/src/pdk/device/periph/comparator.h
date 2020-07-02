@@ -5,6 +5,13 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/comparator.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(GPCC_ADDR)         _gpcc;
+__sfr __at(GPCS_ADDR)         _gpcs;
+
+#define GPCC                  _gpcc
+#define GPCS                  _gpcs
+
 // GPCC (Comparator Control) register definitions
 #define GPCC_COMP_PLUS_BIT           0
 #define GPCC_COMP_MINUS_BIT0         1
@@ -46,6 +53,5 @@
   #define GPCS_COMP_WAKEUP_ENABLE_BIT  6
   #define GPCS_COMP_WAKEUP_ENABLE      (1 << GPCS_COMP_WAKEUP_ENABLE_BIT)
 #endif
-
 
 #endif //__PDK_DEVICE_PERIPH_COMPARATOR_H__

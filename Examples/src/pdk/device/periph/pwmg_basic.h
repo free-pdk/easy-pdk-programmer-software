@@ -5,6 +5,39 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/pwmg_basic.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(PWMGCLK_ADDR)      _pwmgclk;
+__sfr __at(PWMGCUBH_ADDR)     _pwmgcubh;
+__sfr __at(PWMGCUBL_ADDR)     _pwmgcubl;
+
+__sfr __at(PWMG0C_ADDR)       _pwmg0c;
+__sfr __at(PWMG0DTH_ADDR)     _pwmg0dth;
+__sfr __at(PWMG0DTL_ADDR)     _pwmg0dtl;
+
+__sfr __at(PWMG1C_ADDR)       _pwmg1c;
+__sfr __at(PWMG1DTH_ADDR)     _pwmg1dth;
+__sfr __at(PWMG1DTL_ADDR)     _pwmg1dtl;
+
+__sfr __at(PWMG2C_ADDR)       _pwmg2c;
+__sfr __at(PWMG2DTH_ADDR)     _pwmg2dth;
+__sfr __at(PWMG2DTL_ADDR)     _pwmg2dtl;
+
+#define PWMGCLK               _pwmgclk
+#define PWMGCUBH              _pwmgcubh
+#define PWMGCUBL              _pwmgcubl
+
+#define PWMG0C                _pwmg0c
+#define PWMG0DTH              _pwmg0dth
+#define PWMG0DTL              _pwmg0dtl
+
+#define PWMG1C                _pwmg1c
+#define PWMG1DTH              _pwmg1dth
+#define PWMG1DTL              _pwmg1dtl
+
+#define PWMG2C                _pwmg2c
+#define PWMG2DTH              _pwmg2dth
+#define PWMG2DTL              _pwmg2dtl
+
 // PWMGCLK (PWMG Clock) register definitions
 #define PWMGCLK_CLK_SRC_BIT          0
 #define PWMGCLK_PRESCALE_BIT0        4

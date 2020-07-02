@@ -5,6 +5,10 @@
 #  error "You must #include "pdk/io.h" instead of "pdk/device/periph/exernal_oscillator.h" by itself."
 #endif
 
+// __sfr definitions
+__sfr __at(EOSCR_ADDR)        _eoscr;
+#define EOSCR                 _eoscr
+
 // EOSC (External Oscillator Setting) register definitions
 #define EOSC_BG_LVR_SHUTDOWN_BIT     0
 #if defined(HAS_EOSC)
