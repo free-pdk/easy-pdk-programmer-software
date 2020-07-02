@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "pdk/io.h"
+#include "pdk/device.h"
 #include "easy-pdk/calibrate.h"
 
 volatile uint16_t txdata;                       //txdata, serial data shift register

@@ -1,5 +1,5 @@
-#ifndef __PDK_IO_H__
-#define __PDK_IO_H__
+#ifndef __PDK_DEVICE_H__
+#define __PDK_DEVICE_H__
 
 #include "util.h"
 
@@ -23,4 +23,4 @@
 #include "factory_calibration.h"
 #include "sysclock.h"
 
-#endif //__PDK_IO_H__
+#endif //__PDK_DEVICE_H__

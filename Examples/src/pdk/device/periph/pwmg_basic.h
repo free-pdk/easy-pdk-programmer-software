@@ -1,8 +1,8 @@
 #ifndef __PDK_DEVICE_PERIPH_PWMG_BASIC_H__
 #define __PDK_DEVICE_PERIPH_PWMG_BASIC_H__
 
-#if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/pwmg_basic.h" by itself."
+#if !defined(__PDK_DEVICE_H__)
+#  error "You must #include "pdk/device.h" instead of "pdk/device/periph/pwmg_basic.h" by itself."
 #endif
 
 // __sfr definitions

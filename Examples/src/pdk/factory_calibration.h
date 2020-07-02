@@ -1,8 +1,8 @@
 #ifndef __PDK_FACTORY_CALIBRATION_H__
 #define __PDK_FACTORY_CALIBRATION_H__
 
-#if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/factory_calibration.h" by itself."
+#if !defined(__PDK_DEVICE_H__)
+#  error "You must #include "pdk/device.h" instead of "pdk/factory_calibration.h" by itself."
 #endif
 
 // Factory Calibration macros

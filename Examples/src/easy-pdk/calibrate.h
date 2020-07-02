@@ -1,8 +1,8 @@
 #ifndef __EASY_PDK_CALIBRATE_H__
 #define __EASY_PDK_CALIBRATE_H__
 
-#if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" "
+#if !defined(__PDK_DEVICE_H__)
+#  error "You must #include "pdk/device.h" "
 #endif
 
 //place holder for EASYPDK calibrations executed / replaced by easypdkprog

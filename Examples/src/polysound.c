@@ -3,7 +3,7 @@
 //Connect a speaker to PA3 and GND
 
 #include <stdint.h>
-#include "pdk/io.h"
+#include "pdk/device.h"
 #include "easy-pdk/calibrate.h"
 
 #define PWM_PORT        PA

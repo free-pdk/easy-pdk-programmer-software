@@ -1,8 +1,8 @@
 #ifndef __PDK_DEVICE_PERIPH_ADC_H__
 #define __PDK_DEVICE_PERIPH_ADC_H__
 
-#if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/adc.h" by itself."
+#if !defined(__PDK_DEVICE_H__)
+#  error "You must #include "pdk/device.h" instead of "pdk/device/periph/adc.h" by itself."
 #endif
 
 // __sfr definitions

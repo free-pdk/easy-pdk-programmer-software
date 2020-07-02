@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "pdk/io.h"
+#include "pdk/device.h"
 #include "easy-pdk/calibrate.h"
 
 unsigned char _sdcc_external_startup(void)
