@@ -35,7 +35,7 @@ __sfr __at(TM2B_ADDR)        _tm2b;
 #if defined(HAS_PORTB)
   #define TM2C_OUT_PB4                 (3 << TM2C_OUTPUT_SEL_BIT0)
 #else
-  #define TM2C_OUT_PA4                 1q(3 << TM2C_OUTPUT_SEL_BIT0)
+  #define TM2C_OUT_PA4                 (3 << TM2C_OUTPUT_SEL_BIT0)
 #endif
 
 #define TM2C_CLK_DISABLE             0x00
