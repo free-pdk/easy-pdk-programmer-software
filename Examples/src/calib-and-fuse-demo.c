@@ -35,6 +35,11 @@ unsigned char _sdcc_external_startup(void)
   PDK_USE_FACTORY_IHRCR_16MHZ();                //use factory calibration value
 #endif
 
+	// NOTE: Technically this frequency is unsupported, but it seems to work (at least on some devices)
+  // setup 16MHz sysclock and let easypdk programmer do the calibration (after writing)
+  PDK_USE_16MHZ_IHRC_SYSCLOCK();                 //use 16MHz sysclock
+  EASY_PDK_CALIBRATE_IHRC(16000000,5000);        //tune SYSCLK to 16MHz @ 5.000V
+
   // setup 8MHz sysclock and let easypdk programmer do the calibration (after writing)
   PDK_USE_8MHZ_IHRC_SYSCLOCK();                 //use 8MHz sysclock
   EASY_PDK_CALIBRATE_IHRC(8000000,5000);        //tune SYSCLK to 8MHz @ 5.000V

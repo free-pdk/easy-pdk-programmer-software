@@ -30,7 +30,7 @@ __sfr __at(ILRCR_ADDR)        _ilrcr;
 #define CLKMD_MODE0(s)               (s << CLKMD_SYSCLK_BIT0)
 #define CLKMD_IHRC_DIV4              CLKMD_MODE0(0)
 #define CLKMD_IHRC_DIV2              CLKMD_MODE0(1)
-//0x02 reserved
+#define CLKMD_IHRC                   CLKMD_MODE0(2)
 #if defined(HAS_EOSC)
   #define CLKMD_EOSC_DIV4              CLKMD_MODE0(3)
   #define CLKMD_EOSC_DIV2              CLKMD_MODE0(4)
