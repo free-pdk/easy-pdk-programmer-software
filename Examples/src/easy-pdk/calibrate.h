@@ -17,7 +17,7 @@
 __asm__(                                \
   "and a, #'R'                       \n"\
   "and a, #'C'                       \n"\
-  "and a, #(("_STR(type)"))          \n"\
+  "and a, #("_STR(type)")            \n"\
   "and a, #(("_STR(frequency)"))     \n"\
   "and a, #(("_STR(frequency)")>>8)  \n"\
   "and a, #(("_STR(frequency)")>>16) \n"\

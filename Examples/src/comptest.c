@@ -69,7 +69,7 @@ void main(void)
     puts("VDD is:");
     for( uint8_t n=0; n<16; n++ )               //loop over all 16 values of the VInt_R resistor ladder
     {
-      GPCS = GPCS_COMP_RANGE3 | n;               //range 3 covers 2.0V - 5.33V
+      GPCS = GPCS_COMP_RANGE3 | n;              //range 3 covers 2.0V - 5.33V
       for(uint32_t d=100; d>0; d--);            //small delay after GPCS setup required
 
       if( GPCC & GPCC_COMP_RESULT_POSITIV )     //test if comparator result is positiv
@@ -77,6 +77,7 @@ void main(void)
       else
         putchar('<');
 
+			putchar(' ');
       puts(vddcompstr[n]);                      //output the coresponding VDD value (we use a string table to avoid printf)
     }
 

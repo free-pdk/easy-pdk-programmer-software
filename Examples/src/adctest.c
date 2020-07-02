@@ -82,8 +82,8 @@ void main(void)
   uint8_t adcval = ADCR;                        //read the ADC value
 
   //We measured the internal bandgap voltage which should be 1.2V. This means: 1.2V/adcval = VDD/255 -> VDD = (1.2V*255)/adcval
-  uint16_t vdd = (1200UL*255)/adcval;
-  _uitoa(vdd, str_buf, 10);
+  uint32_t vdd = (1200UL*255)/adcval;
+  _uitoa(vdd, str_buf, 10); // Should really be _ultoa, but that doesn't seem available in SDCC right now
   puts_sans_newline(str_buf);
   puts(" mV");
 
@@ -101,7 +101,7 @@ void main(void)
 
     uint8_t adcval = ADCR;                      //read the ADC value
     puts_sans_newline("PA.0 : ");
-    _uitoa(adcval, str_buf, 10); // Should really be _utoa, but that doesn't seem available right now
+    _uitoa(adcval, str_buf, 10); // Should really be _utoa, but that doesn't seem available in SDCC right now
     puts(str_buf);
   }
 }
