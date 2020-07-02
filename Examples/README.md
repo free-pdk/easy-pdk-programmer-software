@@ -27,7 +27,7 @@ IC is supported: PFS154 ICID:0xAA1
 
 PFS154:
 ```
-$ ./easypdkprog --icname=PFS154  write helloworld_pfs154.ihx
+$ ./easypdkprog --icname=PFS154  write pre-compiled/PFS154/helloworld.ihx
 Erasing IC... done.
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
@@ -35,7 +35,7 @@ Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (
 
 PFS172:
 ```
-$ ./easypdkprog --icname=PFS172  write helloworld_pfs172.ihx
+$ ./easypdkprog --icname=PFS172  write pre-compiled/PFS172/helloworld.ihx
 Erasing IC... done.
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
@@ -43,7 +43,7 @@ Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (
 
 PFS173:
 ```
-$ ./easypdkprog --icname=PFS173  write helloworld_pfs173.ihx
+$ ./easypdkprog --icname=PFS173  write pre-compiled/PFS173/helloworld.ihx
 Erasing IC... done.
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
@@ -51,21 +51,21 @@ Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (
 
 PMS150C:
 ```
-$ ./easypdkprog --icname=PMS150C write helloworld_pms150c.ihx
+$ ./easypdkprog --icname=PMS150C write pre-compiled/PMS150C/helloworld.ihx
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
 ```
 
 PMS152:
 ```
-$ ./easypdkprog --icname=PMS152 write helloworld_pms152.ihx
+$ ./easypdkprog --icname=PMS152 write pre-compiled/PMS152/helloworld.ihx
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
 ```
 
 PMS171B:
 ```
-$ ./easypdkprog --icname=PMS171B write helloworld_pms171b.ihx
+$ ./easypdkprog --icname=PMS171B write pre-compiled/PMS171B/helloworld.ihx
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
 ```

@@ -1,45 +1,39 @@
-SDCC	?= sdcc
-OUTDIR	?= .build
+DEVICE  ?= PFS154
 
-all: PFS154 PFS172 PFS173 PMS150C PMS152 PMS171B
+SDCC    ?= sdcc
+OUTDIR  ?= .build
+RELDIR  ?= ../pre-compiled
 
-PFS154:
-	mkdir -p $(OUTDIR)
-	$(SDCC) -DPFS154 -mpdk14 -o $(OUTDIR)/helloworld_pfs154.ihx helloworld.c
-	$(SDCC) -DPFS154 -mpdk14 -o $(OUTDIR)/comptest_pfs154.ihx comptest.c
+ifeq ($(DEVICE), PMS150C)
+	ARCH = pdk13
+else ifeq ($(DEVICE), PMS152)
+	ARCH = pdk14
+else ifeq ($(DEVICE), PMS171B)
+ 	ARCH = pdk14
+else ifeq ($(DEVICE), PFS154)
+	ARCH = pdk14
+else ifeq ($(DEVICE), PFS172)
+	ARCH = pdk14
+else ifeq ($(DEVICE), PFS173)
+	ARCH = pdk15
+endif
 
-PFS172:
-	mkdir -p $(OUTDIR)
-	$(SDCC) -DPFS172 -mpdk14 -o $(OUTDIR)/helloworld_pfs172.ihx helloworld.c
-	$(SDCC) -DPFS172 -mpdk14 -o $(OUTDIR)/comptest_pfs172.ihx comptest.c
+all: build
 
-PFS173:
-	mkdir -p $(OUTDIR)
-	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/helloworld_pfs173.ihx helloworld.c
-	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/comptest_pfs173.ihx comptest.c
-	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/adctest_pfs173.ihx adctest.c
-	$(SDCC) -DPFS173 -mpdk15 -o $(OUTDIR)/polysound_pfs173.ihx polysound.c
+build:
+	mkdir -p $(OUTDIR)/$(DEVICE)
+	$(SDCC) -D$(DEVICE) -m$(ARCH) -o $(OUTDIR)/$(DEVICE)/helloworld.ihx helloworld.c
+	$(SDCC) -D$(DEVICE) -m$(ARCH) -o $(OUTDIR)/$(DEVICE)/comptest.ihx comptest.c
+ifeq ($(DEVICE), PFS173)
+	$(SDCC) -D$(DEVICE) -m$(ARCH) -o $(OUTDIR)/$(DEVICE)/adctest.ihx adctest.c
+	$(SDCC) -D$(DEVICE) -m$(ARCH) -o $(OUTDIR)/$(DEVICE)/polysound.ihx polysound.c
+endif
 
-PMS150C:
-	mkdir -p $(OUTDIR)
-	$(SDCC) -DPMS150C -mpdk13 -o $(OUTDIR)/helloworld_pms150c.ihx helloworld.c
-	$(SDCC) -DPMS150C -mpdk13 -o $(OUTDIR)/comptest_pms150c.ihx comptest.c
-
-PMS152:
-	mkdir -p $(OUTDIR)
-	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/helloworld_pms152.ihx helloworld.c
-	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/comptest_pms152.ihx comptest.c
-
-PMS171B:
-	mkdir -p $(OUTDIR)
-	$(SDCC) -DPMS171B -mpdk14 -o $(OUTDIR)/helloworld_pms171b.ihx helloworld.c
-	$(SDCC) -DPMS171B -mpdk14 -o $(OUTDIR)/comptest_pms171b.ihx comptest.c
-
+release: build
+	mkdir -p $(RELDIR)/$(DEVICE)
+	cp $(OUTDIR)/$(DEVICE)/*.ihx $(RELDIR)/$(DEVICE)
 
 clean:
 	rm -rf $(OUTDIR)
-
-release: all
-	cp $(OUTDIR)/*.ihx ../
 
 .PHONY: all clean
