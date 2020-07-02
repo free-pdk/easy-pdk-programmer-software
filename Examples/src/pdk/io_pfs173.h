@@ -127,6 +127,7 @@
 // Peripheral definitions
 #define HAS_EOSC
 #define HAS_PORTB
+#define HAS_PORTC
 #define HAS_PB5_PA4_INT
 #define HAS_PWMG
 #define HAS_TM3

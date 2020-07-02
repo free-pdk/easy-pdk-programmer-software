@@ -35,6 +35,7 @@
 #define GPCS_COMP_RANGE2             (1 << GPCS_COMP_RANGE_SEL_BIT0)
 #define GPCS_COMP_RANGE3             (2 << GPCS_COMP_RANGE_SEL_BIT0)
 #define GPCS_COMP_RANGE4             (3 << GPCS_COMP_RANGE_SEL_BIT0)
+
 #define GPCS_COMP_OUTPUT_PA0         (1 << GPCS_COMP_OUT_PA0_BIT)
 
 #if defined(HAS_COMP_WAKEUP)
