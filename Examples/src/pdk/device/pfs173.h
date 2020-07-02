@@ -15,7 +15,7 @@
 	#error "PFS173 needs the PDK14 backend. You must compile with the -mpdk15 option."
 #endif
 
-#define ILRC_FREQ           95000
+#define ILRC_FREQ           93000
 
 // Factory Calibration address locations
 #define FACTORY_IHRCR_ADDR  0x0bed
@@ -110,8 +110,8 @@
 //0x50
 //...
 //0x61
-#define ILRCR_ADDR          0x39
-#define BGTR_ADDR           0x1a
+#define ILRCR_ADDR          0x60
+#define BGTR_ADDR           0x63
 //0x64
 //0x65
 //0x66

@@ -24,7 +24,7 @@
 #define SYSCLOCK_EOSC_DIV8                  CLKMD_EOSC_DIV8
 
 // System Clock macros
-#define PDK_SET_SYSCLOCK(f)                 CLKMD = CLKMD_ENABLE_ILRC | CLKMD_ENABLE_IHRC | f
+#define PDK_SET_SYSCLOCK(f)                 CLKMD = (uint8_t)(CLKMD_ENABLE_ILRC | CLKMD_ENABLE_IHRC | f)
 
 #define PDK_DISABLE_IHRC()                  CLKMD &= ~CLKMD_ENABLE_IHRC
 #define PDK_DISABLE_ILRC()                  CLKMD &= ~CLKMD_ENABLE_ILRC
