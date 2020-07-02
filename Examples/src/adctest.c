@@ -53,17 +53,17 @@ void main(void)
 
   //setup ADC
 #ifdef ADCRGC
-  ADCRGC = ADCRG_ADC_REF_VDD;                   //ADC reference voltage is VDD
+  ADCRGC = ADCRGC_ADC_REF_VDD;                   //ADC reference voltage is VDD
 #endif
   ADCM = ADCM_CLK_SYSCLK_DIV16;                 //SYSCLK 8MHZ/16 -> 500 kHz ADC clock
-  ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD16_BANDGAP;//enable ADC and use channel 16 (internal bandgap voltage 1.2V)
+  ADCC = (uint8_t)(ADCC_ADC_ENABLE | ADCC_CH_AD16_BANDGAP);//enable ADC and use channel 16 (internal bandgap voltage 1.2V)
                                                 //NOTE: a delay of 400usec is required after initialization, before first ADC conversion can start
 
   //printf has a huge footprint (big CODE + big RAM). Do not use it in your projects unless you have to.  
   printf("Measuring VDD (VBandGap): ");
 
-  ADCC |= ADCC_ADC_CONV_START;                  //start ADC conversion
-  while( !(ADCC & ADCC_ADC_CONV_COMPLETE) );    //busy wait for ADC conversion to finish (we also could use the ADC interrupt...)
+  ADCC |= ADCC_START_ADC_CONV;                  //start ADC conversion
+  while( !(ADCC & ADCC_IS_ADC_CONV_READY) );    //busy wait for ADC conversion to finish (we also could use the ADC interrupt...)
   uint8_t adcval = ADCR;                        //read the ADC value
 
   //We measured the internal bandgap voltage which should be 1.2V. This means: 1.2V/adcval = VDD/255 -> VDD = (1.2V*255)/adcval
@@ -75,13 +75,13 @@ void main(void)
   PAC &= ~(1<<0);                               //disable PA.0 GPIO output
   PAPH &= ~(1<<0);                              //disable pull up on PA.0, NOTE: also disable PxPL if available (e.g. on port B)
   PADIER &= ~(1<<0);                            //disable PA.0 GPIO input
-  ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD10_PA0;    //enable ADC and use channel 10 (PA.0)
+  ADCC = (uint8_t)(ADCC_ADC_ENABLE | ADCC_CH_AD10_PA0);    //enable ADC and use channel 10 (PA.0)
                                                 //NOTE: a delay of 400usec is required after initialization, before first ADC conversion can start
   printf("Start ADC on PA.0\n");
   for(;;)
   {
-    ADCC |= ADCC_ADC_CONV_START;                //start ADC conversion
-    while( !(ADCC & ADCC_ADC_CONV_COMPLETE) );  //busy wait for ADC conversion to finish (we also could use the ADC interrupt...)
+    ADCC |= ADCC_START_ADC_CONV;                //start ADC conversion
+    while( !(ADCC & ADCC_IS_ADC_CONV_READY) );  //busy wait for ADC conversion to finish (we also could use the ADC interrupt...)
 
     uint8_t adcval = ADCR;                      //read the ADC value
     printf("PA.0 : %d\r", adcval);
