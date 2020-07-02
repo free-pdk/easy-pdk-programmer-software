@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef enum FPDKCALIBTYPE
 {
-  FPDKCALIB_IHRC  = 1,
-  FPDKCALIB_ILRC  = 2,
-  FPDKCALIB_BG    = 3,
-  FPDKCALIB_IHRC0 = 4,
+  FPDKCALIB_UNKNOWN = 0,
+  FPDKCALIB_IHRC    = 1,
+  FPDKCALIB_ILRC    = 2,
+  FPDKCALIB_BG      = 3,
 
 } FPDKCALIBTYPE;
 
