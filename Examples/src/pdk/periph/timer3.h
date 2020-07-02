@@ -8,22 +8,37 @@
 #define TM3C_CLK_SRC_BIT0            4
 
 #define TM3C_INVERT_OUT              (1 << TM3C_INVERT_OUT_BIT)
+
 #define TM3C_MODE_PERIOD             0x00
 #define TM3C_MODE_PWM                (1 << TM3C_MODE_SEL_BIT)
+
 #define TM3C_OUT_DISABLE             0x00
-#define TM3C_OUT_PB2                 (1 << TM3C_OUTPUT_SEL_BIT0)
+#if defined(HAS_PORTB)
+  #define TM3C_OUT_PB2                 (1 << TM3C_OUTPUT_SEL_BIT0)
+#endif
 #define TM3C_OUT_PA3                 (2 << TM3C_OUTPUT_SEL_BIT0)
-#define TM3C_OUT_PB4                 (3 << TM3C_OUTPUT_SEL_BIT0)
+#if defined(HAS_PORTB)
+  #define TM3C_OUT_PB4                 (3 << TM3C_OUTPUT_SEL_BIT0)
+#else
+  #define TM3C_OUT_PA4                 (3 << TM3C_OUTPUT_SEL_BIT0)
+#endif
+
 #define TM3C_CLK_DISABLE             0x00
 #define TM3C_CLK_SYSCLK              (1 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_IHRC                (2 << TM3C_CLK_SRC_BIT0)
-#define TM3C_CLK_EOSC                (3 << TM3C_CLK_SRC_BIT0)
+#if defined(HAS_EOSC)
+  #define TM3C_CLK_EOSC                (3 << TM3C_CLK_SRC_BIT0)
+#endif
 #define TM3C_CLK_ILRC                (4 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_COMPOUT             (5 << TM3C_CLK_SRC_BIT0)
+//0x06 reserved
+//0x07 reserved
 #define TM3C_CLK_PA0_RISE            (8 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_PA0_FALL            (9 << TM3C_CLK_SRC_BIT0)
-#define TM3C_CLK_PB0_RISE            (10 << TM3C_CLK_SRC_BIT0)
-#define TM3C_CLK_PB0_FALL            (11 << TM3C_CLK_SRC_BIT0)
+#if defined(HAS_PORTB)
+  #define TM3C_CLK_PB0_RISE            (10 << TM3C_CLK_SRC_BIT0)
+  #define TM3C_CLK_PB0_FALL            (11 << TM3C_CLK_SRC_BIT0)
+#endif
 #define TM3C_CLK_PA4_RISE            (12 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_PA4_FALL            (13 << TM3C_CLK_SRC_BIT0)
 
@@ -64,10 +79,12 @@
 #define TM3S_SCALE_DIV30             (29 << TM3S_SCALE_BIT0)
 #define TM3S_SCALE_DIV31             (30 << TM3S_SCALE_BIT0)
 #define TM3S_SCALE_DIV32             (31 << TM3S_SCALE_BIT0)
+
 #define TM3S_PRESCALE_NONE           0x00
 #define TM3S_PRESCALE_DIV4           (1 << TM3S_PRESCALE_BIT0)
 #define TM3S_PRESCALE_DIV16          (2 << TM3S_PRESCALE_BIT0)
 #define TM3S_PRESCALE_DIV64          (3 << TM3S_PRESCALE_BIT0)
+
 #define TM3S_PWM_RES_8BIT            0x00
 #define TM3S_PWM_RES_6BIT            (1 << TM3S_PWM_RES_SEL_BIT)
 

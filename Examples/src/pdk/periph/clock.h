@@ -32,7 +32,9 @@
 #define CLKMD_ILRC_DIV16             CLKMD_MODE1(2)
 #define CLKMD_IHRC_DIV32             CLKMD_MODE1(3)
 #define CLKMD_IHRC_DIV64             CLKMD_MODE1(4)
-#define CLKMD_EOSC_DIV8              CLKMD_MODE1(5)
+#if defined(HAS_EOSC)
+  #define CLKMD_EOSC_DIV8              CLKMD_MODE1(5)
+#endif
 //0x06 reserved
 //0x07 reserved
 

@@ -17,7 +17,11 @@
   #define TM2C_OUT_PB2                 (1 << TM2C_OUTPUT_SEL_BIT0)
 #endif
 #define TM2C_OUT_PA3                 (2 << TM2C_OUTPUT_SEL_BIT0)
-#define TM2C_OUT_PB4                 (3 << TM2C_OUTPUT_SEL_BIT0)
+#if defined(HAS_PORTB)
+  #define TM2C_OUT_PB4                 (3 << TM2C_OUTPUT_SEL_BIT0)
+#else
+  #define TM2C_OUT_PA4                 1q(3 << TM2C_OUTPUT_SEL_BIT0)
+#endif
 
 #define TM2C_CLK_DISABLE             0x00
 #define TM2C_CLK_SYSCLK              (1 << TM2C_CLK_SRC_BIT0)
