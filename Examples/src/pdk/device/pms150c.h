@@ -62,8 +62,7 @@
 #define PAC_ADDR            0x11
 #define PAPH_ADDR           0x12
 //0x13
-//0x14
-//0x15
+//...
 //0x16
 #define TM2S_ADDR           0x17
 //0x18

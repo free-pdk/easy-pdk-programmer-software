@@ -25,10 +25,10 @@
 #define FUSE_WORD_ADDR      0x04ff
 #define FUSE_RES_BITS_HIGH  0x11FC // - - 0 1   B B 0 1   1 1 1 1   1 1 0 S
 // Blank IC Values          0x1FFD // - - 0 1   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, Fast Boot-up)
-#define FUSE_SECURITY_ON   0x0000 //(S)
-#define FUSE_SECURITY_OFF  0x0001
-#define FUSE_BOOTUP_SLOW   0x0000 //(B)
-#define FUSE_BOOTUP_FAST   0x0C00
+#define FUSE_SECURITY_ON    0x0000 //(S)
+#define FUSE_SECURITY_OFF   0x0001
+#define FUSE_BOOTUP_SLOW    0x0000 //(B)
+#define FUSE_BOOTUP_FAST    0x0C00
 
 
 // Register address definitions
