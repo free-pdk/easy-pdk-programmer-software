@@ -15,7 +15,7 @@ unsigned char _sdcc_external_startup(void)
   //
   // Calibrations should always be inserted in "_sdcc_external_startup()" function to ensure reachability at startup.
   //
-  // SYSCLK setup and calibration (Your application should use only one of the IHRC and/or ILRC setup and claibrations).
+  // SYSCLK setup and calibration (Your application should use only one of the IHRC and/or ILRC setup and calibrations).
   
   // setup ILRC as sysclock and let easypdk programmer do the calibration (after writing)
   PDK_USE_ILRC_SYSCLOCK();                      //use ILRC as sysclock, 60-96kHz, depends on IC variant
@@ -25,14 +25,12 @@ unsigned char _sdcc_external_startup(void)
   PDK_USE_ILRC_DIV4_SYSCLOCK();                 //use ILRC/4 as sysclock, 15-24kHz, depends on IC variant
   EASY_PDK_CALIBRATE_ILRC(ILRC_FREQ/4,3300);    //tune SYSCLK to 24kHz @ 3.300V (value for PFS173)
 
-#if defined(CLKMD_ILRC_DIV16)
   // setup ILRC/16 as sysclock and let easypdk programmer do the calibration (after writing)
   PDK_USE_ILRC_DIV16_SYSCLOCK();                //use ILRC/16 as sysclock, 4-6kHz, depends on IC variant
   EASY_PDK_CALIBRATE_ILRC(ILRC_FREQ/16,3000);   //tune SYSCLK to 6kHz @ 3.000V (value for PFS173)
-#endif
 
-#if defined(PFS154) || defined(PFS172) || defined(PFS173)
-  // setup 8MHz sysclock and use factory calibration (available on PFS154 and PFS173)
+#if defined(PDK_USE_FACTORY_IHRCR_16MHZ)
+  // setup 8MHz sysclock and use factory calibration (available on MTP devices)
   PDK_USE_8MHZ_IHRC_SYSCLOCK();                 //use 8MHz sysclock
   PDK_USE_FACTORY_IHRCR_16MHZ();                //use factory calibration value
 #endif
@@ -57,11 +55,15 @@ unsigned char _sdcc_external_startup(void)
   PDK_USE_500KHZ_IHRC_SYSCLOCK();               //use 500KHZ sysclock
   EASY_PDK_CALIBRATE_IHRC(500000,3000);         //tune SYSCLK to 500kHz @ 3.000V
 
+  // setup 250kHz sysclock and let easypdk programmer do the calibration (after writing)
+  PDK_USE_250KHZ_IHRC_SYSCLOCK();               //use 250KHZ sysclock
+  EASY_PDK_CALIBRATE_IHRC(250000,3000);         //tune SYSCLK to 250kHz @ 3.000V
+
 
   // BANDGAP calibration:
   PDK_USE_FACTORY_BGTR();                       //use factory BandGap calibration value
                                                 // -OR-
-  EASY_PDK_CALIBRATE_BG();                      //let easypdk progammer do the bandgap calibration (after writing) - bandgap tuning requires any IHRC SYSCLK
+  EASY_PDK_CALIBRATE_BG();                      //let easypdk programmer do the bandgap calibration (after writing) - bandgap tuning requires any IHRC SYSCLK
 
 
   return 0;                                     //perform normal initialization
