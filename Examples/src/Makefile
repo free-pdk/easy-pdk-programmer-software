@@ -15,6 +15,7 @@ ifeq ($(DEVICE), PFS154)
 	ARCH = pdk14
 else ifeq ($(DEVICE), PFS172)
 	ARCH = pdk14
+	SOURCES += adctest.c
 else ifeq ($(DEVICE), PFS173)
 	ARCH = pdk15
 	SOURCES += adctest.c polysound.c
@@ -24,6 +25,7 @@ else ifeq ($(DEVICE), PMS152)
 	ARCH = pdk14
 else ifeq ($(DEVICE), PMS171B)
  	ARCH = pdk14
+	SOURCES += adctest.c
 endif
 
 RELEASES = $(patsubst %.c,$(BUILD_DIR)/%.ihx,$(SOURCES))
