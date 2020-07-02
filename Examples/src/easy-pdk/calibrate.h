@@ -24,7 +24,7 @@ __asm__(                                \
   "and a, #(("_STR(frequency)")>>24) \n"\
   "and a, #(("_STR(millivolt)"))     \n"\
   "and a, #(("_STR(millivolt)")>>8)  \n"\
-  "and a, #(("_STR(reg)")>>8)        \n"\
+  "and a, #("_STR(reg)")             \n"\
 )
 
 #define EASY_PDK_CALIBRATE_BG_M(bgtr,gpcc,gpcs) \
@@ -34,9 +34,9 @@ __asm__(                                \
   "and a, #(3)                       \n"\
   "and a, #(3950)                    \n"\
   "and a, #(3950>>8)                 \n"\
-  "and a, #(("_STR(bgtr)"))          \n"\
-  "and a, #(("_STR(gpcc)"))          \n"\
-  "and a, #(("_STR(gpcs)"))          \n"\
+  "and a, #("_STR(bgtr)")            \n"\
+  "and a, #("_STR(gpcc)")            \n"\
+  "and a, #("_STR(gpcs)")            \n"\
   "and a, #0                         \n"\
   "and a, #0                         \n"\
   "and a, #0                         \n"\
