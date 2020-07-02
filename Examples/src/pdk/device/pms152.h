@@ -6,13 +6,13 @@
 #endif
 
 #if !defined(__PDK_DEVICE_XXX_H__)
-	#define __PDK_DEVICE_XXX_H__ "pfs152.h"
+	#define __PDK_DEVICE_XXX_H__ "pms152.h"
 #else
 	#error "Attempt to include more than one "pdk/device/XXX.h" file."
 #endif
 
 #if !defined(__SDCC_pdk14)
-	#error "PFS152 needs the PDK14 backend. You must compile with the -mpdk14 option."
+	#error "PMS152 needs the PDK14 backend. You must compile with the -mpdk14 option."
 #endif
 
 #define ILRC_FREQ           55000
