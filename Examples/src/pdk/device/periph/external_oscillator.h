@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_EXTERNAL_OSCILLATOR_H__
-#define __PDK_PERIPH_EXTERNAL_OSCILLATOR_H__
+#ifndef __PDK_DEVICE_PERIPH_EXTERNAL_OSCILLATOR_H__
+#define __PDK_DEVICE_PERIPH_EXTERNAL_OSCILLATOR_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/exernal_oscillator.h" by itself."
+#endif
 
 // EOSC (External Oscillator Setting) register definitions
 #define EOSC_BG_LVR_SHUTDOWN_BIT     0
@@ -16,4 +20,4 @@
   #define EOSC_ENABLE                  (1 << EOSC_BG_LVR_SHUTDOWN_BIT)
 #endif
 
-#endif //__PDK_PERIPH_EXTERNAL_OSCILLATOR_H__
+#endif //__PDK_DEVICE_PERIPH_EXTERNAL_OSCILLATOR_H__

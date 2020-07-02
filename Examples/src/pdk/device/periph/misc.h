@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_MISC_H__
-#define __PDK_PERIPH_MISC_H__
+#ifndef __PDK_DEVICE_PERIPH_MISC_H__
+#define __PDK_DEVICE_PERIPH_MISC_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/misc.h" by itself."
+#endif
 
 // MISC register definitions
 #define MISC_WATCHDOG_BIT0           0
@@ -19,4 +23,4 @@
   #define MISC_LCD_ENABLE              (1 << MISC_LCD_ENABLE_BIT)
 #endif
 
-#endif //__PDK_PERIPH_MISC_H__
+#endif //__PDK_DEVICE_PERIPH_MISC_H__

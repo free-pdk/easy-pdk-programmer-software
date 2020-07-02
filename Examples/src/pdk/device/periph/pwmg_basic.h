@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_PWMG_BASIC_H__
-#define __PDK_PERIPH_PWMG_BASIC_H__
+#ifndef __PDK_DEVICE_PERIPH_PWMG_BASIC_H__
+#define __PDK_DEVICE_PERIPH_PWMG_BASIC_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/pwmg_basic.h" by itself."
+#endif
 
 // PWMGCLK (PWMG Clock) register definitions
 #define PWMGCLK_CLK_SRC_BIT          0
@@ -96,4 +100,4 @@
 #define PWMG2C_INVERT_OUT            (1 << PWMG2C_INVERT_OUT_BIT)
 #define PWMG2C_STATUS_OUT            (1 << PWMG2C_STATUS_OUT_BIT)
 
-#endif //__PDK_PERIPH_PWMG_BASIC_H__
+#endif //__PDK_DEVICE_PERIPH_PWMG_BASIC_H__

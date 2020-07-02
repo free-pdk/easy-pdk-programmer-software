@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_PWMG0_H__
-#define __PDK_PERIPH_PWMG0_H__
+#ifndef __PDK_DEVICE_PERIPH_PWMG0_H__
+#define __PDK_DEVICE_PERIPH_PWMG0_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/pwmg0.h" by itself."
+#endif
 
 // PWMG0C (PWMG0 Control) register definitions
 #define PWMG0C_CLK_SRC_BIT           0
@@ -68,4 +72,4 @@
 #define PWMG0_INT_AT_DUTY            0x00
 #define PWMG0_INT_AT_0               (1 << PWMG0S_INT_MODE_BIT)
 
-#endif //__PDK_PERIPH_PWMG0_H__
+#endif //__PDK_DEVICE_PERIPH_PWMG0_H__

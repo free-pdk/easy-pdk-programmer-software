@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_INTERRUPT_H__
-#define __PDK_PERIPH_INTERRUPT_H__
+#ifndef __PDK_DEVICE_PERIPH_INTERRUPT_H__
+#define __PDK_DEVICE_PERIPH_INTERRUPT_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/interrupt.h" by itself."
+#endif
 
 // INTEN (Interrupt Enable) register definitions
 #define INTEN_PA0_ENABLE_BIT         0
@@ -97,4 +101,4 @@
   #define INTEGS_COMP_FALLING           (2 << INTEGS_COMP_EDGE_SEL_BIT0)
 #endif
 
-#endif //__PDK_PERIPH_INTERRUPT_H__
+#endif //__PDK_DEVICE_PERIPH_INTERRUPT_H__

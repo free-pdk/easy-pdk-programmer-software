@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_CLOCK_H__
-#define __PDK_PERIPH_CLOCK_H__
+#ifndef __PDK_DEVICE_PERIPH_CLOCK_H__
+#define __PDK_DEVICE_PERIPH_CLOCK_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/clock.h" by itself."
+#endif
 
 // CLKMD (Clock Mode) register definitions
 #define CLKMD_PA5_PRSTB_BIT          0
@@ -38,4 +42,4 @@
 //0x06 reserved
 //0x07 reserved
 
-#endif //__PDK_PERIPH_CLOCK_H__
+#endif //__PDK_DEVICE_PERIPH_CLOCK_H__

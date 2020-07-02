@@ -1,37 +1,36 @@
-#ifndef __PDK_IO_PFS173_H__
-#define __PDK_IO_PFS173_H__
+#ifndef __PDK_DEVICE_PFS172_H__
+#define __PDK_DEVICE_PFS172_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/io_pfs173.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/pfs172.h" by itself."
 #endif
 
-#ifndef __PDK__IO_XXX_H_
-#  define __PDK_IO_XXX_H_ "io_pfs173.h"
+#if !defined(__PDK_DEVICE_XXX_H__)
+#  define __PDK_DEVICE_XXX_H__ "pfs172.h"
 #else
-#  error "Attempt to include more than one "pdk/io_XXX.h" file."
-#endif 
-
-#if !defined __SDCC_pdk15
-#  error "PFS173 needs the PDK14 backend. You must compile with the -mpdk15 option."
+#  error "Attempt to include more than one "pdk/device/XXX.h" file."
 #endif
 
-#define ILRC_FREQ           95000
+#if !defined(__SDCC_pdk14)
+#  error "PFS172 needs the PDK14 backend. You must compile with the -mpdk14 option."
+#endif
+
+#define ILRC_FREQ           55000
 
 // Factory Calibration address locations
-#define FACTORY_IHRCR_ADDR  0x0bed
-#define FACTORY_BGTR_ADDR   0x0bee
+#define FACTORY_IHRCR_ADDR  0x07ed
+#define FACTORY_BGTR_ADDR   0x07ee
 
 
 // FUSE definitions
-#define FUSE_WORD_ADDR      0x0bff
-#define FUSE_RES_BITS_HIGH  0x62FC // - 1 1 B   B 0 1 D   1 1 1 1   1 1 0 S
-// Blank IC Values          0x7FFF // - 1 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, PB4/PB5 Strong IO Drive, Fast Boot-up)
+#define FUSE_WORD_ADDR      0x07ff
+#define FUSE_RES_BITS_HIGH  0x017C // - - B B   0 0 0 1   D 1 1 1   1 1 0 S => 0x017C
 #define FUSE_SECURITY_ON    0x0000 //(S)
 #define FUSE_SECURITY_OFF   0x0001
-#define FUSE_PB4_PB5_NORMAL 0x0000 //(D)
-#define FUSE_PB4_PB5_STRONG 0x0100
+#define FUSE_PB4PB7_NORMAL  0x0000 //(D)
+#define FUSE_PB4PB7_STRONG  0x0080
 #define FUSE_BOOTUP_SLOW    0x0000 //(B)
-#define FUSE_BOOTUP_FAST    0x1800
+#define FUSE_BOOTUP_FAST    0x3000
 
 
 // Register address definitions
@@ -50,26 +49,24 @@
 #define INTEGS_ADDR         0x0c
 #define PADIER_ADDR         0x0d
 #define PBDIER_ADDR         0x0e
-#define PCDIER_ADDR         0x0f
+//0x0f
 #define PA_ADDR             0x10
 #define PAC_ADDR            0x11
 #define PAPH_ADDR           0x12
-#define PB_ADDR             0x13
-#define PBC_ADDR            0x14
-#define PBPH_ADDR           0x15
-#define PC_ADDR             0x16
-#define PCC_ADDR            0x17
-#define PCPH_ADDR           0x18
-#define PBPL_ADDR           0x19
-#define PCPL_ADDR           0x1a
-//0x1b
+#define PAPL_ADDR           0x13
+//0x14
+#define PB_ADDR             0x15
+#define PBC_ADDR            0x16
+#define PBPH_ADDR           0x17
+#define PBPL_ADDR           0x18
+//0x19
 //...
 //0x1f
 #define ADCC_ADDR           0x20
 #define ADCM_ADDR           0x21
 #define ADCR_ADDR           0x22
 //0x23
-#define ADCRGC_ADDR         0x24
+//0x24
 //0x25
 #define MISC_ADDR           0x26
 #define MISC2_ADDR          0x27
@@ -89,43 +86,19 @@
 #define TM3S_ADDR           0x36
 #define TM3B_ADDR           0x37
 //0x38
-//...
+//0x3a
+#define ILRCR_ADDR          0x3b
+#define BGTR_ADDR           0x3c
+#define ROP_ADDR            0x3d
+//0x3e
 //0x3f
-#define PWMG0C_ADDR         0x40
-#define PWMGCLK_ADDR        0x41
-#define PWMG0DTH_ADDR       0x42
-#define PWMG0DTL_ADDR       0x43
-#define PWMGCUBH_ADDR       0x44
-#define PWMGCUBL_ADDR       0x45
-#define PWMG1C_ADDR         0x46
-//0x47
-#define PWMG1DTH_ADDR       0x48
-#define PWMG1DTL_ADDR       0x49
-//0x4a
-//0x4b
-#define PWMG2C_ADDR         0x4c
-//0x4d
-#define PWMG2DTH_ADDR       0x4e
-#define PWMG2DTL_ADDR       0x4f
-//0x50
-//...
-//0x61
-#define ILRCR_ADDR          0x39
-#define BGTR_ADDR           0x1a
-//0x64
-//0x65
-//0x66
-#define ROP_ADDR            0x67
 
 
 // Peripheral definitions
 #define HAS_EOSC
 #define HAS_PORTB
-#define HAS_PORTC
 #define HAS_PB5_PA4_INT
-#define HAS_PWMG
 #define HAS_TM3
-#define HAS_LCD
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -136,10 +109,21 @@
 #include "periph/timer3.h"
 #include "periph/comparator.h"
 #include "periph/adc.h"
-#include "periph/pwmg_basic.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
 #include "periph/misclvr.h"
+
+// Additional MISC register definitions
+// TODO: verify these... they are in the PFS172.INC file but not the datasheet
+#define MISC_EC_DRIVE_HIGH           0x00
+#define MISC_EC_DRIVE_LOW            0x40
+
+// Additional MISC2 register definitions
+#define MISC2_PA6_TO_PA7_BIT         1
+#define MISC2_PB3_TO_PB4_BIT         2
+
+#define MISC2_PA6_TO_PA7             (1 << MISC2_PA6_TO_PA7_BIT)
+#define MISC2_PB3_TO_PB4             (1 << MISC2_PB3_TO_PB4_BIT)
 
 // ROP register definitions
 #define ROP_PB0_PA4_SEL_BIT          0
@@ -147,7 +131,6 @@
 #define ROP_TMX_BIT_SEL_BIT          4
 #define ROP_TMX_FREQ_SEL_BIT         5
 #define ROP_PWM_SEL_BIT              6
-#define ROP_PWM_FREQ_SEL_BIT         7
 
 #define ROP_INT_SRC_PB0              0x00
 #define ROP_INT_SRC_PA4              (1 << ROP_PB0_PA4_SEL_BIT)
@@ -164,7 +147,4 @@
 #define ROP_PURE_PWM                 0x00
 #define ROP_GPC_PWM                  (1 << ROP_PWM_SEL_BIT)
 
-#define ROP_PWM_16MHZ                0x00
-#define ROP_PWM_32MHZ                (1 << ROP_PWM_FREQ_SEL_BIT)
-
-#endif //__PDK_IO_PFS173_H__
+#endif //__PDK_DEVICE_PFS172_H__

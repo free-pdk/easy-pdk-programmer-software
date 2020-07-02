@@ -1,17 +1,17 @@
-#ifndef __PDK_IO_PFS154_H__
-#define __PDK_IO_PFS154_H__
+#ifndef __PDK_DEVICE_PFS154_H__
+#define __PDK_DEVICE_PFS154_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/io_pfs154.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/pfs154.h" by itself."
 #endif
 
-#ifndef __PDK__IO_XXX_H_
-#  define __PDK_IO_XXX_H_ "io_pfs154.h"
+#if !defined(__PDK_DEVICE_XXX_H__)
+#  define __PDK_DEVICE_XXX_H__ "pfs154.h"
 #else
-#  error "Attempt to include more than one "pdk/io_XXX.h" file."
-#endif 
+#  error "Attempt to include more than one "pdk/device/XXX.h" file."
+#endif
 
-#if !defined __SDCC_pdk14
+#if !defined(__SDCC_pdk14)
 #  error "PFS154 needs the PDK14 backend. You must compile with the -mpdk14 option."
 #endif
 
@@ -130,4 +130,4 @@
 //#define MISC2_UNK_TM3                0x00
 //#define MISC2_UNK_PWMG2              0x10
 
-#endif //__PDK_IO_PFS154_H__
+#endif //__PDK_DEVICE_PFS154_H__

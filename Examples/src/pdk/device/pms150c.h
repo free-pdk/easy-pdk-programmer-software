@@ -1,17 +1,17 @@
-#ifndef __PDK_IO_PMS150C_H__
-#define __PDK_IO_PMS150C_H__
+#ifndef __PDK_DEVICE_PMS150C_H__
+#define __PDK_DEVICE_PMS150C_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/io_pms150c.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/pms150c.h" by itself."
 #endif
 
-#ifndef __PDK__IO_XXX_H_
-#  define __PDK_IO_XXX_H_ "io_pms150c.h"
+#if !defined(__PDK_DEVICE_XXX_H__)
+#  define __PDK_DEVICE_XXX_H__ "pms150c.h"
 #else
-#  error "Attempt to include more than one "pdk/io_XXX.h" file."
-#endif 
+#  error "Attempt to include more than one "pdk/device/XXX.h" file."
+#endif
 
-#if !defined __SDCC_pdk13
+#if !defined(__SDCC_pdk13)
 #  error "PMS150C needs the PDK13 backend. You must compile with the -mpdk13 option."
 #endif
 
@@ -89,4 +89,4 @@
 #include "periph/comparator.h"
 #include "periph/misc.h"
 
-#endif //__PDK_IO_PMS150C_H__
+#endif //__PDK_DEVICE_PMS150C_H__

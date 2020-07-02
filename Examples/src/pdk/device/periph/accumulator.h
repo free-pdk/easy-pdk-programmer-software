@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_ACCUMULATOR_H__
-#define __PDK_PERIPH_ACCUMULATOR_H__
+#ifndef __PDK_DEVICE_PERIPH_ACCUMULATOR_H__
+#define __PDK_DEVICE_PERIPH_ACCUMULATOR_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/accumulator.h" by itself."
+#endif
 
 // FLAG (ACC Status Flag) register definitions
 #define FLAG_Z_BIT                   0
@@ -12,4 +16,4 @@
 #define FLAG_AC                      (1 << FLAG_AC_BIT)
 #define FLAG_OV                      (1 << FLAG_OV_BIT)
 
-#endif //__PDK_PERIPH_ACCUMULATOR_H__
+#endif //__PDK_DEVICE_PERIPH_ACCUMULATOR_H__

@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_COMPARATOR_H__
-#define __PDK_PERIPH_COMPARATOR_H__
+#ifndef __PDK_DEVICE_PERIPH_COMPARATOR_H__
+#define __PDK_DEVICE_PERIPH_COMPARATOR_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/comparator.h" by itself."
+#endif
 
 // GPCC (Comparator Control) register definitions
 #define GPCC_COMP_PLUS_BIT           0
@@ -44,4 +48,4 @@
 #endif
 
 
-#endif //__PDK_PERIPH_COMPARATOR_H__
+#endif //__PDK_DEVICE_PERIPH_COMPARATOR_H__

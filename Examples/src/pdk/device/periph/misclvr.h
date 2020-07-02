@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_MISCLVR_H__
-#define __PDK_PERIPH_MISCLVR_H__
+#ifndef __PDK_DEVICE_PERIPH_MISCLVR_H__
+#define __PDK_DEVICE_PERIPH_MISCLVR_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/misclvr.h" by itself."
+#endif
 
 // MISCLVR register definitions
 #define MISCLVR_BANDGAP_DIV_BIT0     0
@@ -27,4 +31,4 @@
 #define MISCLVR_4V                   (14 << MISCLVR_LVR_BIT0)
 #define MISCLVR_4V5                  (15 << MISCLVR_LVR_BIT0)
 
-#endif //__PDK_PERIPH_MISCLVR_H__
+#endif //__PDK_DEVICE_PERIPH_MISCLVR_H__

@@ -4,17 +4,17 @@
 #include "util.h"
 
 #if defined(PMS150C)
-  #include "io_pms150c.h"
+  #include "device/pms150c.h"
 #elif defined(PMS152)
-  #include "io_pms152.h"
+  #include "device/pms152.h"
 #elif defined(PMS171B)
- #include "io_pms171b.h"
+ #include "device/pms171b.h"
 #elif defined(PFS154)
-  #include "io_pfs154.h"
+  #include "device/pfs154.h"
 #elif defined(PFS172)
-  #include "io_pfs172.h"
+  #include "device/pfs172.h"
 #elif defined(PFS173)
-  #include "io_pfs173.h"
+  #include "device/pfs173.h"
 #else
 #  error "Unknown device. Please define device!"
 #endif

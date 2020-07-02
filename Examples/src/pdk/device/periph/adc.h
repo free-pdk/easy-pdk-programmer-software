@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_ADC_H__
-#define __PDK_PERIPH_ADC_H__
+#ifndef __PDK_DEVICE_PERIPH_ADC_H__
+#define __PDK_DEVICE_PERIPH_ADC_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/adc.h" by itself."
+#endif
 
 // ADCC (ADC Control) register definitions
 #define ADCC_CHANNEL_SEL_BIT0        2
@@ -47,4 +51,4 @@
 #define ADCRGC_ADC_REF_VDD           0x00
 #define ADCRGC_ADC_REF_PB1           (1 << ADCRGC_CLK_SRC_BIT)
 
-#endif //__PDK_PERIPH_ADC_H__
+#endif //__PDK_DEVICE_PERIPH_ADC_H__

@@ -1,17 +1,17 @@
-#ifndef __PDK_IO_PMS152_H__
-#define __PDK_IO_PMS152_H__
+#ifndef __PDK_DEVICE_PMS152_H__
+#define __PDK_DEVICE_PMS152_H__
 
 #if !defined(__PDK_IO_H__)
-#  error "You must #include "pdk/io.h" instead of "pdk/io_pms152.h" by itself."
+#  error "You must #include "pdk/io.h" instead of "pdk/device/pms152.h" by itself."
 #endif
 
-#ifndef __PDK__IO_XXX_H_
-#  define __PDK_IO_XXX_H_ "io_pfs152.h"
+#if !defined(__PDK_DEVICE_XXX_H__)
+#  define __PDK_DEVICE_XXX_H__ "pfs152.h"
 #else
-#  error "Attempt to include more than one "pdk/io_XXX.h" file."
-#endif 
+#  error "Attempt to include more than one "pdk/device/XXX.h" file."
+#endif
 
-#if !defined __SDCC_pdk14
+#if !defined(__SDCC_pdk14)
 #  error "PFS152 needs the PDK14 backend. You must compile with the -mpdk14 option."
 #endif
 
@@ -108,4 +108,4 @@
 #include "periph/misc2.h"
 #include "periph/misclvr.h"
 
-#endif //__PDK_IO_PMS152_H__
+#endif //__PDK_DEVICE_PMS152_H__

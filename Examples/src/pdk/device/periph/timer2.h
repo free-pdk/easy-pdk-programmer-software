@@ -1,5 +1,9 @@
-#ifndef __PDK_PERIPH_TIMER2_H__
-#define __PDK_PERIPH_TIMER2_H__
+#ifndef __PDK_DEVICE_PERIPH_TIMER2_H__
+#define __PDK_DEVICE_PERIPH_TIMER2_H__
+
+#if !defined(__PDK_IO_H__)
+#  error "You must #include "pdk/io.h" instead of "pdk/device/periph/timer2.h" by itself."
+#endif
 
 // TM2C (Timer2 Control) register definitions
 #define TM2C_INVERT_OUT_BIT          0
@@ -88,4 +92,4 @@
 #define TM2S_PWM_RES_8BIT            0x00
 #define TM2S_PWM_RES_6BIT            (1 << TM2S_PWM_RES_SEL_BIT)
 
-#endif //__PDK_PERIPH_TIMER2_H__
+#endif //__PDK_DEVICE_PERIPH_TIMER2_H__
