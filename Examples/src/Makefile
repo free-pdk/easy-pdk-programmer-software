@@ -9,7 +9,7 @@ RELDIR  ?= ../pre-compiled
 BUILD_DIR = $(OUTDIR)/$(DEVICE)
 RELEASE_DIR = $(RELDIR)/$(DEVICE)
 
-SOURCES = helloworld.c comptest.c
+SOURCES = helloworld.c comptest.c calib-and-fuse-demo.c
 
 ifeq ($(DEVICE), PFS154)
 	ARCH = pdk14
