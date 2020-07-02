@@ -28,8 +28,8 @@
 // Blank IC Values          0x7FFF // - 1 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, PB4/PB5 Strong IO Drive, Fast Boot-up)
 #define FUSE_SECURITY_ON    0x0000 //(S)
 #define FUSE_SECURITY_OFF   0x0001
-#define FUSE_PB4PB5_NORMAL  0x0000 //(D)
-#define FUSE_PB4PB5_STRONG  0x0100
+#define FUSE_PB4_PB5_NORMAL 0x0000 //(D)
+#define FUSE_PB4_PB5_STRONG 0x0100
 #define FUSE_BOOTUP_SLOW    0x0000 //(B)
 #define FUSE_BOOTUP_FAST    0x1800
 
@@ -63,9 +63,7 @@
 #define PBPL_ADDR           0x19
 #define PCPL_ADDR           0x1a
 //0x1b
-//0x1c
-//0x1d
-//0x1e
+//...
 //0x1f
 #define ADCC_ADDR           0x20
 #define ADCM_ADDR           0x21
@@ -91,11 +89,7 @@
 #define TM3S_ADDR           0x36
 #define TM3B_ADDR           0x37
 //0x38
-//0x3a
-//0x3b
-//0x3c
-//0x3d
-//0x3e
+//...
 //0x3f
 #define PWMG0C_ADDR         0x40
 #define PWMGCLK_ADDR        0x41
@@ -114,7 +108,7 @@
 #define PWMG2DTH_ADDR       0x4e
 #define PWMG2DTL_ADDR       0x4f
 //0x50
-//..
+//...
 //0x61
 #define ILRCR_ADDR          0x39
 #define BGTR_ADDR           0x1a
@@ -132,7 +126,6 @@
 #define HAS_PWMG
 #define HAS_TM3
 #define HAS_LCD
-#define MISCLVR_TYPE_B
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -143,13 +136,13 @@
 #include "periph/timer3.h"
 #include "periph/comparator.h"
 #include "periph/adc.h"
-#include "periph/pwmg_b.h"
+#include "periph/pwmg_basic.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
 #include "periph/misclvr.h"
 
 // ROP register definitions
-#define RPO_PB0_PA4_SEL_BIT          0
+#define ROP_PB0_PA4_SEL_BIT          0
 #define ROP_PA0_PB5_SEL_BIT          1
 #define ROP_TMX_BIT_SEL_BIT          4
 #define ROP_TMX_FREQ_SEL_BIT         5
@@ -157,15 +150,20 @@
 #define ROP_PWM_FREQ_SEL_BIT         7
 
 #define ROP_INT_SRC_PB0              0x00
-#define ROP_INT_SRC_PA4              (1 << RPO_PB0_PA4_SEL_BIT)
+#define ROP_INT_SRC_PA4              (1 << ROP_PB0_PA4_SEL_BIT)
+
 #define ROP_INT_SRC_PA0              0x00
 #define ROP_INT_SRC_PB5              (1 << ROP_PA0_PB5_SEL_BIT)
+
 #define ROP_TMX_6BIT                 0x00
 #define ROP_TMX_7BIT                 (1 << ROP_TMX_BIT_SEL_BIT)
+
 #define ROP_TMX_16MHZ                0x00
 #define ROP_TMX_32MHZ                (1 << ROP_TMX_FREQ_SEL_BIT)
+
 #define ROP_PURE_PWM                 0x00
 #define ROP_GPC_PWM                  (1 << ROP_PWM_SEL_BIT)
+
 #define ROP_PWM_16MHZ                0x00
 #define ROP_PWM_32MHZ                (1 << ROP_PWM_FREQ_SEL_BIT)
 

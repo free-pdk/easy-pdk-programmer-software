@@ -14,13 +14,9 @@
 
 #define TM3C_OUT_DISABLE             0x00
 #if defined(HAS_PORTB)
-  #define TM3C_OUT_PB2                 (1 << TM3C_OUTPUT_SEL_BIT0)
-#endif
-#define TM3C_OUT_PA3                 (2 << TM3C_OUTPUT_SEL_BIT0)
-#if defined(HAS_PORTB)
-  #define TM3C_OUT_PB4                 (3 << TM3C_OUTPUT_SEL_BIT0)
-#else
-  #define TM3C_OUT_PA4                 (3 << TM3C_OUTPUT_SEL_BIT0)
+  #define TM3C_OUT_PB5                 (1 << TM3C_OUTPUT_SEL_BIT0)
+  #define TM3C_OUT_PB6                 (2 << TM3C_OUTPUT_SEL_BIT0)
+  #define TM3C_OUT_PB7                 (3 << TM3C_OUTPUT_SEL_BIT0)
 #endif
 
 #define TM3C_CLK_DISABLE             0x00

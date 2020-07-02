@@ -17,8 +17,10 @@
 #define ADCC_CH_AD8_PA3              (8 << ADCC_CHANNEL_SEL_BIT0)
 #define ADCC_CH_AD9_PA4              (9 << ADCC_CHANNEL_SEL_BIT0)
 #define ADCC_CH_AD10_PA0             (10 << ADCC_CHANNEL_SEL_BIT0)
-#define ADCC_CH_AD11_PC1             (11 << ADCC_CHANNEL_SEL_BIT0)
-#define ADCC_CH_AD12_PC2             (12 << ADCC_CHANNEL_SEL_BIT0)
+#if defined(HAS_PORTC)
+  #define ADCC_CH_AD11_PC1             (11 << ADCC_CHANNEL_SEL_BIT0)
+  #define ADCC_CH_AD12_PC2             (12 << ADCC_CHANNEL_SEL_BIT0)
+#endif
 #define ADCC_CH_AD16_BANDGAP         (15 << ADCC_CHANNEL_SEL_BIT0)
 
 #define ADCC_START_ADC_CONV          (1 << ADCC_PROCESS_CONTROL_BIT)

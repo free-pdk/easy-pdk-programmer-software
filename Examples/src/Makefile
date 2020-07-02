@@ -1,7 +1,7 @@
 SDCC	?= sdcc
 OUTDIR	?= .build
 
-all: PFS154 PFS172 PFS173 PMS150C PMS152
+all: PFS154 PFS172 PFS173 PMS150C PMS152 PMS171B
 
 PFS154:
 	mkdir -p $(OUTDIR)
@@ -29,6 +29,12 @@ PMS152:
 	mkdir -p $(OUTDIR)
 	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/helloworld_pms152.ihx helloworld.c
 	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/comptest_pms152.ihx comptest.c
+
+PMS171B:
+	mkdir -p $(OUTDIR)
+	$(SDCC) -DPMS171B -mpdk14 -o $(OUTDIR)/helloworld_pms171b.ihx helloworld.c
+	$(SDCC) -DPMS171B -mpdk14 -o $(OUTDIR)/comptest_pms171b.ihx comptest.c
+
 
 clean:
 	rm -rf $(OUTDIR)

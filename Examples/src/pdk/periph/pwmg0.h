@@ -1,5 +1,5 @@
-#ifndef __PDK_PERIPH_PWMG_A0_H__
-#define __PDK_PERIPH_PWMG_A0_H__
+#ifndef __PDK_PERIPH_PWMG0_H__
+#define __PDK_PERIPH_PWMG0_H__
 
 // PWMG0C (PWMG0 Control) register definitions
 #define PWMG0C_CLK_SRC_BIT           0
@@ -68,4 +68,4 @@
 #define PWMG0_INT_AT_DUTY            0x00
 #define PWMG0_INT_AT_0               (1 << PWMG0S_INT_MODE_BIT)
 
-#endif //__PDK_PERIPH_PWMG_A0_H__
+#endif //__PDK_PERIPH_PWMG0_H__

@@ -1,5 +1,5 @@
-#ifndef __PDK_PERIPH_PWMG_B_H__
-#define __PDK_PERIPH_PWMG_B_H__
+#ifndef __PDK_PERIPH_PWMG_BASIC_H__
+#define __PDK_PERIPH_PWMG_BASIC_H__
 
 // PWMGCLK (PWMG Clock) register definitions
 #define PWMGCLK_CLK_SRC_BIT          0
@@ -96,4 +96,4 @@
 #define PWMG2C_INVERT_OUT            (1 << PWMG2C_INVERT_OUT_BIT)
 #define PWMG2C_STATUS_OUT            (1 << PWMG2C_STATUS_OUT_BIT)
 
-#endif //__PDK_PERIPH_PWMG_B_H__
+#endif //__PDK_PERIPH_PWMG_BASIC_H__

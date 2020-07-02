@@ -7,6 +7,8 @@
   #include "io_pms150c.h"
 #elif defined(PMS152)
   #include "io_pms152.h"
+#elif defined(PMS171B)
+ #include "io_pms171b.h"
 #elif defined(PFS154)
   #include "io_pfs154.h"
 #elif defined(PFS172)

@@ -81,20 +81,12 @@
 #define PWMG2DTH_ADDR       0x2e
 #define PWMG2DTL_ADDR       0x2f
 //0x30
-//0x31
-//0x32
-//0x33
-//0x34
-//0x35
-//0x36
-//0x37
+//...
 //0x38
 #define ILRCR_ADDR          0x39
 #define ROP_ADDR            0x3a
 //0x3b
-//0x3c
-//0x3d
-//0x3e
+//...
 //0x3f
 
 
@@ -103,7 +95,6 @@
 #define HAS_PORTB
 #define HAS_PB5_PA4_INT
 #define HAS_PWMG
-#define MISCLVR_TYPE_B
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -112,7 +103,7 @@
 #include "periph/timer16.h"
 #include "periph/timer2.h"
 #include "periph/comparator.h"
-#include "periph/pwmg_b.h"
+#include "periph/pwmg_basic.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
 #include "periph/misclvr.h"

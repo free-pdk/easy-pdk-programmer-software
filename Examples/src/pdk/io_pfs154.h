@@ -94,10 +94,7 @@
 //0x38
 #define ILRCR_ADDR          0x39
 //0x3a
-//0x3b
-//0x3c
-//0x3d
-//0x3e
+//...
 //0x3f
 
 
@@ -107,7 +104,6 @@
 #define HAS_PWMG
 #define HAS_TM3
 #define HAS_LCD
-#define MISCLVR_TYPE_A
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -117,12 +113,12 @@
 #include "periph/timer2.h"
 #include "periph/timer3.h"
 #include "periph/comparator.h"
-#include "periph/pwmg_a0.h"
-#include "periph/pwmg_a1.h"
-#include "periph/pwmg_a2.h"
+#include "periph/pwmg0.h"
+#include "periph/pwmg1.h"
+#include "periph/pwmg2.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
-#include "periph/misclvr.h"
+#include "periph/misclvr_basic.h"
 
 // Additional MISC2 register definitions
 #define MISC2_COMP_PWMG1_BIT0        3
