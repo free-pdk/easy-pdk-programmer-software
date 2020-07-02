@@ -36,6 +36,13 @@ int putchar(int c)
   return (c);
 }
 
+void puts_sans_newline(char *s)
+{
+  while (*s)
+    if (putchar(*s++) == EOF)
+      return;
+}
+
 unsigned char _sdcc_external_startup(void)
 {
   PDK_USE_8MHZ_IHRC_SYSCLOCK();                 //use 8MHz sysclock
@@ -46,13 +53,6 @@ unsigned char _sdcc_external_startup(void)
 #endif
   PDK_USE_FACTORY_BGTR();                       //use factory BandGap tuning value (tuned @ 5.0V)
   return 0;                                     //perform normal initialization
-}
-
-void puts_sans_newline(char *s)
-{
-    while (*s)
-        if (putchar(*s++) == EOF)
-            return;
 }
 
 void main(void)
@@ -82,8 +82,8 @@ void main(void)
   uint8_t adcval = ADCR;                        //read the ADC value
 
   //We measured the internal bandgap voltage which should be 1.2V. This means: 1.2V/adcval = VDD/255 -> VDD = (1.2V*255)/adcval
-  uint32_t vdd = (1200UL*255)/adcval;
-  _uitoa(vdd, str_buf, 10);  // Should really be _ultoa, but that doesn't seem available right now
+  uint16_t vdd = (1200UL*255)/adcval;
+  _uitoa(vdd, str_buf, 10);
   puts_sans_newline(str_buf);
   puts(" mV");
 
