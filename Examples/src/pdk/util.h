@@ -13,6 +13,7 @@
 #define __disgint()           __asm__("disgint\n")
 #define __stopsys()           __asm__("stopsys\n")
 #define __stopexe()           __asm__("stopexe\nnop\n")
+#define __reset()             __asm__("reset\n")
 #define __wdreset()           __asm__("wdreset\n")
 #define __set0(var,bit)       __asm__("set0 "_STR_VAR(var)", #"_STR(bit)"\n")
 #define __set1(var,bit)       __asm__("set1 "_STR_VAR(var)", #"_STR(bit)"\n")
