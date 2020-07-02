@@ -2,7 +2,7 @@
 #define __PDK_DEVICE_PERIPH_PORT_A_H__
 
 #if !defined(__PDK_DEVICE_H__)
-#  error "You must #include "pdk/device.h" instead of "pdk/device/periph/port_a.h" by itself."
+	#error "You must #include "pdk/device.h" instead of "pdk/device/periph/port_a.h" by itself."
 #endif
 
 // __sfr definitions

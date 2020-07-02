@@ -2,17 +2,17 @@
 #define __PDK_DEVICE_PMS171B_H__
 
 #if !defined(__PDK_DEVICE_H__)
-#  error "You must #include "pdk/device.h" instead of "pdk/device/pms171b.h" by itself."
+	#error "You must #include "pdk/device.h" instead of "pdk/device/pms171b.h" by itself."
 #endif
 
 #if !defined(__PDK_DEVICE_XXX_H__)
-#  define __PDK_DEVICE_XXX_H__ "pms171b.h"
+	#define __PDK_DEVICE_XXX_H__ "pms171b.h"
 #else
-#  error "Attempt to include more than one "pdk/device/XXX.h" file."
+	#error "Attempt to include more than one "pdk/device/XXX.h" file."
 #endif
 
 #if !defined(__SDCC_pdk14)
-#  error "PMS171B needs the PDK13 backend. You must compile with the -mpdk14 option."
+	#error "PMS171B needs the PDK13 backend. You must compile with the -mpdk14 option."
 #endif
 
 #define ILRC_FREQ           50000

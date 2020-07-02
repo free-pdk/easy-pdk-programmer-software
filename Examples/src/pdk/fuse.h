@@ -2,7 +2,7 @@
 #define __PDK_FUSE_H__
 
 #if !defined(__PDK_DEVICE_H__)
-#  error "You must #include "pdk/device.h" instead of "pdk/fuse.h" by itself."
+	#error "You must #include "pdk/device.h" instead of "pdk/fuse.h" by itself."
 #endif
 
 // FUSE macros

@@ -2,7 +2,7 @@
 #define __PDK_DEVICE_PERIPH_PWMG_1_H__
 
 #if !defined(__PDK_DEVICE_H__)
-#  error "You must #include "pdk/device.h" instead of "pdk/device/periph/pwmg_1.h" by itself."
+	#error "You must #include "pdk/device.h" instead of "pdk/device/periph/pwmg_1.h" by itself."
 #endif
 
 // __sfr definitions

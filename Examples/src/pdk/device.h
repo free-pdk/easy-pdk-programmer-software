@@ -8,7 +8,7 @@
 #elif defined(PMS152)
   #include "device/pms152.h"
 #elif defined(PMS171B)
- #include "device/pms171b.h"
+  #include "device/pms171b.h"
 #elif defined(PFS154)
   #include "device/pfs154.h"
 #elif defined(PFS172)
@@ -16,7 +16,7 @@
 #elif defined(PFS173)
   #include "device/pfs173.h"
 #else
-#  error "Unknown device. Please define device!"
+	#error "Unknown device. Please define device!"
 #endif
 
 #include "fuse.h"

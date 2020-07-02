@@ -2,17 +2,17 @@
 #define __PDK_DEVICE_PMS150C_H__
 
 #if !defined(__PDK_DEVICE_H__)
-#  error "You must #include "pdk/device.h" instead of "pdk/device/pms150c.h" by itself."
+	#error "You must #include "pdk/device.h" instead of "pdk/device/pms150c.h" by itself."
 #endif
 
 #if !defined(__PDK_DEVICE_XXX_H__)
-#  define __PDK_DEVICE_XXX_H__ "pms150c.h"
+	#define __PDK_DEVICE_XXX_H__ "pms150c.h"
 #else
-#  error "Attempt to include more than one "pdk/device/XXX.h" file."
+	#error "Attempt to include more than one "pdk/device/XXX.h" file."
 #endif
 
 #if !defined(__SDCC_pdk13)
-#  error "PMS150C needs the PDK13 backend. You must compile with the -mpdk13 option."
+	#error "PMS150C needs the PDK13 backend. You must compile with the -mpdk13 option."
 #endif
 
 #define ILRC_FREQ           59000
