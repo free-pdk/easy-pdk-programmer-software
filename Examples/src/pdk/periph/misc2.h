@@ -1,0 +1,11 @@
+#ifndef __PDK_PERIPH_MISC2_H__
+#define __PDK_PERIPH_MISC2_H__
+
+// MISC2 register definitions
+#define MISC2_COMP_EDGE_SEL_BIT0     5
+
+#define MISC2_COMP_EDGE_INT_BOTH     0x00
+#define MISC2_COMP_EDGE_INT_RISE     (1 << MISC2_COMP_EDGE_SEL_BIT0)
+#define MISC2_COMP_EDGE_INT_FALL     (2 << MISC2_COMP_EDGE_SEL_BIT0)
+
+#endif //__PDK_PERIPH_MISC2_H__

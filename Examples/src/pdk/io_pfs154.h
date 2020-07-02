@@ -107,6 +107,7 @@
 #define HAS_PWMG
 #define HAS_TM3
 #define HAS_LCD
+#define MISCLVR_TYPE_A
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -120,19 +121,17 @@
 #include "periph/pwmg_a1.h"
 #include "periph/pwmg_a2.h"
 #include "periph/misc.h"
-#include "periph/misc_a.h"
+#include "periph/misc2.h"
+#include "periph/misclvr.h"
 
-// MISC2 register definitions
+// Additional MISC2 register definitions
 #define MISC2_COMP_PWMG1_BIT0        3
 #define MISC2_TM3_PWMG2_BIT0         4
-#define MISC2_COMP_EDGE_SEL_BIT0     5
 
+//TODO: verify these...
 //#define MISC2_UNK_COMP               0x00
 //#define MISC2_UNK_PWMG1              0x08
 //#define MISC2_UNK_TM3                0x00
 //#define MISC2_UNK_PWMG2              0x10
-#define MISC2_COMP_EDGE_INT_BOTH     0x00
-#define MISC2_COMP_EDGE_INT_RISE     (1 << MISC2_COMP_EDGE_SEL_BIT0)
-#define MISC2_COMP_EDGE_INT_FALL     (2 << MISC2_COMP_EDGE_SEL_BIT0)
 
 #endif //__PDK_IO_PFS154_H__

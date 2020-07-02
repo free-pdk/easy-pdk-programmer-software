@@ -103,6 +103,7 @@
 #define HAS_PORTB
 #define HAS_PB5_PA4_INT
 #define HAS_TM3
+#define MISCLVR_TYPE_B
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -114,23 +115,20 @@
 #include "periph/comparator.h"
 #include "periph/adc.h"
 #include "periph/misc.h"
-#include "periph/misclvr_b.h"
+#include "periph/misc2.h"
+#include "periph/misclvr.h"
 
-// MISC register definitions
+// Additional MISC register definitions
 // TODO: verify these... they are in the PFS172.INC file but not the datasheet
-// #define MISC_EC_DRIVE_HIGH           0x00
-// #define MISC_EC_DRIVE_LOW            0x40
+#define MISC_EC_DRIVE_HIGH           0x00
+#define MISC_EC_DRIVE_LOW            0x40
 
-// MISC2 register definitions
+// Additional MISC2 register definitions
 #define MISC2_PA6_TO_PA7_BIT         1
 #define MISC2_PB3_TO_PB4_BIT         2
-#define MISC2_COMP_EDGE_SEL_BIT0     5
 
 #define MISC2_PA6_TO_PA7             (1 << MISC2_PA6_TO_PA7_BIT)
 #define MISC2_PB3_TO_PB4             (1 << MISC2_PB3_TO_PB4_BIT)
-#define MISC2_COMP_EDGE_INT_BOTH     0x00
-#define MISC2_COMP_EDGE_INT_RISE     (1 << MISC2_COMP_EDGE_SEL_BIT0)
-#define MISC2_COMP_EDGE_INT_FALL     (2 << MISC2_COMP_EDGE_SEL_BIT0)
 
 // ROP register definitions
 #define RPO_PB0_PA4_SEL_BIT          0

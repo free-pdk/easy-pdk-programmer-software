@@ -131,6 +131,7 @@
 #define HAS_PWMG
 #define HAS_TM3
 #define HAS_LCD
+#define MISCLVR_TYPE_B
 
 #include "periph/accumulator.h"
 #include "periph/clock.h"
@@ -143,14 +144,8 @@
 #include "periph/adc.h"
 #include "periph/pwmg_b.h"
 #include "periph/misc.h"
-#include "periph/misclvr_b.h"
-
-// MISC2 register definitions
-#define MISC2_COMP_EDGE_SEL_BIT0     5
-
-#define MISC2_COMP_EDGE_INT_BOTH     0x00
-#define MISC2_COMP_EDGE_INT_RISE     (1 << MISC2_COMP_EDGE_SEL_BIT0)
-#define MISC2_COMP_EDGE_INT_FALL     (2 << MISC2_COMP_EDGE_SEL_BIT0)
+#include "periph/misc2.h"
+#include "periph/misclvr.h"
 
 // ROP register definitions
 #define RPO_PB0_PA4_SEL_BIT          0
