@@ -39,7 +39,7 @@ __sfr __at(ILRCR_ADDR)        _ilrcr;
 #define CLKMD_ILRC_DIV4              CLKMD_MODE0(6)
 #define CLKMD_ILRC                   CLKMD_MODE0(7)
 
-#define CLKMD_MODE1(s)               ((s << CLKMD_SYSCLK_BIT0) & (1 << CLKMD_CLOCKTYPE_BIT))
+#define CLKMD_MODE1(s)               ((s << CLKMD_SYSCLK_BIT0) | (1 << CLKMD_CLOCKTYPE_BIT))
 #define CLKMD_IHRC_DIV16             CLKMD_MODE1(0)
 #define CLKMD_IHRC_DIV8              CLKMD_MODE1(1)
 #define CLKMD_ILRC_DIV16             CLKMD_MODE1(2)
