@@ -412,7 +412,12 @@ int main( int argc, const char * argv [] )
       int inserts = FPDKSERIAL_InsertSerial(icdata, data, len, arguments.serial);
 
       if( arguments.serial != 0x4C41495245535046ULL )
-        printf("Setting serial: 0x%" PRIX64 " (%d insertions)\n", arguments.serial, inserts);
+      {
+        printf("Setting serial: 0x%02X%02X%02X%02X%02X%02X%02X%02X (%d insertions)\n", 
+               (uint8_t)(arguments.serial>>56)&0xFF, (uint8_t)(arguments.serial>>48)&0xFF, (uint8_t)(arguments.serial>>40)&0xFF, (uint8_t)(arguments.serial>>32)&0xFF, 
+               (uint8_t)(arguments.serial>>24)&0xFF, (uint8_t)(arguments.serial>>16)&0xFF, (uint8_t)(arguments.serial>>8)&0xFF, (uint8_t)(arguments.serial>>0)&0xFF,
+               inserts );
+      }
       else
       {
         if( inserts>0 )
