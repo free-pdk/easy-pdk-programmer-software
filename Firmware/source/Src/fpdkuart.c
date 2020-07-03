@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "main.h"
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 #define FPDKUART_QUEUE_SIZE 32                                                                     //32 byte internal RX queue (-> 32 bytes transmitted from IC during debug can be buffered, sending out via USB us MUCH faster)
 
@@ -85,8 +86,8 @@ void FPDKUART_HandleQueue(void)
         _uartRXAutoBaudFinished = true;
 
         char connectstring[64];
-        sprintf( connectstring, "Connected @%d baud\n", HAL_RCC_GetPCLK1Freq() / (USART1->BRR) );
-        FPDKUSB_SendDebug(connectstring, strlen(connectstring));
+        sprintf( connectstring, "Connected @%" PRIu32 " baud\n", HAL_RCC_GetPCLK1Freq() / USART1->BRR );
+        FPDKUSB_SendDebug((uint8_t*)connectstring, strlen(connectstring));
       }
     }
   }
