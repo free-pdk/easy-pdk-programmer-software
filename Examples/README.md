@@ -58,7 +58,7 @@ Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (
 
 PMS171B:
 ```
-$ ./easypdkprog -n PMS171B write helloworld_pms171b.ihx
+$ ./easypdkprog --icname=PMS171B write helloworld_pms171b.ihx
 Writing IC (186 words)... done.
 Calibrating IC
 * IHRC SYSCLK=8000000Hz @ 4.00V ... calibration result: 7982674Hz (0x41)  done.
