@@ -1,8 +1,6 @@
 #ifndef __PDK_DEVICE_H__
 #define __PDK_DEVICE_H__
 
-#include "util.h"
-
 #if defined(PMS150C)
   #include "device/pms150c.h"
 #elif defined(PMS152)
@@ -19,6 +17,7 @@
 	#error "Unknown device. Please define device!"
 #endif
 
+#include "util.h"
 #include "fuse.h"
 #include "factory_calibration.h"
 #include "sysclock.h"

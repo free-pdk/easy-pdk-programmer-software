@@ -1,10 +1,6 @@
 #ifndef __PDK_DEVICE_PFS172_H__
 #define __PDK_DEVICE_PFS172_H__
 
-#if !defined(__PDK_DEVICE_H__)
-	#error "You must #include "pdk/device.h" instead of "pdk/device/pfs172.h" by itself."
-#endif
-
 #if !defined(__PDK_DEVICE_XXX_H__)
 	#define __PDK_DEVICE_XXX_H__ "pfs172.h"
 #else
@@ -107,7 +103,6 @@
 #define HAS_PORTB
 #define HAS_PB5_PA4_INT
 #define HAS_TM3
-
 
 #include "periph/accumulator.h"
 #include "periph/stack.h"

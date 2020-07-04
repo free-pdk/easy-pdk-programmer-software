@@ -1,10 +1,6 @@
 #ifndef __PDK_DEVICE_PFS173_H__
 #define __PDK_DEVICE_PFS173_H__
 
-#if !defined(__PDK_DEVICE_H__)
-	#error "You must #include "pdk/device.h" instead of "pdk/device/pfs173.h" by itself."
-#endif
-
 #if !defined(__PDK_DEVICE_XXX_H__)
 	#define __PDK_DEVICE_XXX_H__ "pfs173.h"
 #else
@@ -12,7 +8,7 @@
 #endif
 
 #if !defined(__SDCC_pdk15)
-	#error "PFS173 needs the PDK14 backend. You must compile with the -mpdk15 option."
+	#error "PFS173 needs the PDK15 backend. You must compile with the -mpdk15 option."
 #endif
 
 #define ILRC_FREQ           93000

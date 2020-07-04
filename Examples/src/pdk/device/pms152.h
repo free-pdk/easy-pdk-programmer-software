@@ -1,10 +1,6 @@
 #ifndef __PDK_DEVICE_PMS152_H__
 #define __PDK_DEVICE_PMS152_H__
 
-#if !defined(__PDK_DEVICE_H__)
-	#error "You must #include "pdk/device.h" instead of "pdk/device/pms152.h" by itself."
-#endif
-
 #if !defined(__PDK_DEVICE_XXX_H__)
 	#define __PDK_DEVICE_XXX_H__ "pms152.h"
 #else
