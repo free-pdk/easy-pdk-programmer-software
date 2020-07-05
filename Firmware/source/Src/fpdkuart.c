@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkusb.h"
 
 #include "main.h"
+#include <stdio.h>
+#include <string.h>
+#include <inttypes.h>
 
 #define FPDKUART_QUEUE_SIZE 32                                                                     //32 byte internal RX queue (-> 32 bytes transmitted from IC during debug can be buffered, sending out via USB us MUCH faster)
 
@@ -81,6 +84,10 @@ void FPDKUART_HandleQueue(void)
         HAL_UART_Abort(&huart1);                                                                   //reset DMA with new baud rate
         HAL_UART_Receive_DMA( &huart1, _uartRXBuffer, sizeof(_uartRXBuffer));
         _uartRXAutoBaudFinished = true;
+
+        char connectstring[64];
+        sprintf( connectstring, "Connected @%" PRIu32 " baud\n", HAL_RCC_GetPCLK1Freq() / USART1->BRR );
+        FPDKUSB_SendDebug((uint8_t*)connectstring, strlen(connectstring));
       }
     }
   }

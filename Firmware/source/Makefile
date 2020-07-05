@@ -74,7 +74,8 @@ CP = $(PREFIX)objcopy
 SZ = $(PREFIX)size
 endif
 BIN = $(CP) -O binary -S
-DFU = dfu-suffix
+DFU_SUFFIX = dfu-suffix
+DFU_UTIL = dfu-util
 
 #######################################
 # CFLAGS
@@ -175,10 +176,13 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	
 $(BUILD_DIR)/%.dfu: $(BUILD_DIR)/%.bin | $(BUILD_DIR)
 	cp $< $@
-	-$(DFU) -v 0483 -p df11 -a $@
+	-$(DFU_SUFFIX) -v 0483 -p df11 -a $@
 
 $(BUILD_DIR):
 	mkdir $@		
+
+program-dfu: $(BUILD_DIR)/$(TARGET).dfu
+	-$(DFU_UTIL) -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D $(BUILD_DIR)/$(TARGET).dfu
 
 #######################################
 # clean up

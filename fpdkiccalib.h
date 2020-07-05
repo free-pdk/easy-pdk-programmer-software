@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef enum FPDKCALIBTYPE
 {
-  FPDKCALIB_IHRC  = 1,
-  FPDKCALIB_ILRC  = 2,
-  FPDKCALIB_BG    = 3,
-  FPDKCALIB_IHRC0 = 4,
+  FPDKCALIB_UNKNOWN = 0,
+  FPDKCALIB_IHRC    = 1,
+  FPDKCALIB_ILRC    = 2,
+  FPDKCALIB_BG      = 3,
 
 } FPDKCALIBTYPE;
 

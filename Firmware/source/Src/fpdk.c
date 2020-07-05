@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -486,12 +486,14 @@ void FPDK_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct1 = { .Pin=HW_VARIANT_DET1_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLUP, .Speed=GPIO_SPEED_FREQ_HIGH };
   HAL_GPIO_Init(HW_VARIANT_DET1_GPIO_Port, &GPIO_InitStruct1);
 
+
   uint32_t hwdet = (HAL_GPIO_ReadPin(HW_VARIANT_DET0_GPIO_Port, HW_VARIANT_DET0_Pin)?0:1) |
-                   (HAL_GPIO_ReadPin(HW_VARIANT_DET1_GPIO_Port, HW_VARIANT_DET1_Pin)?0:2);
+                   (HAL_GPIO_ReadPin(HW_VARIANT_DET1_GPIO_Port, HW_VARIANT_DET1_Pin)?0:2);    // Generates hardware detection bitmask. Pins that are connected to ground are encoded as "1", floating pins as "0"
 
   switch( hwdet )
   {
-    case 1: _hw_variant = FPDK_HWVAR_MINI_PILL; break;
+    case 1: _hw_variant = FPDK_HWVAR_LITE; break;      // Lite programmer, PB8 is GND, PB9 floats
+    case 2: _hw_variant = FPDK_HWVAR_MINI_PILL; break; // Mini pill board, PB8 floats, PB9 is GND
 
     default:
       _hw_variant = FPDK_HWVAR_NONE;
@@ -1129,7 +1131,7 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
   bool ret = false;
 
   //select measurement window based on frequency
-  _spiBlocksMeasure = 16;
+  _spiBlocksMeasure = 24;
   _spiBlockSize = SPI_BLOCK_SIZE_MAX;
   if( frequency<=4000000 )
     _spiBlocksMeasure = 8;
@@ -1157,11 +1159,6 @@ bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
     switch( type)
     {
       case 1: //IHRC
-        *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, false, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
-        ret = true;
-        break;
-
-      case 4: //IHRC0 
         *fcalval = _FPDK_CalibrateSingleFrequency( frequency, multiplier, 0, 0x9F, 1, true, freq_tuned ); //0x9F seems maximum for IHRCR, upper bits unknown
         ret = true;
         break;

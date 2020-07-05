@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ typedef enum FPDKHWVARIANT
 {
   FPDK_HWVAR_NONE = 0,
   FPDK_HWVAR_MINI_PILL = 1,
+  FPDK_HWVAR_LITE = 2,
 } FPDKHWVARIANT;
 
 typedef enum FPDKICTYPE

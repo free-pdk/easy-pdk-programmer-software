@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdint.h>
 
-const char FPDK_ERR_MSG[16][64];
+extern const char FPDK_ERR_MSG[16][64];
 
 void verbose_set(int v);
 int  verbose_printf(char *format, ...);
