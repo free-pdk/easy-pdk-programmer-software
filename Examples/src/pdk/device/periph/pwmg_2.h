@@ -32,9 +32,9 @@ __sfr __at(PWMG2CUBL_ADDR)    _pwmg2cubl;
 #define PWMG2C_CLK_IHRC              (1 << PWMG2C_CLK_SRC_BIT)
 
 #define PWMG2C_OUT_NONE              0x00
-#define PWMG2C_OUT_PB5               (1 << PWMG2C_OUT_PIN_SEL_BIT0)
-#define PWMG2C_OUT_PA0               (2 << PWMG2C_OUT_PIN_SEL_BIT0)
-#define PWMG2C_OUT_PB4               (3 << PWMG2C_OUT_PIN_SEL_BIT0)
+#define PWMG2C_OUT_PB4               (1 << PWMG2C_OUT_PIN_SEL_BIT0)
+#define PWMG2C_OUT_PA3               (2 << PWMG2C_OUT_PIN_SEL_BIT0)
+#define PWMG2C_OUT_PA5               (3 << PWMG2C_OUT_PIN_SEL_BIT0)
 
 #define PWMG2C_RESET_COUNTER         (1 << PWMG2C_CTR_RST_BIT)
 #define PWMG2C_INVERT_OUT            (1 << PWMG2C_INVERT_OUT_BIT)

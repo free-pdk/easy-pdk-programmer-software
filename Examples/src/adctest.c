@@ -47,7 +47,7 @@ unsigned char _sdcc_external_startup(void)
 {
   PDK_USE_8MHZ_IHRC_SYSCLOCK();                 //use 8MHz sysclock
 #if defined(PDK_USE_FACTORY_IHRCR_16MHZ)
-  PDK_USE_FACTORY_IHRCR_16MHZ()                 //use factory IHCR tuning value (tuned for 8MHz SYSCLK @ 5.0V)
+  PDK_USE_FACTORY_IHRCR_16MHZ();                //use factory IHCR tuning value (tuned for 8MHz SYSCLK @ 5.0V)
 #else
 	EASY_PDK_CALIBRATE_IHRC(8000000,5000);        //calibrate to 8MHz @ 5.0V (OTP devices don't have factory IHRC calibration)
 #endif
