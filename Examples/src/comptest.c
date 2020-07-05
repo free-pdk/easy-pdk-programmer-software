@@ -50,7 +50,7 @@ void main(void)
   //setup timer2 (TM2) interrupt for 115200 baud
   TM2C = TM2C_CLK_IHRC;                         //use IHRC -> 16 Mhz
   TM2S = TM2S_PRESCALE_NONE | TM2S_SCALE_DIV8;  //no prescale, scale 8 ~> 2MHz
-  TM2B = 103;                                   //divide by (103+1) ~> 19230 Hz (apx. 19200)
+  TM2B = 104;                                   //divide by 104 ~> 19230 Hz (apx. 19200)
 
   PAC = 0x80;                                   //enable PA.7 as output
   txdata = 0xD55F;                              //setup 2 stop bits, 0x55 char for autobaud, 1 start bit, 5 stop bits
