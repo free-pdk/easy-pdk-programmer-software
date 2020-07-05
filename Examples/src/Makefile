@@ -1,5 +1,5 @@
 SDCC=../../sdcc/bin/sdcc
-OUTDIR = build
+OUTDIR=build
 
 all: PFS154 PFS172 PFS173 PMS150C PMS152 PMS171B
 

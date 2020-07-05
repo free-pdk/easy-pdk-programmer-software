@@ -233,7 +233,7 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vdd_cmd_read                 = 2.5,
     .vpp_cmd_read                 = 5.5,
     .vdd_read_hv                  = 2.5,
-    .vpp_read_hv                  = 0.0,
+    .vpp_read_hv                  = 0.0, 
     .vdd_cmd_write                = 2.5,
     .vpp_cmd_write                = 5.5,
     .vdd_write_hv                 = 5.3,
@@ -386,7 +386,7 @@ static FPDKICDATA* _FPDKICDATA_GetICDataById12BitAndCodebits(const FPDKICTYPE ty
 FPDKICDATA* FPDKICDATA_GetICDataByCmdResponse(const FPDKICTYPE type, const uint32_t cmdrsp)
 {
   unsigned int shift;
-
+  
   if( FPDK_IS_FLASH_TYPE(type) )
   {
     FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(cmdrsp);
