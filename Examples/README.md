@@ -70,6 +70,20 @@ Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
 ```
 
+PMS152:
+```
+$ ./easypdkprog --icname=PMS152 write helloworld_pms152.ihx
+Writing IC... done.
+Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
+```
+
+PMS171B:
+```
+$ ./easypdkprog --icname=PMS171B write helloworld_pms171b.ihx
+Writing IC (186 words)... done.
+Calibrating IC
+* IHRC SYSCLK=8000000Hz @ 4.00V ... calibration result: 7982674Hz (0x41)  done.
+```
 
 **RUN PROGRAM ON IC**
 

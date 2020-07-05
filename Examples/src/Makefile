@@ -44,6 +44,16 @@ release: build
 	@mkdir -p $(RELEASE_DIR)
 	cp $(BUILD_DIR)/*.ihx $(RELEASE_DIR)
 
+PMS152:
+	mkdir -p $(OUTDIR)
+	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/helloworld_pms152.ihx helloworld.c
+	$(SDCC) -DPMS152 -mpdk14 -o $(OUTDIR)/comptest_pms152.ihx comptest.c
+
+PMS171B:
+	mkdir -p $(OUTDIR)
+	$(SDCC) -DPMS171B -mpdk14 -o $(OUTDIR)/helloworld_pms171b.ihx helloworld.c
+	$(SDCC) -DPMS171B -mpdk14 -o $(OUTDIR)/comptest_pms171b.ihx comptest.c
+
 clean:
 	rm -rf $(BUILD_DIR)
 

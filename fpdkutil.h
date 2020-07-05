@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdint.h>
 
-const char FPDK_ERR_MSG[16][64];
+extern const char FPDK_ERR_MSG[16][64];
 
 void verbose_set(int v);
 int  verbose_printf(char *format, ...);

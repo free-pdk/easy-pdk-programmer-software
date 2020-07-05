@@ -135,7 +135,6 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vpp_cmd_read                 = 5.0,
     .vdd_read_hv                  = 3.0,
     .vpp_read_hv                  = 5.0,
-/*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -143,7 +142,6 @@ static const FPDKICDATA fpdk_ic_table[] =
     .write_block_size             = 2,
     .write_block_clock_groups     = 1,
     .write_block_clocks_per_group = 8,
-*/
   },
 
   { .name                         = "PMS154B",
@@ -207,13 +205,12 @@ static const FPDKICDATA fpdk_ic_table[] =
     .codebits                     = 14,
     .codewords                    = 0x600,
     .ramsize                      = 0x60,
-    .exclude_code_start           = 0x5F9,
+    .exclude_code_start           = 0x5F6,
     .exclude_code_end             = 0x600,
     .vdd_cmd_read                 = 3.0,
     .vpp_cmd_read                 = 5.0,
     .vdd_read_hv                  = 3.0,
     .vpp_read_hv                  = 5.0,
-/*
     .vdd_cmd_write                = 4.3,
     .vpp_cmd_write                = 8.0,
     .vdd_write_hv                 = 5.8,
@@ -221,7 +218,6 @@ static const FPDKICDATA fpdk_ic_table[] =
     .write_block_size             = 2,
     .write_block_clock_groups     = 1,
     .write_block_clocks_per_group = 8,
-*/
   },
 
   { .name                         = "PFS172",
@@ -267,7 +263,7 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vdd_read_hv                  = 2.5,
     .vpp_read_hv                  = 5.5,
     .vdd_cmd_write                = 2.5,
-    .vpp_cmd_write                = 5.5,
+    .vpp_cmd_write                = 6.5,
     .vdd_write_hv                 = 5.8,
     .vpp_write_hv                 = 9.0,
     .write_block_size             = 4,
