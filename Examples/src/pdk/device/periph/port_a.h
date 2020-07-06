@@ -16,4 +16,14 @@ __sfr __at(PAPH_ADDR)        _paph;
 #define PAC                  _pac
 #define PAPH                 _paph
 
+// PIN definitions (also useful for PORTB/PORTC)
+#define PIN0	               (1)
+#define PIN1	               (1<<1)
+#define PIN2	               (1<<2)
+#define PIN3	               (1<<3)
+#define PIN4	               (1<<4)
+#define PIN5	               (1<<5)
+#define PIN6	               (1<<6)
+#define PIN7	               (1<<7)
+
 #endif //__PDK_DEVICE_PERIPH_PORT_A_H__

@@ -27,8 +27,13 @@ __sfr __at(GPCS_ADDR)         _gpcs;
 #define GPCC_COMP_MINUS_PA4          (1 << GPCC_COMP_MINUS_BIT0)
 #define GPCC_COMP_MINUS_BANDGAP_1V2  (2 << GPCC_COMP_MINUS_BIT0)
 #define GPCC_COMP_MINUS_VINT_R       (3 << GPCC_COMP_MINUS_BIT0)
-#define GPCC_COMP_MINUS_PB6          (4 << GPCC_COMP_MINUS_BIT0)
-#define GPCC_COMP_MINUS_PB7          (5 << GPCC_COMP_MINUS_BIT0)
+#if defined(HAS_PORTB)
+  #define GPCC_COMP_MINUS_PB6          (4 << GPCC_COMP_MINUS_BIT0)
+  #define GPCC_COMP_MINUS_PB7          (5 << GPCC_COMP_MINUS_BIT0)
+#else
+  #define GPCC_COMP_MINUS_PA6          (4 << GPCC_COMP_MINUS_BIT0)
+  #define GPCC_COMP_MINUS_PA7          (5 << GPCC_COMP_MINUS_BIT0)
+#endif
 
 #define GPCC_COMP_OUT_INVERT         (1 << GPCC_COMP_INVERT_OUT_BIT)
 #define GPCC_COMP_OUT_TO_TM2CLK      (1 << GPCC_COMP_OUT_TO_TM2CLK_BIT)

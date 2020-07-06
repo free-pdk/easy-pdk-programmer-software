@@ -1,29 +1,36 @@
-#ifndef __PDK_DEVICE_PFS154_H__
-#define __PDK_DEVICE_PFS154_H__
+#ifndef __PDK_DEVICE_PMS154C_H__
+#define __PDK_DEVICE_PMS154C_H__
 
 #if !defined(__PDK_DEVICE_XXX_H__)
-	#define __PDK_DEVICE_XXX_H__ "pfs154.h"
+	#define __PDK_DEVICE_XXX_H__ "pms154c.h"
 #else
 	#error "Attempt to include more than one "pdk/device/XXX.h" file."
 #endif
 
 #if !defined(__SDCC_pdk14)
-	#error "PFS154 needs the PDK14 backend. You must compile with the -mpdk14 option."
+	#error "PMS154C needs the PDK14 backend. You must compile with the -mpdk14 option."
 #endif
 
-#define ILRC_FREQ           55000
+#define ILRC_FREQ           70000
 
 // Factory Calibration address locations
-#define FACTORY_IHRCR_ADDR  0x07ed
-#define FACTORY_BGTR_ADDR   0x07ee
+#define FACTORY_BGTR_ADDR   0x07f6
 
 
 // FUSE definitions
 #define FUSE_WORD_ADDR      0x07ff
-#define FUSE_RES_BITS_HIGH  0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
-// Blank IC Values          0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
+#define FUSE_RES_BITS_HIGH  0x1140 // - - 0 1   B B 0 1   0 1 0 L   L L 0 S
+// Blank IC Values          ???
 #define FUSE_SECURITY_ON    0x0000 //(S)
 #define FUSE_SECURITY_OFF   0x0001
+#define FUSE_LVR_4V         0x0000 //(L)
+#define FUSE_LVR_3V5        0x0004
+#define FUSE_LVR_3V         0x0008
+#define FUSE_LVR_2V75       0x000C
+#define FUSE_LVR_2V5        0x0010
+#define FUSE_LVR_1V8        0x0014
+#define FUSE_LVR_2V2        0x0018
+#define FUSE_LVR_2V         0x001C
 #define FUSE_IO_DRV_LOW     0x0000 //(D)
 #define FUSE_IO_DRV_NORMAL  0x0100
 #define FUSE_BOOTUP_SLOW    0x0000 //(B)
@@ -58,7 +65,7 @@
 #define GPCC_ADDR           0x18
 #define GPCS_ADDR           0x19
 #define BGTR_ADDR           0x1a
-#define MISCLVR_ADDR        0x1b
+//0x1b
 #define TM2C_ADDR           0x1c
 #define TM2CT_ADDR          0x1d
 //0x1e
@@ -118,10 +125,9 @@
 #include "periph/pwmg_2.h"
 #include "periph/misc.h"
 #include "periph/misc2.h"
-#include "periph/misclvr_basic.h"
 
 // Additional MISC2 register definitions
 #define MISC2_COMP_PWMG1_BIT0        3
 #define MISC2_TM3_PWMG2_BIT0         4
 
-#endif //__PDK_DEVICE_PFS154_H__
+#endif //__PDK_DEVICE_PMS154C_H__
