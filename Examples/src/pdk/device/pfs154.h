@@ -22,12 +22,12 @@
 #define FUSE_WORD_ADDR      0x07ff
 #define FUSE_RES_BITS_HIGH  0x30FC // - - 1 1   B B 0 D   1 1 1 1   1 1 0 S
 // Blank IC Values          0x3FFD // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, Normal IO Drive, Fast Boot-up)
-#define FUSE_SECURITY_ON    0x0000 //(S)
-#define FUSE_SECURITY_OFF   0x0001
-#define FUSE_IO_DRV_LOW     0x0000 //(D)
-#define FUSE_IO_DRV_NORMAL  0x0100
-#define FUSE_BOOTUP_SLOW    0x0000 //(B)
-#define FUSE_BOOTUP_FAST    0x0C00
+#define FUSE_SECURITY_ON    0x0000    //(S)
+#define FUSE_SECURITY_OFF   (1 << 0)
+#define FUSE_IO_DRV_LOW     0x0000    //(D)
+#define FUSE_IO_DRV_NORMAL  (1 << 8)
+#define FUSE_BOOTUP_SLOW    0x0000    //(B)
+#define FUSE_BOOTUP_FAST    (3 << 10)
 
 
 // Register address definitions
@@ -95,10 +95,11 @@
 
 
 // Peripheral definitions
+#define HAS_COMP
 #define HAS_EOSC
 #define HAS_PORTB
-#define HAS_PWMG
 #define HAS_TM3
+#define HAS_PWMG
 #define HAS_LCD
 
 #include "periph/accumulator.h"

@@ -19,22 +19,22 @@
 
 // FUSE definitions
 #define FUSE_WORD_ADDR      0x03ff
-#define FUSE_RES_BITS_HIGH  0x0260 // - - - 0   B B 1 0   D 1 1 L   L L 0 S
-// Blank IC Values          0x0FFD // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
-#define FUSE_SECURITY_ON    0x0000 //(S)
-#define FUSE_SECURITY_OFF   0x0001
-#define FUSE_LVR_4V         0x0000 //(L)
-#define FUSE_LVR_3V5        0x0004
-#define FUSE_LVR_3V         0x0008
-#define FUSE_LVR_2V75       0x000C
-#define FUSE_LVR_2V5        0x0010
-#define FUSE_LVR_1V8        0x0014
-#define FUSE_LVR_2V2        0x0018
-#define FUSE_LVR_2V         0x001C
-#define FUSE_IO_DRV_LOW     0x0000 //(D)
-#define FUSE_IO_DRV_NORMAL  0x0080
-#define FUSE_BOOTUP_SLOW    0x0000 //(B)
-#define FUSE_BOOTUP_FAST    0x0C00
+#define FUSE_RES_BITS_HIGH  0x0260    // - - - 0   B B 1 0   D 1 1 L   L L 0 S
+// Blank IC Values          0x0FFD    // - - - 0   1 1 1 1   1 1 1 1   1 1 0 1 (Security Off, 2.0V LVR, Normal IO Drive, Fast Boot-up)
+#define FUSE_SECURITY_ON    0x0000    //(S)
+#define FUSE_SECURITY_OFF   (1 << 0)
+#define FUSE_LVR_4V         0x0000    //(L)
+#define FUSE_LVR_3V5        (1 << 2)
+#define FUSE_LVR_3V         (2 << 2)
+#define FUSE_LVR_2V75       (3 << 2)
+#define FUSE_LVR_2V5        (4 << 2)
+#define FUSE_LVR_1V8        (5 << 2)
+#define FUSE_LVR_2V2        (6 << 2)
+#define FUSE_LVR_2V         (7 << 2)
+#define FUSE_IO_DRV_LOW     0x0000    //(D)
+#define FUSE_IO_DRV_NORMAL  (1 << 7)
+#define FUSE_BOOTUP_SLOW    0x0000    //(B)
+#define FUSE_BOOTUP_FAST    (3 << 10)
 
 
 // Register address definitions
@@ -72,8 +72,9 @@
 
 
 // Peripheral definitions
-#define HAS_COMP_INT_EDGE
+#define HAS_COMP
 #define HAS_COMP_WAKEUP
+#define HAS_COMP_INT_EDGE
 
 #include "periph/accumulator.h"
 #include "periph/stack.h"

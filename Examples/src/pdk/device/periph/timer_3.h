@@ -41,7 +41,9 @@ __sfr __at(TM3B_ADDR)         _tm3b;
   #define TM3C_CLK_EOSC                (3 << TM3C_CLK_SRC_BIT0)
 #endif
 #define TM3C_CLK_ILRC                (4 << TM3C_CLK_SRC_BIT0)
-#define TM3C_CLK_COMPOUT             (5 << TM3C_CLK_SRC_BIT0)
+#if defined(HAS_COMP)
+  #define TM3C_CLK_COMPOUT             (5 << TM3C_CLK_SRC_BIT0)
+#endif
 //0x06 reserved
 //0x07 reserved
 #define TM3C_CLK_PA0_RISE            (8 << TM3C_CLK_SRC_BIT0)

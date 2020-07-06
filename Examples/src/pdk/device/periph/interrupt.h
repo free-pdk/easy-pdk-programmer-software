@@ -18,12 +18,10 @@ __sfr __at(INTEGS_ADDR)       _integs;
 // INTEN (Interrupt Enable) register definitions
 #define INTEN_PA0_ENABLE_BIT         0
 #define INTEN_T16_ENABLE_BIT         2
-#define INTEN_COMP_ENABLE_BIT        4
 #define INTEN_TM2_ENABLE_BIT         6
 
 #define INTEN_PA0                    (1 << INTEN_PA0_ENABLE_BIT)
 #define INTEN_T16                    (1 << INTEN_T16_ENABLE_BIT)
-#define INTEN_COMP                   (1 << INTEN_COMP_ENABLE_BIT)
 #define INTEN_TM2                    (1 << INTEN_TM2_ENABLE_BIT)
 
 #if defined(HAS_PORTB)
@@ -37,6 +35,14 @@ __sfr __at(INTEGS_ADDR)       _integs;
   #define INTEN_PB5                    (1 << INTEN_PB5_ENABLE_BIT)
   #define INTEN_PA4                    (1 << INTEN_PA4_ENABLE_BIT)
 #endif
+#if defined(HAS_ADC)
+  #define INTEN_ADC_ENABLE_BIT         3
+  #define INTEN_ADC                    (1 << INTEN_ADC_ENABLE_BIT)
+#endif
+#if defined(HAS_COMP)
+  #define INTEN_COMP_ENABLE_BIT        4
+  #define INTEN_COMP                   (1 << INTEN_COMP_ENABLE_BIT)
+#endif
 #if defined(HAS_PWMG)
   #define INTEN_PWMG_ENABLE_BIT        5
   #define INTEN_PWMG                   (1 << INTEN_PWMG_ENABLE_BIT)
@@ -49,12 +55,10 @@ __sfr __at(INTEGS_ADDR)       _integs;
 // INTRQ (Interrupt Request) register definitions
 #define INTRQ_PA0_BIT                0
 #define INTRQ_T16_BIT                2
-#define INTRQ_COMP_BIT               4
 #define INTRQ_TM2_BIT                6
 
 #define INTRQ_PA0                    (1 << INTRQ_PA0_BIT)
 #define INTRQ_T16                    (1 << INTRQ_T16_BIT)
-#define INTRQ_COMP                   (1 << INTRQ_COMP_BIT)
 #define INTRQ_TM2                    (1 << INTRQ_TM2_BIT)
 
 #if defined(HAS_PORTB)
@@ -68,8 +72,16 @@ __sfr __at(INTEGS_ADDR)       _integs;
   #define INTRQ_PB5                    (1 << INTRQ_PB5_BIT)
   #define INTRQ_PA4                    (1 << INTRQ_PA4_BIT)
 #endif
+#if defined(HAS_ADC)
+  #define INTRQ_ADC_BIT                3
+  #define INTRQ_ADC                    (1 << INTRQ_ADC_BIT)
+#endif
+#if defined(HAS_COMP)
+  #define INTRQ_COMP_BIT               4
+  #define INTRQ_COMP                   (1 << INTRQ_COMP_BIT)
+#endif
 #if defined(HAS_PWMG)
-  #define INTRQ_PWMG_BI                5
+  #define INTRQ_PWMG_BIT               5
   #define INTRQ_PWMG                   (1 << INTRQ_PWMG_BIT)
 #endif
 #if defined(HAS_TM3)

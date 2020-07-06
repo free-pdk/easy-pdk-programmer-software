@@ -20,13 +20,13 @@
 
 // FUSE definitions
 #define FUSE_WORD_ADDR      0x07ff
-#define FUSE_RES_BITS_HIGH  0x017C // - - B B   0 0 0 1   D 1 1 1   1 1 0 S => 0x017C
-#define FUSE_SECURITY_ON    0x0000 //(S)
-#define FUSE_SECURITY_OFF   0x0001
-#define FUSE_PB4PB7_NORMAL  0x0000 //(D)
-#define FUSE_PB4PB7_STRONG  0x0080
-#define FUSE_BOOTUP_SLOW    0x0000 //(B)
-#define FUSE_BOOTUP_FAST    0x3000
+#define FUSE_RES_BITS_HIGH  0x017C    // - - B B   0 0 0 1   D 1 1 1   1 1 0 S => 0x017C
+#define FUSE_SECURITY_ON    0x0000    //(S)
+#define FUSE_SECURITY_OFF   (1 << 0)
+#define FUSE_PB4_PB7_NORMAL 0x0000    //(D)
+#define FUSE_PB4_PB7_STRONG (1 << 7)
+#define FUSE_BOOTUP_SLOW    0x0000    //(B)
+#define FUSE_BOOTUP_FAST    (3 << 12)
 
 
 // Register address definitions
@@ -99,10 +99,12 @@
 
 
 // Peripheral definitions
+#define HAS_COMP
 #define HAS_EOSC
 #define HAS_PORTB
 #define HAS_PB5_PA4_INT
 #define HAS_TM3
+#define HAS_ADC
 
 #include "periph/accumulator.h"
 #include "periph/stack.h"
@@ -124,8 +126,10 @@
 
 // Additional MISC register definitions
 // TODO: verify these... they are in the PFS172.INC file but not the datasheet
+#define MISC_EC_DRIVE_BIT            6
+
 #define MISC_EC_DRIVE_HIGH           0x00
-#define MISC_EC_DRIVE_LOW            0x40
+#define MISC_EC_DRIVE_LOW            (1 << MISC_EC_DRIVE_BIT)
 
 // Additional MISC2 register definitions
 #define MISC2_PA6_TO_PA7_BIT         1

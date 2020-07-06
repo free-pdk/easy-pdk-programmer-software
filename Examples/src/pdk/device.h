@@ -1,7 +1,9 @@
 #ifndef __PDK_DEVICE_H__
 #define __PDK_DEVICE_H__
 
-#if defined(PMS150C)
+#if defined(PMS131)
+  #include "device/pms131.h"
+#elif defined(PMS150C)
   #include "device/pms150c.h"
 #elif defined(PMS15A)
   #include "device/pms150c.h"

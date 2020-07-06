@@ -19,14 +19,14 @@
 
 // FUSE definitions
 #define FUSE_WORD_ADDR      0x05ff
-#define FUSE_SECURITY_ON    0x0000 //(S)
-#define FUSE_SECURITY_OFF   0x0001
-#define FUSE_PB4_PB5_NORMAL 0x0000 //(D)
-#define FUSE_PB4_PB5_STRONG 0x0100
-#define FUSE_BOOTUP_SLOW    0x0000 //(B)
-#define FUSE_BOOTUP_FAST    0x0600
-#define FUSE_RES_BITS_HIGH  0x10FC // - - 0 1   B B 0 D   1 1 1 1   1 1 0 S
-// Blank IC Values          0x1FFD // - - 0 1   1 1 1 1   1 1 1 1   1 1 0 1 (Security off, High PB4/PB5 Drive, Fast Boot-up)
+#define FUSE_RES_BITS_HIGH  0x10FC    // - - 0 1   B B 0 D   1 1 1 1   1 1 0 S
+// Blank IC Values          0x1FFD    // - - 0 1   1 1 1 1   1 1 1 1   1 1 0 1 (Security off, High PB4/PB5 Drive, Fast Boot-up)
+#define FUSE_SECURITY_ON    0x0000    //(S)
+#define FUSE_SECURITY_OFF   (1 << 0)
+#define FUSE_PB4_PB5_NORMAL 0x0000    //(D)
+#define FUSE_PB4_PB5_STRONG (1 << 8)
+#define FUSE_BOOTUP_SLOW    0x0000    //(B)
+#define FUSE_BOOTUP_FAST    (3 << 10)
 
 
 // Register address definitions
@@ -90,11 +90,13 @@
 
 
 // Peripheral definitions
+#define HAS_COMP
+#define HAS_COMP_WAKEUP
 #define HAS_EOSC
 #define HAS_PORTB
 #define HAS_PB5_PA4_INT
 #define HAS_TM3
-#define HAS_COMP_WAKEUP
+#define HAS_ADC
 
 #include "periph/accumulator.h"
 #include "periph/stack.h"

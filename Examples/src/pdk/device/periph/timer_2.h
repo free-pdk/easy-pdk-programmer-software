@@ -45,7 +45,9 @@ __sfr __at(TM2B_ADDR)        _tm2b;
   #define TM2C_CLK_EOSC                (3 << TM2C_CLK_SRC_BIT0)
 #endif
 #define TM2C_CLK_ILRC                (4 << TM2C_CLK_SRC_BIT0)
-#define TM2C_CLK_COMPOUT             (5 << TM2C_CLK_SRC_BIT0)
+#if defined(HAS_COMP)
+  #define TM2C_CLK_COMPOUT             (5 << TM2C_CLK_SRC_BIT0)
+#endif
 //0x06 reserved
 //0x07 reserved
 #define TM2C_CLK_PA0_RISE            (8 << TM2C_CLK_SRC_BIT0)

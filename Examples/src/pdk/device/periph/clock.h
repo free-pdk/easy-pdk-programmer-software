@@ -8,11 +8,15 @@
 // __sfr definitions
 __sfr __at(CLKMD_ADDR)        _clkmd;
 __sfr __at(IHRCR_ADDR)        _ihrcr;
-__sfr __at(ILRCR_ADDR)        _ilrcr;
 
 #define CLKMD                 _clkmd
 #define IHRCR                 _ihrcr
-#define ILRCR                 _ilrcr
+
+// PMS131 doesn't seem to have ILRCR for some reason
+#if defined(ILRCR)
+  __sfr __at(ILRCR_ADDR)        _ilrcr;
+  #define ILRCR                 _ilrcr
+#endif
 
 // CLKMD (Clock Mode) register definitions
 #define CLKMD_PA5_PRSTB_BIT          0
