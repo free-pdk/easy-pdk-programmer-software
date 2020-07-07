@@ -12,7 +12,7 @@ __sfr __at(ADCM_ADDR)         _adcm;
 #define ADCC                  _adcc
 #define ADCM                  _adcm
 
-#if defined(HAS_ADC_12BIT)
+#if defined(__PDK_HAS_ADC_12BIT)
   __sfr __at(ADCRH_ADDR)        _adcrh;
   __sfr __at(ADCRL_ADDR)        _adcrl;
   #define ADCRH                 _adcrh
@@ -43,7 +43,7 @@ __sfr __at(ADCM_ADDR)         _adcm;
 #define ADCC_CH_AD8_PA3              (8 << ADCC_CHANNEL_SEL_BIT0)
 #define ADCC_CH_AD9_PA4              (9 << ADCC_CHANNEL_SEL_BIT0)
 #define ADCC_CH_AD10_PA0             (10 << ADCC_CHANNEL_SEL_BIT0)
-#if defined(HAS_PORTC)
+#if defined(__PDK_HAS_PORTC)
   #define ADCC_CH_AD11_PC1             (11 << ADCC_CHANNEL_SEL_BIT0)
   #define ADCC_CH_AD12_PC2             (12 << ADCC_CHANNEL_SEL_BIT0)
 #endif
@@ -67,7 +67,7 @@ __sfr __at(ADCM_ADDR)         _adcm;
 #define ADCM_CLK_SYSCLK_DIV64        (6 << ADCM_CLK_SRC_BIT0)
 #define ADCM_CLK_SYSCLK_DIV128       (7 << ADCM_CLK_SRC_BIT0)
 
-#if defined(HAS_ADC_12BIT)
+#if defined(__PDK_HAS_ADC_12BIT)
   #define ADCM_BIT_RES_BIT0            5
   #define ADCM_8BIT_RES                0x00
   #define ADCM_9BIT_RES                (1 << ADCM_BIT_RES_BIT0)
@@ -79,7 +79,7 @@ __sfr __at(ADCM_ADDR)         _adcm;
 // ADCRGC (ADC Regulator Control) register definitions
 #if defined(ADCRGC_ADDR)
   // Might need to change the definition this one uses depending on similarity/difference to other devices
-  #if defined(HAS_ADC_12BIT)
+  #if defined(__PDK_HAS_ADC_12BIT)
     #define ADCRGC_AD16_SEL_BIT          4
     #define ADCRGC_ADC_REF_BIT0          5
 

@@ -28,11 +28,11 @@ __sfr __at(TM2B_ADDR)        _tm2b;
 #define TM2C_MODE_PWM                (1 << TM2C_MODE_SEL_BIT)
 
 #define TM2C_OUT_DISABLE             0x00
-#if defined(HAS_PORTB)
+#if defined(__PDK_HAS_PORTB)
   #define TM2C_OUT_PB2                 (1 << TM2C_OUTPUT_SEL_BIT0)
 #endif
 #define TM2C_OUT_PA3                 (2 << TM2C_OUTPUT_SEL_BIT0)
-#if defined(HAS_PORTB)
+#if defined(__PDK_HAS_PORTB)
   #define TM2C_OUT_PB4                 (3 << TM2C_OUTPUT_SEL_BIT0)
 #else
   #define TM2C_OUT_PA4                 (3 << TM2C_OUTPUT_SEL_BIT0)
@@ -41,18 +41,18 @@ __sfr __at(TM2B_ADDR)        _tm2b;
 #define TM2C_CLK_DISABLE             0x00
 #define TM2C_CLK_SYSCLK              (1 << TM2C_CLK_SRC_BIT0)
 #define TM2C_CLK_IHRC                (2 << TM2C_CLK_SRC_BIT0)
-#if defined(HAS_EOSC)
+#if defined(__PDK_HAS_EOSC)
   #define TM2C_CLK_EOSC                (3 << TM2C_CLK_SRC_BIT0)
 #endif
 #define TM2C_CLK_ILRC                (4 << TM2C_CLK_SRC_BIT0)
-#if defined(HAS_COMP)
+#if defined(__PDK_HAS_COMP)
   #define TM2C_CLK_COMPOUT             (5 << TM2C_CLK_SRC_BIT0)
 #endif
 //0x06 reserved
 //0x07 reserved
 #define TM2C_CLK_PA0_RISE            (8 << TM2C_CLK_SRC_BIT0)
 #define TM2C_CLK_PA0_FALL            (9 << TM2C_CLK_SRC_BIT0)
-#if defined(HAS_PORTB)
+#if defined(__PDK_HAS_PORTB)
   #define TM2C_CLK_PB0_RISE            (10 << TM2C_CLK_SRC_BIT0)
   #define TM2C_CLK_PB0_FALL            (11 << TM2C_CLK_SRC_BIT0)
 #endif

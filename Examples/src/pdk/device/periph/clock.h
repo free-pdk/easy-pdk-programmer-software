@@ -13,7 +13,7 @@ __sfr __at(IHRCR_ADDR)        _ihrcr;
 #define IHRCR                 _ihrcr
 
 // PMS131 doesn't seem to have ILRCR for some reason
-#if defined(ILRCR)
+#if defined(ILRCR_ADDR)
   __sfr __at(ILRCR_ADDR)        _ilrcr;
   #define ILRCR                 _ilrcr
 #endif
@@ -35,7 +35,7 @@ __sfr __at(IHRCR_ADDR)        _ihrcr;
 #define CLKMD_IHRC_DIV4              CLKMD_MODE0(0)
 #define CLKMD_IHRC_DIV2              CLKMD_MODE0(1)
 #define CLKMD_IHRC                   CLKMD_MODE0(2)
-#if defined(HAS_EOSC)
+#if defined(__PDK_HAS_EOSC)
   #define CLKMD_EOSC_DIV4              CLKMD_MODE0(3)
   #define CLKMD_EOSC_DIV2              CLKMD_MODE0(4)
   #define CLKMD_EOSC                   CLKMD_MODE0(5)
@@ -49,7 +49,7 @@ __sfr __at(IHRCR_ADDR)        _ihrcr;
 #define CLKMD_ILRC_DIV16             CLKMD_MODE1(2)
 #define CLKMD_IHRC_DIV32             CLKMD_MODE1(3)
 #define CLKMD_IHRC_DIV64             CLKMD_MODE1(4)
-#if defined(HAS_EOSC)
+#if defined(__PDK_HAS_EOSC)
   #define CLKMD_EOSC_DIV8              CLKMD_MODE1(5)
 #endif
 //0x06 reserved

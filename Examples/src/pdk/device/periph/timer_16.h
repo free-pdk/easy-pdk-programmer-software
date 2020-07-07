@@ -39,7 +39,7 @@ __sfr16                       _t16c;
 //0x02 reserved
 #define T16M_CLK_PA4_FALL            (3 << T16M_CLK_SRC_BIT0)
 #define T16M_CLK_IHRC                (4 << T16M_CLK_SRC_BIT0)
-#if defined(HAS_EOSC)
+#if defined(__PDK_HAS_EOSC)
   #define T16M_CLK_EOSC                (5 << T16M_CLK_SRC_BIT0)
 #endif
 #define T16M_CLK_ILRC                (6 << T16M_CLK_SRC_BIT0)

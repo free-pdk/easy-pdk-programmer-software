@@ -28,7 +28,7 @@ __sfr __at(TM3B_ADDR)         _tm3b;
 #define TM3C_MODE_PWM                (1 << TM3C_MODE_SEL_BIT)
 
 #define TM3C_OUT_DISABLE             0x00
-#if defined(HAS_PORTB)
+#if defined(__PDK_HAS_PORTB)
   #define TM3C_OUT_PB5                 (1 << TM3C_OUTPUT_SEL_BIT0)
   #define TM3C_OUT_PB6                 (2 << TM3C_OUTPUT_SEL_BIT0)
   #define TM3C_OUT_PB7                 (3 << TM3C_OUTPUT_SEL_BIT0)
@@ -37,18 +37,18 @@ __sfr __at(TM3B_ADDR)         _tm3b;
 #define TM3C_CLK_DISABLE             0x00
 #define TM3C_CLK_SYSCLK              (1 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_IHRC                (2 << TM3C_CLK_SRC_BIT0)
-#if defined(HAS_EOSC)
+#if defined(__PDK_HAS_EOSC)
   #define TM3C_CLK_EOSC                (3 << TM3C_CLK_SRC_BIT0)
 #endif
 #define TM3C_CLK_ILRC                (4 << TM3C_CLK_SRC_BIT0)
-#if defined(HAS_COMP)
+#if defined(__PDK_HAS_COMP)
   #define TM3C_CLK_COMPOUT             (5 << TM3C_CLK_SRC_BIT0)
 #endif
 //0x06 reserved
 //0x07 reserved
 #define TM3C_CLK_PA0_RISE            (8 << TM3C_CLK_SRC_BIT0)
 #define TM3C_CLK_PA0_FALL            (9 << TM3C_CLK_SRC_BIT0)
-#if defined(HAS_PORTB)
+#if defined(__PDK_HAS_PORTB)
   #define TM3C_CLK_PB0_RISE            (10 << TM3C_CLK_SRC_BIT0)
   #define TM3C_CLK_PB0_FALL            (11 << TM3C_CLK_SRC_BIT0)
 #endif

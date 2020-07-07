@@ -27,7 +27,7 @@ __sfr __at(GPCS_ADDR)         _gpcs;
 #define GPCC_COMP_MINUS_PA4          (1 << GPCC_COMP_MINUS_BIT0)
 #define GPCC_COMP_MINUS_BANDGAP_1V2  (2 << GPCC_COMP_MINUS_BIT0)
 #define GPCC_COMP_MINUS_VINT_R       (3 << GPCC_COMP_MINUS_BIT0)
-#if defined(HAS_PORTB)
+#if defined(__PDK_HAS_PORTB)
   #define GPCC_COMP_MINUS_PB6          (4 << GPCC_COMP_MINUS_BIT0)
   #define GPCC_COMP_MINUS_PB7          (5 << GPCC_COMP_MINUS_BIT0)
 #else
@@ -54,7 +54,7 @@ __sfr __at(GPCS_ADDR)         _gpcs;
 
 #define GPCS_COMP_OUTPUT_PA0         (1 << GPCS_COMP_OUT_PA0_BIT)
 
-#if defined(HAS_COMP_WAKEUP)
+#if defined(__PDK_HAS_COMP_WAKEUP)
   #define GPCS_COMP_WAKEUP_ENABLE_BIT  6
   #define GPCS_COMP_WAKEUP_ENABLE      (1 << GPCS_COMP_WAKEUP_ENABLE_BIT)
 #endif

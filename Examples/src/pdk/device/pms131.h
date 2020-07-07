@@ -63,7 +63,8 @@
 //0x1a
 #define MISC_ADDR           0x1b
 #define ADCRGC_ADDR         0x1c
-//...
+//0x1d
+//0x1e
 //0x1f
 #define ADCC_ADDR           0x20
 #define ADCM_ADDR           0x21
@@ -98,12 +99,12 @@
 
 
 // Peripheral definitions
-#define HAS_EOSC
-#define HAS_PORTB
-#define HAS_PB5_PA4_INT
-#define HAS_TM3
-#define HAS_ADC
-#define HAS_ADC_12BIT
+#define __PDK_HAS_EOSC
+#define __PDK_HAS_PORTB
+#define __PDK_HAS_PB5_PA4_INT
+#define __PDK_HAS_TM3
+#define __PDK_HAS_ADC
+#define __PDK_HAS_ADC_12BIT
 
 #include "periph/accumulator.h"
 #include "periph/multiplier.h"
@@ -121,7 +122,8 @@
 #include "periph/misc.h"
 #include "periph/rop.h"
 
-// Override some defaults (not sure why these aren't supported but not in .INC file or datasheet)
+// Override some defaults
+// (not sure why these wouldn't be supported but they are not defined either in the .INC file or the datasheet)
 #undef CLKMD_ILRC_DIV16
 #undef TM2C_CLK_EOSC
 #undef TM3C_CLK_EOSC

@@ -23,7 +23,7 @@ __sfr __at(MISC_ADDR)         _misc;
 #define MISC_LVR_DISABLE             (1 << MISC_LVR_DISABLE_BIT)
 #define MISC_FAST_WAKEUP_ENABLE      (1 << MISC_FAST_WAKEUP_ENABLE_BIT)
 
-#if defined(HAS_LCD)
+#if defined(__PDK_HAS_LCD)
   #define MISC_LCD_ENABLE_BIT          4
   #define MISC_LCD_ENABLE              (1 << MISC_LCD_ENABLE_BIT)
 #endif

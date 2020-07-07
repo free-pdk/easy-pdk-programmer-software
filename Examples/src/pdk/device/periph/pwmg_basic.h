@@ -69,7 +69,7 @@ __sfr __at(PWMG2DTL_ADDR)     _pwmg2dtl;
 
 #define PWMG0C_OUT_NONE              0x00
 #define PWMG0C_OUT_PB5               (1 << PWMG0C_OUT_PIN_SEL_BIT0)
-#if defined(HAS_PORTC)
+#if defined(__PDK_HAS_PORTC)
   #define PWMG0C_OUT_PC2               (2 << PWMG0C_OUT_PIN_SEL_BIT0)
 #endif
 #define PWMG0C_OUT_PA0               (3 << PWMG0C_OUT_PIN_SEL_BIT0)
@@ -92,7 +92,7 @@ __sfr __at(PWMG2DTL_ADDR)     _pwmg2dtl;
 
 #define PWMG1C_OUT_NONE              0x00
 #define PWMG1C_OUT_PB6               (1 << PWMG1C_OUT_PIN_SEL_BIT0)
-#if defined(HAS_PORTC)
+#if defined(__PDK_HAS_PORTC)
   #define PWMG1C_OUT_PC3               (2 << PWMG1C_OUT_PIN_SEL_BIT0)
 #endif
 #define PWMG1C_OUT_PA4               (3 << PWMG1C_OUT_PIN_SEL_BIT0)
@@ -118,7 +118,7 @@ __sfr __at(PWMG2DTL_ADDR)     _pwmg2dtl;
 
 #define PWMG2C_OUT_NONE              0x00
 #define PWMG2C_OUT_PB3               (1 << PWMG2C_OUT_PIN_SEL_BIT0)
-#if defined(HAS_PORTC)
+#if defined(__PDK_HAS_PORTC)
   #define PWMG2C_OUT_PC0               (2 << PWMG2C_OUT_PIN_SEL_BIT0)
 #endif
 #define PWMG2C_OUT_PA3               (3 << PWMG2C_OUT_PIN_SEL_BIT0)
