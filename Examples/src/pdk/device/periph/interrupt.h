@@ -96,8 +96,9 @@ __sfr __at(INTEGS_ADDR)       _integs;
 #define INTEGS_PA0_BOTH              0x00
 #define INTEGS_PA0_RISING            (1 << INTEGS_PA0_EDGE_SEL_BIT0)
 #define INTEGS_PA0_FALLING           (2 << INTEGS_PA0_EDGE_SEL_BIT0)
+
 #define INTEGS_T16_RISING            0x00
-#define INTEGS_T16_FALLING           (0 << INTEGS_T16_EDGE_SEL_BIT)
+#define INTEGS_T16_FALLING           (1 << INTEGS_T16_EDGE_SEL_BIT)
 
 #if defined(__PDK_HAS_PORTB)
   #define INTEGS_PB0_EDGE_SEL_BIT0     2
