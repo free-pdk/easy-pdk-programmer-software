@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <stdint.h>
 
-#define __FPDKSW__ "1.3"
+#define __FPDKSW__ "1.4"
 #define __FPDKHW__ "1.2"
 
 typedef enum FPDKHWVARIANT
