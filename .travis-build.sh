@@ -8,13 +8,19 @@ if [ -z $TRAVIS_OS_NAME ]; then
     exit -1
 fi
 
+EPDKVER=$(git describe --abbrev=0)
+
+if [ "_$OSTYPE" = "_firmware" ]; then
+  cd Firmware
+  make all EPDKVER=$EPDKVER 
+  exit 0
+fi
+
 if [ "_$OSTYPE" = "_msys" ]; then
   unset CC
   export CC=i686-w64-mingw32-gcc
   export STRIP=i686-w64-mingw32-strip
 fi
-
-EPDKVER=$(git describe --abbrev=0)
 
 make all EPDKVER=$EPDKVER 
 

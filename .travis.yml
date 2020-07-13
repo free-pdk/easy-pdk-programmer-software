@@ -5,6 +5,16 @@ matrix:
   include:
   - os: linux
     dist: xenial
+    addons:
+      apt:
+        sources:
+          - debian-buster
+        packages:
+          - gcc-arm-none-eabi
+    compiler: gcc
+    env: OSTYPE=firmware
+  - os: linux
+    dist: xenial
     compiler: gcc
   - os: osx
     compiler: clang
