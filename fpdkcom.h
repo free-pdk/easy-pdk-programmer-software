@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __FPDKCOM_H_
 #define __FPDKCOM_H_
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -29,7 +30,11 @@ int      FPDKCOM_Open(const char* devname);
 
 int      FPDKCOM_Close(const int fd);
 
-bool     FPDKCOM_GetVersion(const int fd, unsigned int *hw_major, unsigned int *hw_minor, unsigned int *sw_major, unsigned int *sw_minor, unsigned int *proto_major, unsigned int *proto_minor);
+bool     FPDKCOM_GetVersion(const int fd, 
+                            unsigned int *hw_major, unsigned int *hw_minor, 
+                            unsigned int *sw_major, unsigned int *sw_minor, 
+                            unsigned int *proto_major, unsigned int *proto_minor,
+                            char* fwstr, const size_t fwstrlen);
 
 bool     FPDKCOM_SetLed(const int fd, const uint8_t ledbits);
 

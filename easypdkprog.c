@@ -241,10 +241,11 @@ int main( int argc, const char * argv [] )
   }
 
   unsigned int hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor;
-  if( !FPDKCOM_GetVersion(comfd, &hw_major, &hw_minor, &sw_major, &sw_minor, &proto_major, &proto_minor) )
+  char fwstr[130];
+  if( !FPDKCOM_GetVersion(comfd, &hw_major, &hw_minor, &sw_major, &sw_minor, &proto_major, &proto_minor, fwstr, sizeof(fwstr)) )
     return -1;
 
-  verbose_printf("FREE-PDK EASY PROG - Hardware:%u.%u Firmware:%u.%u Protocol:%u.%u\n", hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor);
+  verbose_printf("%s",fwstr);
 
   switch( arguments.command )
   {

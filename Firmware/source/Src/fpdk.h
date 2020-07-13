@@ -21,8 +21,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <stdint.h>
 
-#define __FPDKSW__ "1.4"
 #define __FPDKHW__ "1.2"
+
+#ifdef EPDKVER
+#define __FPDKSW__ EPDKVER
+#else
+#define EPDKVER "0.0"
+#endif
+
+#ifdef EPDKSUB
+#define __FPDKSUB__ EPDKSUB
+#else
+#define __FPDKSUB__ "(unknown)"
+#endif
 
 typedef enum FPDKHWVARIANT
 {

@@ -10,6 +10,7 @@ matrix:
         packages:
           - gcc-arm-none-eabi
           - libnewlib-arm-none-eabi
+          - dfu-util
     compiler: arm-none-eabi-gcc
     env: OSTYPE=firmware
   - os: linux

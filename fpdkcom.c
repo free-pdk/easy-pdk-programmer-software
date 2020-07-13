@@ -142,7 +142,7 @@ int FPDKCOM_Open(const char* devname)
   while( serialcom_read(fd,dummy,sizeof(dummy))>0 ) {;}
 
   unsigned int hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor;
-  if( !FPDKCOM_GetVersion(fd, &hw_major, &hw_minor, &sw_major, &sw_minor, &proto_major, &proto_minor) )
+  if( !FPDKCOM_GetVersion(fd, &hw_major, &hw_minor, &sw_major, &sw_minor, &proto_major, &proto_minor, NULL, 0) )
   {
     serialcom_close(fd);
     return -2;
@@ -165,13 +165,20 @@ int FPDKCOM_Close(const int fd)
 ////////
 ////
 
-bool FPDKCOM_GetVersion(const int fd, unsigned int *hw_major, unsigned int *hw_minor, unsigned int *sw_major, unsigned int *sw_minor, unsigned int *proto_major, unsigned int *proto_minor)
+bool FPDKCOM_GetVersion(const int fd, 
+                        unsigned int *hw_major, unsigned int *hw_minor, 
+                        unsigned int *sw_major, unsigned int *sw_minor, 
+                        unsigned int *proto_major, unsigned int *proto_minor,
+                        char* fwstr, const size_t fwstrlen )
 {
   uint8_t resp[3+128+1];
   memset(resp, 0, sizeof(resp));
 
   if( _FPDKCOM_SendReceiveCommand(fd, FPDKPROTO_CMD_GETVERINFO, 0, 0, resp, sizeof(resp)-1) < 0 )
     return false;
+
+  if( fwstr )
+    strncpy( fwstr, (char*)&resp[3], fwstrlen );
 
   if( 6 != sscanf( (char*)&resp[3], FPDK_VERSCAN, hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor ) )
     return false;

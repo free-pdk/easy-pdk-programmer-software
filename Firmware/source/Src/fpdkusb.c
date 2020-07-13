@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
-static const uint8_t FPDKVER[] = "FREE-PDK EASY PROG - HW:" __FPDKHW__ " SW:" __FPDKSW__ " PROTO:" __FPDKPROTO__ "\n";
+static const uint8_t FPDKVER[] = "FREE-PDK EASY PROG - HW:" __FPDKHW__ " SW:" __FPDKSW__ " PROTO:" __FPDKPROTO__ " " __FPDKSUB__ "\n";
 
 static const uint32_t FPDK_LED_UART_RX = 1;
 static const uint32_t FPDK_LED_UART_TX = 2;

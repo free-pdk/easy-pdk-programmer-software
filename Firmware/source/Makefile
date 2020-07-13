@@ -3,6 +3,9 @@ BUILD_DIR = build
 
 TARGET = EASYPDKPROG
 
+EPDKVER ?= \"$(shell git describe --abbrev=0)\"
+EPDKSUB ?= \"\($(shell git describe --dirty)\)\"
+
 # debug build?
 #DEBUG = 1
 
@@ -125,7 +128,7 @@ endif
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -std=gnu99
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -std=gnu99 -DEPDKVER=$(EPDKVER) -DEPDKSUB=$(EPDKSUB)
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
