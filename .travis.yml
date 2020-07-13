@@ -11,7 +11,7 @@ matrix:
           - debian-buster
         packages:
           - gcc-arm-none-eabi
-    compiler: gcc
+    compiler: gcc-arm-none-eabi
     env: OSTYPE=firmware
   - os: linux
     dist: xenial

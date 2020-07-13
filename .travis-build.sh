@@ -11,7 +11,7 @@ fi
 EPDKVER=$(git describe --abbrev=0)
 
 if [ "_$OSTYPE" = "_firmware" ]; then
-  cd Firmware
+  cd Firmware/source
   make all EPDKVER=$EPDKVER 
   exit 0
 fi
