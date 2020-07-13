@@ -7,11 +7,10 @@ matrix:
     dist: xenial
     addons:
       apt:
-        sources:
-          - debian-buster
         packages:
           - gcc-arm-none-eabi
-    compiler: gcc-arm-none-eabi
+          - libnewlib-arm-none-eabi
+    compiler: arm-none-eabi-gcc
     env: OSTYPE=firmware
   - os: linux
     dist: xenial

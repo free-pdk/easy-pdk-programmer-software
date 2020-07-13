@@ -10,9 +10,15 @@ fi
 
 EPDKVER=$(git describe --abbrev=0)
 
+GIT=$(git describe --tags --always)
+DATE=$(date +'%Y%m%d')
 if [ "_$OSTYPE" = "_firmware" ]; then
-  cd Firmware/source
-  make all EPDKVER=$EPDKVER 
+  make -C Firmware/source all EPDKVER=$EPDKVER 
+  mkdir -p build/EASYPDKPROG_Firmware
+  cp Firmware/source/build/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README build/EASYPDKPROG_Firmware
+  cd build
+  zip -r -9 "EASYPDKPROG_Firmware_${DATE}_${GIT}.zip" "EASYPDKPROG_Firmware"
+  cd ..
   exit 0
 fi
 
@@ -24,8 +30,6 @@ fi
 
 make all EPDKVER=$EPDKVER 
 
-GIT=$(git describe --tags --always)
-DATE=$(date +'%Y%m%d')
 DESTDIR="build/EASYPDKPROG"
 mkdir -p $DESTDIR
 
@@ -46,8 +50,8 @@ fi
 
 cp INSTALL LICENSE $DESTDIR
 
-mkdir -p  $DESTDIR/Firmware
-cp Firmware/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README $DESTDIR/Firmware
+#mkdir -p  $DESTDIR/Firmware
+#cp Firmware/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README $DESTDIR/Firmware
 
 cp -r Examples $DESTDIR
 
