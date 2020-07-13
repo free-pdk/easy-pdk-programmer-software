@@ -2,7 +2,9 @@ CC    ?= gcc
 RM    ?= rm -rf
 STRIP ?= strip
 
-CFLAGS += -std=c99 -pedantic -Wall -O2
+EPDKVER ?= $(shell git describe --dirty)
+
+CFLAGS += -std=c99 -pedantic -Wall -O2 -DEPDKVER=\"$(EPDKVER)\"
 
 all: easypdkprog
 

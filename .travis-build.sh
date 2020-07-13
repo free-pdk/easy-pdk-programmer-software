@@ -14,7 +14,9 @@ if [ "_$OSTYPE" = "_msys" ]; then
   export STRIP=i686-w64-mingw32-strip
 fi
 
-make all
+EPDKVER=$(git describe --abbrev=0)
+
+make all EPDKVER=$EPDKVER 
 
 GIT=$(git describe --tags --always)
 DATE=$(date +'%Y%m%d')
