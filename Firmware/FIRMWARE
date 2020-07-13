@@ -1,0 +1,7 @@
+You either need to compile the firmware yourself (see source directory) 
+or you use the automatically generated release firmware from here:
+
+https://github.com/free-pdk/easy-pdk-programmer-software/releases
+
+=> EASYPDKPROG_FIRMWARE_XXXXXXXX_X.X.zip
+

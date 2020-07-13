@@ -14,10 +14,10 @@ GIT=$(git describe --tags --always)
 DATE=$(date +'%Y%m%d')
 if [ "_$OSTYPE" = "_firmware" ]; then
   make -C Firmware/source all EPDKVER=\\\"$EPDKVER\\\" EPDKSUB=
-  mkdir -p build/EASYPDKPROG_Firmware
-  cp Firmware/source/build/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README build/EASYPDKPROG_Firmware
+  mkdir -p build/EASYPDKPROG_FIRMWARE
+  cp Firmware/source/build/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README build/EASYPDKPROG_FIRMWARE
   cd build
-  zip -r -9 "EASYPDKPROG_Firmware_${DATE}_${GIT}.zip" "EASYPDKPROG_Firmware"
+  zip -r -9 "EASYPDKPROG_FIRMWARE_${DATE}_${GIT}.zip" "EASYPDKPROG_FIRMWARE"
   cd ..
   exit 0
 fi
