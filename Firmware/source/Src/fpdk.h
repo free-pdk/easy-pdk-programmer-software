@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef EPDKVER
 #define __FPDKSW__ EPDKVER
 #else
-#define EPDKVER "0.0"
+#define __FPDKSW__ "0.0"
 #endif
 
 #ifdef EPDKSUB
