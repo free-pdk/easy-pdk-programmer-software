@@ -178,8 +178,9 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
 $(BUILD_DIR)/%.dfu: $(BUILD_DIR)/%.bin | $(BUILD_DIR)
-	cp $< $@
-	-$(DFU_SUFFIX) -v 0483 -p df11 -a $@
+	cp $< $@.tmp
+	$(DFU_SUFFIX) -v 0483 -p df11 -a $@.tmp
+	mv $@.tmp $@
 
 $(BUILD_DIR):
 	mkdir $@		
