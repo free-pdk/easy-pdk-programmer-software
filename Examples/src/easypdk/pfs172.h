@@ -141,17 +141,13 @@ __sfr16          _t16c;
 #define FLAG_CF 0x02
 #define FLAG_AC 0x04
 #define FLAG_OV 0x08
-#define FLAG_ZF_BIT 0
-#define FLAG_CF_BIT 1
-#define FLAG_AC_BIT 2
-#define FLAG_OV_BIT 3
 
 //clkmd definitions
 #define CLKMD_ENABLE_PA5RST          0x01
 #define CLKMD_ENABLE_WATCHDOG        0x02
 #define CLKMD_ENABLE_ILRC            0x04
 #define CLKMD_ENABLE_IHRC            0x10
-#define CLKMD_IHRC                   0x50
+#define CLKMD_IHRC                   0x40
 #define CLKMD_IHRC_DIV2              0x20
 #define CLKMD_IHRC_DIV4              0x00
 #define CLKMD_IHRC_DIV8              0x28
