@@ -7,6 +7,10 @@ unsigned char _sdcc_external_startup(void)
   // F U S E S
   //
   // Set specific FUSES (defines in IC specific header file, e.g. "easypdk/pfs173.h"), easypdk programmer will set FUSE values after writing
+  //
+  // *REMEMBER ALSO TO SETUP LVR VALUES for IC's which do not have MISCLVR register*
+  // *EASY_PDK_INIT_SYSCLOCK can set the LVR FUSE ONLY in case EASY_PDK_FUSE was not used before*
+  //
   EASY_PDK_FUSE(FUSE_SECURITY_OFF|FUSE_BOOTUP_FAST);
 
   //
