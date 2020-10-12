@@ -95,9 +95,9 @@ __sfr __at(0x32) _tm3c;
 __sfr __at(0x33) _tm3ct;
 __sfr __at(0x34) _tm3s;
 __sfr __at(0x35) _tm3b;
-//0x36
-//0x37
-//0x38
+__sfr __at(0x36) _rfcc;
+__sfr __at(0x37) _rfccrh;
+__sfr __at(0x38) _rfccrl;
 __sfr __at(0x39) _ilrcr;
 //0x3a
 //0x3b
@@ -158,6 +158,9 @@ __sfr16          _t16c;
 #define TM3CT     _tm3ct
 #define TM3S      _tm3s
 #define TM3B      _tm3b
+#define RFCC      _rfcc
+#define RFCCRH    _rfccrh
+#define RFCCRL    _rfccrl
 #define ILRCR     _ilrcr
 #define T16C      _t16c
 
@@ -433,6 +436,24 @@ __sfr16          _t16c;
 #define GPCS_COMP_CASE4              0x30
 #define GPCS_COMP_WAKEUP_ENABLE      0x40
 #define GPCS_COMP_OUTPUT_PA0         0x80
+
+//rfcc definitions
+#define RFCC_ENABLE                  0x10
+#define RFCC_MODE_R_TYPE             0x00
+#define RFCC_MODE_C_TYPE             0x08
+#define RFCC_OVERFLOW                0x04
+#define RFCC_OUTPUT_ENABLE           0x02
+#define RFCC_CH_NONE                 0xE0
+#define RFCC_CH_RFC0_PA4             0x00
+#define RFCC_CH_RFC1_PA0             0x20
+#define RFCC_CH_RFC2_PA3             0x80
+#define RFCC_CH_RFC3_PB7             0xA0
+#define RFCC_CH_RFC4_PB6             0xC0
+#define RFCC_CH_RFC5_PB4             0x01
+#define RFCC_CH_RFC6_PB3             0x21
+#define RFCC_CH_RFC7_PB2             0x41
+#define RFCC_CH_RFC8_PB1             0x61
+#define RFCC_CH_RFC9_PB0             0x81
 
 //pwmg0c definitions
 #define PWMG0C_ENABLE                0x80
