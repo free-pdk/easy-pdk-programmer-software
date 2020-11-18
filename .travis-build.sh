@@ -40,6 +40,7 @@ if [ "$OSTYPE" == "msys" ]; then
 else
     if [[ $OSTYPE =~ darwin.* ]]; then
         OS="MAC"
+        file easypdkprog
         cp easypdkprog $DESTDIR
     else
         OS="LINUX"
