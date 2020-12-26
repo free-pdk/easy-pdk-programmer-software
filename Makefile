@@ -4,7 +4,7 @@ STRIP ?= strip
 
 EPDKVER ?= $(shell git describe --dirty)
 
-CFLAGS += -std=c99 -pedantic -Wall -O2 -DEPDKVER=\"$(EPDKVER)\"
+CFLAGS += -std=c99 -pedantic -Wall -O2 -DEPDKVER=\"$(EPDKVER)\" $(ECFLAGS)
 
 all: easypdkprog
 

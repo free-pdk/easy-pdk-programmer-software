@@ -42,7 +42,7 @@ else
         OS="MAC"
         mv easypdkprog easypdkprog.x86_64
         make distclean 
-        make all EPDKVER=$EPDKVER CFLAGS="-target arm64-apple-macos11"
+        make all EPDKVER=$EPDKVER ECFLAGS="-target arm64-apple-macos11"
         mv easypdkprog easypdkprog.arm64
         lipo -create -output easypdkprog easypdkprog.x86_64 easypdkprog.arm64
         lipo -archs easypdkprog
