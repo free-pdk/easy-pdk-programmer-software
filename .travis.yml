@@ -17,7 +17,7 @@ matrix:
     dist: xenial
     compiler: gcc
   - os: osx
-    osx_image: xcode12u
+    osx_image: xcode12.3
     compiler: clang
   - os: linux
     dist: xenial
