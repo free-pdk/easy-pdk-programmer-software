@@ -36,7 +36,7 @@ easypdkprogtest: $(DEP) $(OBJ) easypdkprogtest.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o easypdkprogtest easypdkprogtest.c $(OBJ) $(LIBS)
 
 $(ARGPSALIB):
-	cd $(ARGPSA) && sh configure CFLAGS='-w -Os'
+	cd $(ARGPSA) && sh configure CFLAGS='-w -Os $(ECFLAGS)'
 	$(MAKE) -C $(ARGPSA)
 
 clean:
