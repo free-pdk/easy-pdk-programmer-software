@@ -3,16 +3,17 @@
 set -e
 set -x
 
-if [ -z $TRAVIS_OS_NAME ]; then
+if [ -z $OSNAME ]; then
     echo "This file is for automated builds only. Please use the make for local builds."
     exit -1
 fi
 
-EPDKVER=$(git describe --abbrev=0)
+EPDKVER=$(git describe --tags --abbrev=0)
 
-GIT=$(git describe --tags --always)
+GIT=$(git describe --tags --abbrev=0)
+
 DATE=$(date +'%Y%m%d')
-if [ "_$OSTYPE" = "_firmware" ]; then
+if [ "$OSTYPE" = "firmware" ]; then
   make -C Firmware/source all EPDKVER=\\\"$EPDKVER\\\" EPDKSUB=
   mkdir -p build/EASYPDKPROG_FIRMWARE
   cp Firmware/source/build/EASYPDKPROG.dfu Firmware/LICENCE-ADDITONAL Firmware/README build/EASYPDKPROG_FIRMWARE
@@ -22,10 +23,11 @@ if [ "_$OSTYPE" = "_firmware" ]; then
   exit 0
 fi
 
-if [ "_$OSTYPE" = "_msys" ]; then
+if [ "$OSTYPE" = "msys" ]; then
   unset CC
   export CC=i686-w64-mingw32-gcc
   export STRIP=i686-w64-mingw32-strip
+  export OS=Windows_NT
 fi
 
 make all EPDKVER=$EPDKVER 
@@ -35,17 +37,17 @@ mkdir -p $DESTDIR
 
 if [ "$OSTYPE" == "msys" ]; then
     OS="WIN"
-    cp easypdkprog $DESTDIR/easypdkprog.exe
+    cp easypdkprog.exe $DESTDIR
     cp -r Windows_STM32VCPDriver $DESTDIR
 else
     if [[ $OSTYPE =~ darwin.* ]]; then
         OS="MAC"
-        mv easypdkprog easypdkprog.x86_64
-        make distclean 
-        make all EPDKVER=$EPDKVER ECFLAGS="-target arm64-apple-macos11" EHOST="--host=arm64-apple-macos11"
-        mv easypdkprog easypdkprog.arm64
-        lipo -create -output easypdkprog easypdkprog.x86_64 easypdkprog.arm64
-        lipo -archs easypdkprog
+#        mv easypdkprog easypdkprog.x86_64
+#        make distclean 
+#        make all EPDKVER=$EPDKVER ECFLAGS="-target arm64-apple-macos11" EHOST="--host=arm64-apple-macos11"
+#        mv easypdkprog easypdkprog.arm64
+#        lipo -create -output easypdkprog easypdkprog.x86_64 easypdkprog.arm64
+#        lipo -archs easypdkprog
         cp easypdkprog $DESTDIR
     else
         OS="LINUX"
