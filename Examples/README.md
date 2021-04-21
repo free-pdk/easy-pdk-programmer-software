@@ -11,7 +11,7 @@ Easy PDK programmer can capture serial data and shows it as output in easypdkpro
 
 **INSERT IC**
 
-You can insert any SOP based PMS150C/PMS152/PMS171B/PFS154/PFS172/PFS173 IC into a SOP socket connected directly to Easy PDK programmer.
+You can insert any SOP based PMS150C/PMS150G/PMS152/PMS171B/PFS154/PFS172/PFS173 IC into a SOP socket connected directly to Easy PDK programmer.
 
 **CHECK IC**
 ```
@@ -52,6 +52,13 @@ PMS150C:
 $ ./easypdkprog --icname=PMS150C write helloworld_pms150c.ihx
 Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
+```
+
+PMS150G:
+```
+$ ./easypdkprog --icname=PMS150G write helloworld_pms150g.ihx
+Writing IC... done.
+Calibrating IC (@4.00V IHRC SYSCLK=2000000Hz)... calibration result: 1995424Hz (0x44)  done.
 ```
 
 PMS152:
