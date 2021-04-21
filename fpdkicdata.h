@@ -48,6 +48,9 @@ typedef struct FPDKICDATA
   bool       exclude_code_first_instr;
   uint16_t   exclude_code_start;
   uint16_t   exclude_code_end;
+  uint16_t   scramble_code_block_length;
+  uint16_t   scramble_code_block_repeat;
+  char       scramble_code_shuffle_bits[16];
   float      vdd_cmd_read;
   float      vpp_cmd_read;
   float      vdd_read_hv;

@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkicdata.h"
 #include "fpdkiccalib.h"
 #include "fpdkicserial.h"
+#include "fpdkicscramble.h"
 #include "fpdkihex8.h"
 #include "argp.h"
 
@@ -313,6 +314,9 @@ int main( int argc, const char * argv [] )
           uint8_t buf[0x1000*2];
           if( FPDKCOM_GetBuffer(comfd, 0, buf, icdata->codewords*sizeof(uint16_t))>0 )
           {
+            if( icdata->scramble_code_block_length )
+              FPDKSCRAMBLE_Scramble( icdata, buf, icdata->codewords*sizeof(uint16_t), true);
+
             if( arguments.binout )
             {
               FILE *f = fopen(arguments.inoutfile,"wb");
@@ -361,7 +365,9 @@ int main( int argc, const char * argv [] )
       }
 
       uint8_t data[0x1000*2];
+      uint8_t wdat[0x1000*2];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
+
       uint32_t len = 0;
       for( uint32_t p=0; p<sizeof(data); p++)
       {
@@ -473,7 +479,11 @@ int main( int argc, const char * argv [] )
 
       printf("Writing IC (%" PRIu32 " words)... ", codewords);
 
-      if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
+      memcpy( wdat, data, len );
+      if( icdata->scramble_code_block_length )
+        FPDKSCRAMBLE_Scramble( icdata, wdat, len, false);
+
+      if( !FPDKCOM_SetBuffer(comfd, 0, wdat, len) )
       {
         fprintf(stderr, "ERROR: Could not send data to programmer\n");
         return -11;
@@ -575,7 +585,11 @@ int main( int argc, const char * argv [] )
 
           if( FPDKCALIB_RemoveCalibration( &calibdata[calib], data, fcalval) )
           {
-            if( !FPDKCOM_SetBuffer(comfd, 0, data, len) )
+            memcpy( wdat, data, len );
+            if( icdata->scramble_code_block_length )
+              FPDKSCRAMBLE_Scramble( icdata, wdat, len, false);
+
+            if( !FPDKCOM_SetBuffer(comfd, 0, wdat, len) )
             {
               fprintf(stderr, "ERROR: Could not send data to programmer\n");
               return -16;
