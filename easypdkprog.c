@@ -364,6 +364,17 @@ int main( int argc, const char * argv [] )
         return -8;
       }
 
+      //fuse bits in ihex file?
+      if( (write_data[icdata->codewords*2 - 1] & 0xFF00) && (write_data[icdata->codewords*2 - 2] & 0xFF00) )
+      {
+        //only use fuse bits from ihex file if there is no fuse argument in command line
+        if( 0xFFFF == arguments.fuse )
+          arguments.fuse = ((write_data[icdata->codewords*2 - 1] & 0xFF)<<8) | (write_data[icdata->codewords*2 - 2] & 0xFF);
+
+        //delete fuse bits from write_data, fuse will be set after write completed
+        write_data[icdata->codewords*2 - 1] = 0; write_data[icdata->codewords*2 - 2] = 0;
+      }
+
       uint8_t data[0x1000*2];
       uint8_t wdat[0x1000*2];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
@@ -387,16 +398,13 @@ int main( int argc, const char * argv [] )
         len = fillend*sizeof(uint16_t);
       }
 
+      //make sure fuse is never set during normal write operation
+      data[icdata->codewords*2-1]=0xFF; data[icdata->codewords*2-2]=0xFF;
+
       if( 0 == len )
       {
         printf("Nothing to write\n");
         break;
-      }
-
-      if( (0xFFFF == arguments.fuse) && (icdata->codewords*2 == len) )
-      {
-        arguments.fuse = (((uint16_t)data[len-1])<<8) | data[len-2];
-        data[len-1]=0xFF; data[len-2]=0xFF; len -= 2;
       }
 
       #define MAX_CALIBRATIONS 16
