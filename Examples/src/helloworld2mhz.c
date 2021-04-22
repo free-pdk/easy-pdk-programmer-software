@@ -33,7 +33,6 @@ int putchar(int c)
 
 unsigned char _sdcc_external_startup(void)
 {
-IHRCR = 0x40;
   EASY_PDK_INIT_SYSCLOCK_2MHZ();                //use 2MHz sysclock
   EASY_PDK_CALIBRATE_IHRC(2000000,4000);        //tune SYSCLK to 2MHz @ 4.000V
   return 0;                                     //perform normal initialization

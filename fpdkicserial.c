@@ -19,9 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
-//TODO:
-#include <stdio.h>
-
 static const uint16_t _serial_pattern [][8] = 
 {
   { 0x0146, 0x0150, 0x0153, 0x0145, 0x0152, 0x0149, 0x0141, 0x014C },  //13 bit    (ret 'F', ret 'P', ret 'S', ret 'E', ret 'R', ret 'I', ret 'A', ret 'L')
