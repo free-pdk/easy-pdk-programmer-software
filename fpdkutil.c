@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -126,18 +126,8 @@ void fpdkutil_waitfdorkeypress(const int fd, const int timeout)
 #include <conio.h>
 int fpdkutil_getchar(void)
 {
-/*
-  if( WAIT_OBJECT_0 == WaitForSingleObject(GetStdHandle(STD_INPUT_HANDLE), 0) )
-  {
-    INPUT_RECORD ir;
-    DWORD inpread;
-    ReadConsoleInput( GetStdHandle(STD_INPUT_HANDLE), &ir, 1, &inpread );
-    if( (KEY_EVENT == ir.EventType) && (ir.Event.KeyEvent.bKeyDown) )
-      return ir.Event.KeyEvent.uChar.AsciiChar;
-  }
-*/
   if( _kbhit() )
-     return _getch(); //!!!
+     return _getch();
 
   return -1;
 }

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ void FPDKUART_HandleQueue(void)
         _uartRXAutoBaudFinished = true;
 
         char connectstring[64];
-        sprintf( connectstring, "Connected @%" PRIu32 " baud\n", HAL_RCC_GetPCLK1Freq() / USART1->BRR );
+        snprintf( connectstring, sizeof(connectstring), "Connected @%" PRIu32 " baud\n", HAL_RCC_GetPCLK1Freq() / USART1->BRR );
         FPDKUSB_SendDebug((uint8_t*)connectstring, strlen(connectstring));
       }
     }

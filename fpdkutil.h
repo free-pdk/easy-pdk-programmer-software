@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,5 @@ int  verbose_printf(char *format, ...);
 void          fpdkutil_waitfdorkeypress(const int fd, const int timeout);
 int           fpdkutil_getchar(void);
 unsigned long fpdkutil_getTickCount(void);
-
-//DEL void          fpdkutil_usleep(int64_t usec);
 
 #endif //__FPDKUTIL_H_
