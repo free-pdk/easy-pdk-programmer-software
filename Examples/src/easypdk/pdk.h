@@ -11,6 +11,8 @@
  #include "pms171b.h"
 #elif defined(PFS154)
  #include "pfs154.h"
+#elif defined(PFC154)
+ #include "pfc154.h"
 #elif defined(PFS172)
  #include "pfs172.h"
 #elif defined(PFS173)
