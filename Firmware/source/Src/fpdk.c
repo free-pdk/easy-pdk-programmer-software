@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,8 +56,11 @@ void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,
 #define _FPDK_RecvBit2()     ({ _FPDK_CLK2_UP(); _FPDK_DelayUS(1); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK2_DOWN(); bit; })
 
 //board specific max values (DAC max => mV max after opamp output / -30 mV DAC DC offset)
-#define FPDK_VDD_DAC_MAX_MV ( 6290 - 30)
-#define FPDK_VPP_DAC_MAX_MV (13300 - 30)
+#define FPDK_VDD_DAC_MAX_MV          ( 6290 - 30)
+#define FPDK_VDD_EXTENDED_DAC_MAX_MV (13300 - 30)  //variant with VDD opamp resistor changed to support VDD >6.2V
+#define FPDK_VPP_DAC_MAX_MV          (13300 - 30)
+
+static uint32_t _dac_vdd_max = FPDK_VDD_DAC_MAX_MV;
 
 //STM32F072 chip specific factory calibration values in rom
 #define TEMP030_CAL ((uint32_t)*((uint16_t*)0x1FFFF7B8))
@@ -76,8 +79,9 @@ void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,
 #define FPDK_LEAVE_PROG_MODE_DELAYUS    10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
 #define FPDK_VDD_CAL_STARTUP_DELAYUS    1000
 
-//FPDK hardware varaint
+//FPDK hardware varaint / hardware mod
 static FPDKHWVARIANT _hw_variant;
+static uint32_t _hw_mod;
 
 //current dac output values, we need to store them so we can set channels seperate
 static uint32_t _dac_vdd;
@@ -538,6 +542,10 @@ void FPDK_Init(void)
 
   HAL_GPIO_WritePin( DCDC15VOLT_ENABLE_OUT_GPIO_Port, DCDC15VOLT_ENABLE_OUT_Pin, GPIO_PIN_SET );   //enable DCDC 15V booster
 
+  FPDK_SetVDD(1000,0);                                                                             //set 1V vdd for measurement (after adc start)
+
+  _hw_mod = FPDK_HWMOD_NONE;
+
   _hw_variant = FPDK_HWVAR_NONE;                                                                   //test for hardware variants
 
   GPIO_InitTypeDef GPIO_InitStruct0 = { .Pin=HW_VARIANT_DET0_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLUP, .Speed=GPIO_SPEED_FREQ_HIGH };
@@ -573,7 +581,7 @@ void FPDK_Init(void)
     HAL_ADC_ConfigChannel(&hadc, &sConfig);
   }
 
-  _adc_vref = 0;
+  _adc_vref = 3300;
   _adc_vdd = 0;
   _adc_vpp = 0;
   HAL_ADCEx_Calibration_Start(&hadc);                                                              //calibrate ADC
@@ -587,6 +595,15 @@ void FPDK_Init(void)
   _FPDK_SetPA4Incoming();
   _FPDK_SetPA0Incoming();
   _FPDK_SetPA7Incoming();
+
+  while( !_adc_vdd ) {;}                                                                           //wait for adc to have a measurement
+  if( _adc_vdd > 1500 )                                                                            //is set test vdd 1V measured > 1.5V?
+  {
+    _dac_vdd_max = FPDK_VDD_EXTENDED_DAC_MAX_MV;                                                   //variant with changed resisistor on opamp
+    _hw_mod |= FPDK_HWMOD_VDD13VMAX;
+  }
+
+  FPDK_SetVDD(0,0);                                                                                //set 0V for VDD
 }
 
 void FPDK_DeInit(void)
@@ -599,6 +616,16 @@ void FPDK_DeInit(void)
   _FPDK_SetPA4Incoming();
   _FPDK_SetPA0Incoming();
   _FPDK_SetPA7Incoming();
+}
+
+uint32_t FPDK_GetHwVariant(void)
+{
+  return _hw_variant;
+}
+
+uint32_t FPDK_GetHwMod(void)
+{
+  return _hw_mod;
 }
 
 void FPDK_SetLeds(uint32_t val)
@@ -654,7 +681,7 @@ uint32_t FPDK_GetAdcVpp(void) {
 
 bool FPDK_SetVDD(uint32_t mV, uint32_t stabelizeDelayUS)
 {
-  _dac_vdd = (mV*4095) / FPDK_VDD_DAC_MAX_MV;
+  _dac_vdd = (mV*4095) / _dac_vdd_max;
 
   if( _dac_vdd>4095 )
     _dac_vdd = 4095;

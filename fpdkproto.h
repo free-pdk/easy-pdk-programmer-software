@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,13 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __FPDKPROTO_H_
 #define __FPDKPROTO_H_
 
-#define __FPDKPROTO__ "1.3"
+#define __FPDKPROTO__ "1.4"
 #define FPDKPROTO_MAJOR 1
-#define FPDKPROTO_MINOR 3
+#define FPDKPROTO_MINOR 4
 
 typedef enum FPDKPROTO_CMD
 {
   FPDKPROTO_CMD_GETVERINFO   = 'I',
+  FPDKPROTO_CMD_GETVERMSG    = 'M',
   FPDKPROTO_CMD_SETLED       = 'L',
   FPDKPROTO_CMD_GETBUTTON    = 'B',
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ bool     FPDKCOM_GetVersion(const int fd,
                             unsigned int *sw_major, unsigned int *sw_minor, 
                             unsigned int *proto_major, unsigned int *proto_minor,
                             char* fwstr, const size_t fwstrlen);
+
+bool     FPDKCOM_GetVerMessage(const int fd, char* msg, const size_t msglen);
 
 bool     FPDKCOM_SetLed(const int fd, const uint8_t ledbits);
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -247,6 +247,10 @@ int main( int argc, const char * argv [] )
     return -1;
 
   verbose_printf("%s",fwstr);
+
+  char vermsg[130];
+  if( (proto_major>=1) && (proto_minor>=4) && FPDKCOM_GetVerMessage(comfd, vermsg, sizeof(vermsg) ) )
+    verbose_printf("%s",vermsg);
 
   switch( arguments.command )
   {

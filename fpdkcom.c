@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -169,7 +169,7 @@ bool FPDKCOM_GetVersion(const int fd,
                         unsigned int *hw_major, unsigned int *hw_minor, 
                         unsigned int *sw_major, unsigned int *sw_minor, 
                         unsigned int *proto_major, unsigned int *proto_minor,
-                        char* fwstr, const size_t fwstrlen )
+                        char* fwstr, const size_t fwstrlen)
 {
   uint8_t resp[3+128+1];
   memset(resp, 0, sizeof(resp));
@@ -182,6 +182,20 @@ bool FPDKCOM_GetVersion(const int fd,
 
   if( 6 != sscanf( (char*)&resp[3], FPDK_VERSCAN, hw_major, hw_minor, sw_major, sw_minor, proto_major, proto_minor ) )
     return false;
+
+  return true;
+}
+
+bool FPDKCOM_GetVerMessage(const int fd, char* msg, const size_t msglen)
+{
+  uint8_t resp[3+128+1];
+  memset(resp, 0, sizeof(resp));
+
+  if( _FPDKCOM_SendReceiveCommand(fd, FPDKPROTO_CMD_GETVERMSG, 0, 0, resp, sizeof(resp)-1) < 0 )
+    return false;
+
+  if( msg )
+    strncpy( msg, (char*)&resp[3], msglen );
 
   return true;
 }

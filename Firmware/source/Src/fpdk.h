@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,6 +42,9 @@ typedef enum FPDKHWVARIANT
   FPDK_HWVAR_LITE = 2,
 } FPDKHWVARIANT;
 
+#define FPDK_HWMOD_NONE      0x00000000
+#define FPDK_HWMOD_VDD13VMAX 0x00000001
+
 typedef enum FPDKICTYPE
 {
   FPDK_IC_OTP1_2   = 0x12,
@@ -58,6 +61,9 @@ typedef enum FPDKICTYPE
 
 void     FPDK_Init(void);
 void     FPDK_DeInit(void);
+
+uint32_t FPDK_GetHwVariant(void);
+uint32_t FPDK_GetHwMod(void);
 
 void     FPDK_SetLeds(uint32_t val);
 void     FPDK_SetLed(uint32_t led, bool enable);
