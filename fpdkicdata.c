@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vpp_read_hv                  = 2.0,
     .vdd_cmd_write                = 3.5,
     .vpp_cmd_write                = 6.5,
-    .vdd_write_hv                 = 7.8, //this voltage can not be reached by esay pdk programmer, however maximum VDD voltage (~6.6V) works fine
+    .vdd_write_hv                 = 7.0, //this voltage can not be reached by original esay pdk programmer (consider R6 mod), however maximum VDD voltage (~6.6V) works fine
     .vpp_write_hv                 = 6.5,
     .write_block_size             = 2,
     .write_block_clock_groups     = 1,
