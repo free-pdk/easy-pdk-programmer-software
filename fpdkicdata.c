@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vpp_read_hv                  = 2.0,
     .vdd_cmd_write                = 3.5,
     .vpp_cmd_write                = 6.5,
-    .vdd_write_hv                 = 7.8, //this voltage can not be reached by esay pdk programmer, however maximum VDD voltage (~6.6V) works fine
+    .vdd_write_hv                 = 7.0, //this voltage can not be reached by original esay pdk programmer (consider R6 mod), however maximum VDD voltage (~6.6V) works fine
     .vpp_write_hv                 = 6.5,
     .write_block_size             = 2,
     .write_block_clock_groups     = 1,
@@ -221,6 +221,34 @@ static const FPDKICDATA fpdk_ic_table[] =
     .vpp_cmd_erase                = 5.5,
     .vdd_erase_hv                 = 3.0,
     .vpp_erase_hv                 = 9.0,
+    .erase_clocks                 = 2
+  },
+
+  { .name                         = "PFC154",
+    .otpid                        = 0x2AA5,
+    .id12bit                      = 0x1A5,
+    .type                         = FPDK_IC_FLASH_3,
+    .addressbits                  = 13,
+    .codebits                     = 14,
+    .codewords                    = 0x800,
+    .ramsize                      = 0x80,
+    .exclude_code_start           = 0x7E0,  //OTP area 16 words, contains empty space for user and BGTR IHRCR factory values
+    .exclude_code_end             = 0x7F0,
+    .vdd_cmd_read                 = 2.5,
+    .vpp_cmd_read                 = 5.5,
+    .vdd_read_hv                  = 2.5,
+    .vpp_read_hv                  = 5.5,
+    .vdd_cmd_write                = 2.5,
+    .vpp_cmd_write                = 5.5,
+    .vdd_write_hv                 = 7.0, //this voltage can not be reached by original esay pdk programmer, you need to do the R6 modification
+    .vpp_write_hv                 = 5.8,
+    .write_block_size             = 4,
+    .write_block_clock_groups     = 3,
+    .write_block_clocks_per_group = 5,
+    .vdd_cmd_erase                = 3.0,
+    .vpp_cmd_erase                = 4.8,
+    .vdd_erase_hv                 = 5.0,
+    .vpp_erase_hv                 = 4.8,
     .erase_clocks                 = 2
   },
 

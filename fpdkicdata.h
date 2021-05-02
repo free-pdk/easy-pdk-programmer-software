@@ -29,6 +29,7 @@ typedef enum FPDKICTYPE
 //  FPDK_IC_FLASH    = 0xF0,
   FPDK_IC_FLASH_1  = 0xF1,
   FPDK_IC_FLASH_2  = 0xF2,
+  FPDK_IC_FLASH_3  = 0xF3,
 } FPDKICTYPE;
 
 #define FPDK_IS_FLASH_TYPE(type) (0xF0==(type&0xF0))

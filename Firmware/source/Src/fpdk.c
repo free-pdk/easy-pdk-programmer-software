@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,8 +56,11 @@ void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,
 #define _FPDK_RecvBit2()     ({ _FPDK_CLK2_UP(); _FPDK_DelayUS(1); uint32_t bit=_FPDK_GET_DAT(); _FPDK_CLK2_DOWN(); bit; })
 
 //board specific max values (DAC max => mV max after opamp output / -30 mV DAC DC offset)
-#define FPDK_VDD_DAC_MAX_MV ( 6290 - 30)
-#define FPDK_VPP_DAC_MAX_MV (13300 - 30)
+#define FPDK_VDD_DAC_MAX_MV          ( 6290 - 30)
+#define FPDK_VDD_EXTENDED_DAC_MAX_MV (13300 - 30)  //variant with VDD opamp resistor changed to support VDD >6.2V
+#define FPDK_VPP_DAC_MAX_MV          (13300 - 30)
+
+static uint32_t _dac_vdd_max = FPDK_VDD_DAC_MAX_MV;
 
 //STM32F072 chip specific factory calibration values in rom
 #define TEMP030_CAL ((uint32_t)*((uint16_t*)0x1FFFF7B8))
@@ -76,8 +79,9 @@ void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,
 #define FPDK_LEAVE_PROG_MODE_DELAYUS    10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
 #define FPDK_VDD_CAL_STARTUP_DELAYUS    1000
 
-//FPDK hardware varaint
+//FPDK hardware varaint / hardware mod
 static FPDKHWVARIANT _hw_variant;
+static uint32_t _hw_mod;
 
 //current dac output values, we need to store them so we can set channels seperate
 static uint32_t _dac_vdd;
@@ -286,6 +290,7 @@ static uint16_t _FPDK_SendCommand(const FPDKICTYPE type, const uint8_t command)
   {
     case FPDK_IC_FLASH:
     case FPDK_IC_FLASH_1:
+    case FPDK_IC_FLASH_3:
       _FPDK_SendBits32F(0xA5A5A5A0 | command, 32);                                                 //preamble+command
       _FPDK_SetDatIncoming();                                                                      //set DAT incoming
       ack = _FPDK_RecvBits32(16);                                                                  //receive ack
@@ -318,6 +323,21 @@ static uint16_t _FPDK_SendCommand(const FPDKICTYPE type, const uint8_t command)
   return ack;                                                                                      //return ack (ic_id)
 }
 
+static uint8_t _FPDK_PARITY(const uint32_t data, const uint8_t data_bits)
+{
+  uint8_t parity = 0;
+  for( uint32_t p=0; p<data_bits; p++ )
+    parity += (data>>p)&1;
+  return(parity & 1);
+}
+
+static uint8_t _FPDK_ECCHAM(const uint32_t data, const uint8_t data_bits)
+{
+  return( (_FPDK_PARITY(data & 0xF800, data_bits)<<4) | (_FPDK_PARITY(data & 0x07F0, data_bits)<<3) |
+          (_FPDK_PARITY(data & 0xC78E, data_bits)<<2) | (_FPDK_PARITY(data & 0x366D, data_bits)<<1) |
+          (_FPDK_PARITY(data & 0xAD5B, data_bits)<<0) ); 
+}
+
 static uint32_t _FPDK_ReadAddr(const FPDKICTYPE type, const uint32_t addr, const uint8_t addr_bits, const uint8_t data_bits)
 {
   uint32_t dat;
@@ -325,11 +345,17 @@ static uint32_t _FPDK_ReadAddr(const FPDKICTYPE type, const uint32_t addr, const
   {
     case FPDK_IC_FLASH_1:
     case FPDK_IC_FLASH_2:
+    case FPDK_IC_FLASH_3:
       _FPDK_SendBits32F(addr,addr_bits);                                                           //send address to read from 
       _FPDK_SetDatIncoming();                                                                      //set DAT incoming
       _FPDK_CLK_UP();
       _FPDK_DelayUS(5);
+
+      if( FPDK_IC_FLASH_3 == type )                                                                //read 5 ecc bits
+        _FPDK_RecvBits32(5);
+
       dat = _FPDK_RecvBits32(data_bits);                                                           //receive data (Rising edge)
+
       _FPDK_SetDatOutgoing();                                                                      //set DAT outgoing
       _FPDK_Clock();                                                                               //1 extra clock
       break;
@@ -390,7 +416,7 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
 
         for( uint32_t l=0; l<write_block_clock_groups; l++ )
         {
-          _FPDK_Clock();                                                                             //1 extra clock
+          _FPDK_Clock();                                                                           //1 extra clock
           _FPDK_DelayUS(2);
 
           for( uint32_t w=0; w<write_block_clocks_per_group; w++ )
@@ -401,7 +427,7 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
             _FPDK_DelayUS(40);
           }
 
-          for( uint32_t e=0; e<4; e++ )                                                              //4 extra clocks
+          for( uint32_t e=0; e<4; e++ )                                                            //4 extra clocks
           {
             _FPDK_CLK_UP();
             _FPDK_DelayUS(2);
@@ -410,7 +436,44 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
           }
         }
 
-        _FPDK_SetDatOutgoing();                                                                        //set DAT outgoing
+        _FPDK_SetDatOutgoing();                                                                    //set DAT outgoing
+      }
+      break;
+
+    case FPDK_IC_FLASH_3:
+      {
+        _FPDK_SendBits32F(addr,addr_bits);                                                         //send address to write to
+
+        for( uint32_t p=0; p<count; p++ )
+        {
+          _FPDK_SendBits32F(_FPDK_ECCHAM(data[p],data_bits),5);                                    //write ecc
+          _FPDK_SendBits32F(data[p],data_bits);                                                    //write word
+        }
+
+        _FPDK_SET_DAT_F(1);
+
+        for( uint32_t l=0; l<write_block_clock_groups; l++ )
+        {
+          if( l==(write_block_clock_groups-1) )
+            _FPDK_SetDatIncoming();                                                                //set DAT incoming
+
+          _FPDK_Clock();                                                                           //1 extra clock
+          _FPDK_DelayUS(2);
+
+          for( uint32_t w=0; w<write_block_clocks_per_group; w++ )
+          {
+            _FPDK_CLK_UP();
+            _FPDK_DelayUS(25);
+            _FPDK_CLK_DOWN();
+            _FPDK_DelayUS(25);
+          }
+
+          _FPDK_Clock();                                                                           //1 extra clock
+          _FPDK_Clock();                                                                           //1 extra clock
+          _FPDK_Clock();                                                                           //1 extra clock
+        }
+
+        _FPDK_SetDatOutgoing();                                                                    //set DAT outgoing
       }
       break;
 
@@ -479,6 +542,10 @@ void FPDK_Init(void)
 
   HAL_GPIO_WritePin( DCDC15VOLT_ENABLE_OUT_GPIO_Port, DCDC15VOLT_ENABLE_OUT_Pin, GPIO_PIN_SET );   //enable DCDC 15V booster
 
+  FPDK_SetVDD(1000,0);                                                                             //set 1V vdd for measurement (after adc start)
+
+  _hw_mod = FPDK_HWMOD_NONE;
+
   _hw_variant = FPDK_HWVAR_NONE;                                                                   //test for hardware variants
 
   GPIO_InitTypeDef GPIO_InitStruct0 = { .Pin=HW_VARIANT_DET0_Pin, .Mode=GPIO_MODE_INPUT, .Pull=GPIO_PULLUP, .Speed=GPIO_SPEED_FREQ_HIGH };
@@ -514,7 +581,7 @@ void FPDK_Init(void)
     HAL_ADC_ConfigChannel(&hadc, &sConfig);
   }
 
-  _adc_vref = 0;
+  _adc_vref = 3300;
   _adc_vdd = 0;
   _adc_vpp = 0;
   HAL_ADCEx_Calibration_Start(&hadc);                                                              //calibrate ADC
@@ -528,6 +595,15 @@ void FPDK_Init(void)
   _FPDK_SetPA4Incoming();
   _FPDK_SetPA0Incoming();
   _FPDK_SetPA7Incoming();
+
+  while( !_adc_vdd ) {;}                                                                           //wait for adc to have a measurement
+  if( _adc_vdd > 1500 )                                                                            //is set test vdd 1V measured > 1.5V?
+  {
+    _dac_vdd_max = FPDK_VDD_EXTENDED_DAC_MAX_MV;                                                   //variant with changed resisistor on opamp
+    _hw_mod |= FPDK_HWMOD_VDD13VMAX;
+  }
+
+  FPDK_SetVDD(0,0);                                                                                //set 0V for VDD
 }
 
 void FPDK_DeInit(void)
@@ -540,6 +616,16 @@ void FPDK_DeInit(void)
   _FPDK_SetPA4Incoming();
   _FPDK_SetPA0Incoming();
   _FPDK_SetPA7Incoming();
+}
+
+uint32_t FPDK_GetHwVariant(void)
+{
+  return _hw_variant;
+}
+
+uint32_t FPDK_GetHwMod(void)
+{
+  return _hw_mod;
 }
 
 void FPDK_SetLeds(uint32_t val)
@@ -595,7 +681,7 @@ uint32_t FPDK_GetAdcVpp(void) {
 
 bool FPDK_SetVDD(uint32_t mV, uint32_t stabelizeDelayUS)
 {
-  _dac_vdd = (mV*4095) / FPDK_VDD_DAC_MAX_MV;
+  _dac_vdd = (mV*4095) / _dac_vdd_max;
 
   if( _dac_vdd>4095 )
     _dac_vdd = 4095;
@@ -706,6 +792,7 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
   switch( type )                                                                                   //send READ command
   {
     case FPDK_IC_FLASH_2: 
+    case FPDK_IC_FLASH_3: 
       resp = _FPDK_SendCommand(type,0xC); 
       break;
     default:
@@ -754,6 +841,7 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
   switch( type )                                                                                   //send READ command
   {
     case FPDK_IC_FLASH_2: 
+    case FPDK_IC_FLASH_3: 
       resp = _FPDK_SendCommand(type,0xC); 
       break;
     default:
@@ -822,6 +910,7 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
   switch( type )                                                                                   //send READ command
   {
     case FPDK_IC_FLASH_2: 
+    case FPDK_IC_FLASH_3: 
       resp = _FPDK_SendCommand(type,0xC);
       break;
     default:
@@ -883,6 +972,7 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
   switch( type )                                                                                   //send ERASE command
   {
     case FPDK_IC_FLASH_2: 
+    case FPDK_IC_FLASH_3: 
       resp = _FPDK_SendCommand(type,0x5);
       break;
     default:
@@ -906,7 +996,12 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
   for( uint32_t e=0; e<erase_clocks; e++ )
   {
     _FPDK_CLK_UP();
-    _FPDK_DelayUS((FPDK_IC_FLASH_2==type)?40000:5000);
+    switch( type )
+    {
+      case FPDK_IC_FLASH_2: _FPDK_DelayUS(40000); break;
+      case FPDK_IC_FLASH_3: _FPDK_DelayUS(20000); break;
+      default:  _FPDK_DelayUS(5000); break;
+    }
     _FPDK_CLK_DOWN();
     _FPDK_DelayUS(1);
     _FPDK_CLK_UP();
@@ -938,7 +1033,16 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
-  uint16_t resp = _FPDK_SendCommand(type,0x7);                                                     //send WRITE command
+  uint16_t resp;
+  switch( type )                                                                                   //send WRITE command
+  {
+    case FPDK_IC_FLASH_3: 
+      resp = _FPDK_SendCommand(type,0xB);
+      break;
+    default:
+      resp = _FPDK_SendCommand(type,0x7); 
+      break;
+  }
 
   if( FPDK_IS_FLASH_TYPE(type) && (ic_id != (resp&0xFFF)) )
   {

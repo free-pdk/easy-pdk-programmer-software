@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020  freepdk  https://free-pdk.github.io
+Copyright (C) 2019-2021  freepdk  https://free-pdk.github.io
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,8 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "usbd_cdc_if.h"
 
 #include <string.h>
+#include <inttypes.h>
 
 static const uint8_t FPDKVER[] = "FREE-PDK EASY PROG - HW:" __FPDKHW__ " SW:" __FPDKSW__ " PROTO:" __FPDKPROTO__ " " __FPDKSUB__ "\n";
+static const uint8_t FPDKMSG[] = "HWVAR:%" PRIx32 " HWMOD:%" PRIx32 "\n";
 
 static const uint32_t FPDK_LED_UART_RX = 1;
 static const uint32_t FPDK_LED_UART_TX = 2;
@@ -123,6 +125,14 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
   {
     case FPDKPROTO_CMD_GETVERINFO:
       _FPDKUSB_Ack( FPDKVER, strlen((char*)FPDKVER) );
+      break;
+
+    case FPDKPROTO_CMD_GETVERMSG:
+      {
+        char msg[128];
+        snprintf(msg, sizeof(msg), FPDKMSG, FPDK_GetHwVariant(), FPDK_GetHwMod() );
+        _FPDKUSB_Ack( msg, strlen((char*)msg) );
+      }
       break;
 
     case FPDKPROTO_CMD_SETLED:
