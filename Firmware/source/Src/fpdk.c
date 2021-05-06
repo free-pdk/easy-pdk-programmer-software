@@ -299,6 +299,7 @@ static uint16_t _FPDK_SendCommand(const FPDKICTYPE type, const uint8_t command)
       break;
 
     case FPDK_IC_FLASH_2:
+    case FPDK_IC_FLASH_4:
       _FPDK_SendBits32F(0xA5A5A5A0 | command, 32);                                                 //preamble+command
       _FPDK_SetDatIncoming();                                                                      //set DAT incoming
       ack = _FPDK_RecvBits32(17);                                                                  //receive ack
@@ -346,12 +347,13 @@ static uint32_t _FPDK_ReadAddr(const FPDKICTYPE type, const uint32_t addr, const
     case FPDK_IC_FLASH_1:
     case FPDK_IC_FLASH_2:
     case FPDK_IC_FLASH_3:
+    case FPDK_IC_FLASH_4:
       _FPDK_SendBits32F(addr,addr_bits);                                                           //send address to read from 
       _FPDK_SetDatIncoming();                                                                      //set DAT incoming
       _FPDK_CLK_UP();
       _FPDK_DelayUS(5);
 
-      if( FPDK_IC_FLASH_3 == type )                                                                //read 5 ecc bits
+      if( (FPDK_IC_FLASH_3 == type) || (FPDK_IC_FLASH_4 == type)  )                                //read 5 ecc bits
         _FPDK_RecvBits32(5);
 
       dat = _FPDK_RecvBits32(data_bits);                                                           //receive data (Rising edge)
@@ -441,6 +443,7 @@ static void _FPDK_WriteAddr(const FPDKICTYPE type, const uint32_t addr, const ui
       break;
 
     case FPDK_IC_FLASH_3:
+    case FPDK_IC_FLASH_4:
       {
         _FPDK_SendBits32F(addr,addr_bits);                                                         //send address to write to
 
@@ -747,6 +750,9 @@ static uint32_t _FPDK_GetIDIC(const FPDKICTYPE type, const uint32_t vpp_cmd, con
   }
   _FPDK_LeaveProgramingMode(type, 0);                                                              //leave prog mode, abort write before it is executed
 
+  if( 0x3FFF == (ic_id & 0x3FFF) )
+    ic_id = 0;
+
   return ic_id;
 }
 
@@ -793,6 +799,7 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
   {
     case FPDK_IC_FLASH_2: 
     case FPDK_IC_FLASH_3: 
+    case FPDK_IC_FLASH_4: 
       resp = _FPDK_SendCommand(type,0xC); 
       break;
     default:
@@ -842,6 +849,7 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
   {
     case FPDK_IC_FLASH_2: 
     case FPDK_IC_FLASH_3: 
+    case FPDK_IC_FLASH_4: 
       resp = _FPDK_SendCommand(type,0xC); 
       break;
     default:
@@ -911,6 +919,7 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
   {
     case FPDK_IC_FLASH_2: 
     case FPDK_IC_FLASH_3: 
+    case FPDK_IC_FLASH_4: 
       resp = _FPDK_SendCommand(type,0xC);
       break;
     default:
@@ -973,6 +982,7 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
   {
     case FPDK_IC_FLASH_2: 
     case FPDK_IC_FLASH_3: 
+    case FPDK_IC_FLASH_4: 
       resp = _FPDK_SendCommand(type,0x5);
       break;
     default:
@@ -1000,6 +1010,7 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
     {
       case FPDK_IC_FLASH_2: _FPDK_DelayUS(40000); break;
       case FPDK_IC_FLASH_3: _FPDK_DelayUS(20000); break;
+      case FPDK_IC_FLASH_4: _FPDK_DelayUS(20000); break;
       default:  _FPDK_DelayUS(5000); break;
     }
     _FPDK_CLK_DOWN();
@@ -1038,6 +1049,9 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
   {
     case FPDK_IC_FLASH_3: 
       resp = _FPDK_SendCommand(type,0xB);
+      break;
+    case FPDK_IC_FLASH_4: 
+      resp = _FPDK_SendCommand(type,0x3);
       break;
     default:
       resp = _FPDK_SendCommand(type,0x7); 
