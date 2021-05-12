@@ -40,7 +40,7 @@ unsigned char _sdcc_external_startup(void)
 
 void main(void)
 {
-  //setup timer2 (TM2) interrupt for 115200 baud
+  //setup timer2 (TM2) interrupt for 28800 baud
   TM2C = TM2C_CLK_IHRC;                         //use IHRC -> 16 Mhz
   TM2S = TM2S_PRESCALE_NONE | TM2S_SCALE_DIV8;  //no prescale, scale 8 ~> 2MHz
   TM2B = 69;                                    //divide by 69 ~> 28985 Hz (apx. 28800)

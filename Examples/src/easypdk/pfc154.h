@@ -480,8 +480,8 @@ __sfr16          _t16c;
 #define PWMG0C_CLK_IHRC              0x01
 
 //pwmg0s definitions
-#define PWMG0_INT_AT_0               0x00
-#define PWMG0_INT_AT_DUTY            0x80
+#define PWMG0_INT_AT_DUTY            0x00
+#define PWMG0_INT_AT_0               0x80
 #define PWMG0_PRESCALE_NONE          0x00
 #define PWMG0_PRESCALE_DIV4          0x20
 #define PWMG0_PRESCALE_DIV16         0x40
@@ -532,8 +532,8 @@ __sfr16          _t16c;
 #define PWMG1C_CLK_IHRC              0x01
 
 //pwmg1s definitions
-#define PWMG1_INT_AT_0               0x00
-#define PWMG1_INT_AT_DUTY            0x80
+#define PWMG1_INT_AT_DUTY            0x00
+#define PWMG1_INT_AT_0               0x80
 #define PWMG1_PRESCALE_NONE          0x00
 #define PWMG1_PRESCALE_DIV4          0x20
 #define PWMG1_PRESCALE_DIV16         0x40
@@ -585,8 +585,8 @@ __sfr16          _t16c;
 #define PWMG2C_CLK_IHRC              0x01
 
 //pwmg2s definitions
-#define PWMG2_INT_AT_0               0x00
-#define PWMG2_INT_AT_DUTY            0x80
+#define PWMG2_INT_AT_DUTY            0x00
+#define PWMG2_INT_AT_0               0x80
 #define PWMG2_PRESCALE_NONE          0x00
 #define PWMG2_PRESCALE_DIV4          0x20
 #define PWMG2_PRESCALE_DIV16         0x40
