@@ -56,7 +56,7 @@ void main(void)
   ADCRGC = ADCRG_ADC_REF_VDD;                   //ADC reference voltage is VDD
 #endif
   ADCM = ADCM_CLK_SYSCLK_DIV16;                 //SYSCLK 8MHZ/16 -> 500 kHz ADC clock
-  ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD16_BANDGAP;//enable ADC and use channel 16 (internal bandgap voltage 1.2V)
+  ADCC = ADCC_ADC_ENABLE | ADCC_CH_AD15_BANDGAP;//enable ADC and use channel 16 (internal bandgap voltage 1.2V)
                                                 //NOTE: a delay of 400usec is required after initialization, before first ADC conversion can start
 
   //printf has a huge footprint (big CODE + big RAM). Do not use it in your projects unless you have to.  

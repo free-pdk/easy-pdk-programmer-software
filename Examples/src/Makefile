@@ -31,7 +31,8 @@ PMS150C:
 
 PMS150G:
 	mkdir -p $(OUTDIR)
-	$(SDCC) -DPMS150G -mpdk13 -o $(OUTDIR)/helloworld_pms150g.ihx helloworld2mhz.c
+	$(SDCC) -DPMS150G -mpdk13 -o $(OUTDIR)/helloworld_pms150g.ihx helloworld_2mhz.c
+	$(SDCC) -DPMS150G -mpdk13 -o $(OUTDIR)/comptest_pms150g.ihx comptest.c
 
 PMS152:
 	mkdir -p $(OUTDIR)
