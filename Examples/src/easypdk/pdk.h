@@ -17,6 +17,8 @@
  #include "pfs172.h"
 #elif defined(PFS173)
  #include "pfs173.h"
+#elif defined(PFC232)
+ #include "pfc232.h"
 #else
  #error "Unknown processor. Please define processor"
 #endif
