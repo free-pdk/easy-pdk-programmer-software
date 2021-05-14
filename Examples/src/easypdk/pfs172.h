@@ -273,7 +273,7 @@ __sfr16          _t16c;
 #define ADCC_CH_AD8_PA3              0x20
 #define ADCC_CH_AD9_PA4              0x24
 #define ADCC_CH_AD10_PA0             0x28
-#define ADCC_CH_AD16_BANDGAP         0x3C
+#define ADCC_CH_AD15_BANDGAP         0x3C
 
 //adcm definitions
 #define ADCM_CLK_SYSCLK              0x00
@@ -301,7 +301,6 @@ __sfr16          _t16c;
 #define MISC2_COMP_EDGE_INT_BOTH     0x00
 #define MISC2_COMP_EDGE_INT_RISE     0x20
 #define MISC2_COMP_EDGE_INT_FALL     0x40
-#define MISC2_PB3_TO_PB4             0x04
 
 //misc_lvr definitions
 #define MISCLVR_1V8                  0x00

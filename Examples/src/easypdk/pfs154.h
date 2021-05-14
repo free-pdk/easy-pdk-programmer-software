@@ -277,10 +277,10 @@ __sfr16          _t16c;
 #define MISC2_COMP_EDGE_INT_BOTH     0x00
 #define MISC2_COMP_EDGE_INT_RISE     0x20
 #define MISC2_COMP_EDGE_INT_FALL     0x40
-//#define MISC2_UNK_TM3                0x00
-//#define MISC2_UNK_PWMG2              0x10
-//#define MISC2_UNK_COMP               0x00
-//#define MISC2_UNK_PWMG1              0x08
+#define MISC2_INTRQ7_TM3             0x00
+#define MISC2_INTRQ7_PWMG2           0x10
+#define MISC2_INTRQ4_COMP            0x00
+#define MISC2_INTRQ4_PWMG1           0x08
 
 //misc_lvr definitions
 #define MISCLVR_4V                   0x00

@@ -275,7 +275,7 @@ __sfr16          _t16c;
 #define ADCC_CH_AD8_PA3              0x20
 #define ADCC_CH_AD9_PA4              0x24
 #define ADCC_CH_AD10_PA0             0x28
-#define ADCC_CH_AD16_BANDGAP         0x3C
+#define ADCC_CH_AD15_BANDGAP         0x3C
 
 //adcm definitions
 #define ADCM_CLK_SYSCLK              0x00
