@@ -1149,7 +1149,10 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   if( _spiBlocksMeasure == _spiMeasureBlockCounter )
   {
     uint32_t c = __HAL_TIM_GET_COUNTER(&htim2);
-    _spiFrequency = (48000000ULL*8*_spiBlockSize*(_spiBlocksMeasure-1))/c;
+    if( c>0 ) 
+      _spiFrequency = (48000000ULL*8*_spiBlockSize*(_spiBlocksMeasure-1))/c;
+    else 
+      _spiFrequency = 1;
   }
 }
 
