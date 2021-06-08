@@ -42,12 +42,12 @@ if [ "$OSTYPE" == "msys" ]; then
 else
     if [[ $OSTYPE =~ darwin.* ]]; then
         OS="MAC"
-#        mv easypdkprog easypdkprog.x86_64
-#        make distclean 
-#        make all EPDKVER=$EPDKVER ECFLAGS="-target arm64-apple-macos11" EHOST="--host=arm64-apple-macos11"
-#        mv easypdkprog easypdkprog.arm64
-#        lipo -create -output easypdkprog easypdkprog.x86_64 easypdkprog.arm64
-#        lipo -archs easypdkprog
+        mv easypdkprog easypdkprog.x86_64
+        make distclean 
+        make all EPDKVER=$EPDKVER ECFLAGS="-target arm64-apple-macos11" EHOST="--host=arm64-apple-macos11"
+        mv easypdkprog easypdkprog.arm64
+        lipo -create -output easypdkprog easypdkprog.x86_64 easypdkprog.arm64
+        lipo -archs easypdkprog
         cp easypdkprog $DESTDIR
     else
         OS="LINUX"

@@ -63,8 +63,7 @@ jobs:
 
   job-osx:
     name: 'build macos'
-##    runs-on: macos-11.0
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: 'checkout'
         uses: actions/checkout@v2
