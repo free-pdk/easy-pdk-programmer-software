@@ -20,7 +20,7 @@
 #define FUSE_FPPA_1CORE    0x0000 //(F) - Looks like this setting is ignored. Maybe it is used in wakeup after STOPSYS
 #define FUSE_FPPA_2CORE    0x1000
 #define FUSE_RES_BITS_HIGH 0x213C // - - 1 F   0 0 0 1   D E 1 1   1 1 0 S
-// Blank IC Values         0x3FFF // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, EMI Disable, Normal IO Drive)
+// Blank IC Values         0x3FFF // - - 1 1   1 1 1 1   1 1 1 1   1 1 1 1 (Security Off, EMI Disable, Normal IO Drive, 2 Core mode)
 #define EASY_PDK_FUSE(f) { __asm__(".area FUSE (ABS)\n.org (0x7ff*2)\n.word ("_ASMD(FUSE_RES_BITS_HIGH)"|"_ASMD(f)")\n.area CODE\n"); }
 
 //set calibration macros
