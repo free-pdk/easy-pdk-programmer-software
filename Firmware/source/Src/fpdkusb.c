@@ -217,32 +217,38 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
     case FPDKPROTO_CMD_BLANKCKIC:
       {
-        if( len<(2*sizeof(uint32_t)+4*sizeof(uint16_t)+4*sizeof(uint8_t)) )
+        if( len<(2*sizeof(uint32_t)+4*sizeof(uint16_t)+7*sizeof(uint8_t)) )
           return false;
 
         uint16_t ic_id;
         memcpy( &ic_id, &dat[0], sizeof(uint16_t) );
         uint8_t type = dat[2];
+        uint8_t cmd = dat[3];
+        uint8_t cmd_trailing_clocks = dat[4];
         uint32_t vdd_cmd;
-        memcpy( &vdd_cmd, &dat[3], sizeof(uint32_t) );
+        memcpy( &vdd_cmd, &dat[5], sizeof(uint32_t) );
         uint32_t vpp_cmd;
-        memcpy( &vpp_cmd, &dat[7], sizeof(uint32_t) );
+        memcpy( &vpp_cmd, &dat[9], sizeof(uint32_t) );
         uint32_t vdd_read;
-        memcpy( &vdd_read, &dat[11], sizeof(uint32_t) );
+        memcpy( &vdd_read, &dat[13], sizeof(uint32_t) );
         uint32_t vpp_read;
-        memcpy( &vpp_read, &dat[15], sizeof(uint32_t) );
-        uint8_t addr_bits = dat[19];
-        uint8_t data_bits = dat[20];
+        memcpy( &vpp_read, &dat[17], sizeof(uint32_t) );
+        uint8_t addr_bits = dat[21];
+        uint8_t data_bits = dat[22];
+        uint8_t ecc_bits = dat[23];
         uint16_t count;
-        memcpy( &count, &dat[21], sizeof(uint16_t) );
-        uint8_t addr_exclude_first_instr = dat[23];
+        memcpy( &count, &dat[24], sizeof(uint16_t) );
+        uint8_t addr_exclude_first_instr = dat[26];
         uint16_t addr_exclude_start;
-        memcpy( &addr_exclude_start, &dat[24], sizeof(uint16_t) );
+        memcpy( &addr_exclude_start, &dat[27], sizeof(uint16_t) );
         uint16_t addr_exclude_end;
-        memcpy( &addr_exclude_end, &dat[26], sizeof(uint16_t) );
+        memcpy( &addr_exclude_end, &dat[29], sizeof(uint16_t) );
  
         FPDK_SetLed(FPDK_LED_IC,true);
-        ic_id = FPDK_BlankCheckIC(ic_id, type, vpp_cmd, vdd_cmd, vpp_read, vdd_read, addr_bits, data_bits, count, addr_exclude_first_instr, addr_exclude_start, addr_exclude_end );
+        ic_id = FPDK_BlankCheckIC(ic_id, type, cmd, cmd_trailing_clocks,
+                                  vpp_cmd, vdd_cmd, vpp_read, vdd_read, 
+                                  addr_bits, data_bits, ecc_bits, count, 
+                                  addr_exclude_first_instr, addr_exclude_start, addr_exclude_end );
         FPDK_SetLed(FPDK_LED_IC,false);
 
         _FPDKUSB_Ack((uint8_t*)&ic_id, sizeof(ic_id));
@@ -251,24 +257,30 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
     case FPDKPROTO_CMD_ERASEIC:
       {
-        if( len<(2*sizeof(uint8_t)+sizeof(uint16_t)+4*sizeof(uint32_t)) )
+        if( len<(4*sizeof(uint8_t)+2*sizeof(uint16_t)+4*sizeof(uint32_t)) )
           return false;
 
         uint16_t ic_id;
         memcpy( &ic_id, &dat[0], sizeof(uint16_t) );
         uint8_t type = dat[2];
+        uint8_t cmd = dat[3];
+        uint8_t cmd_trailing_clocks = dat[4];
         uint32_t vdd_cmd;
-        memcpy( &vdd_cmd, &dat[3], sizeof(uint32_t) );
+        memcpy( &vdd_cmd, &dat[5], sizeof(uint32_t) );
         uint32_t vpp_cmd;
-        memcpy( &vpp_cmd, &dat[7], sizeof(uint32_t) );
+        memcpy( &vpp_cmd, &dat[9], sizeof(uint32_t) );
         uint32_t vdd_erase;
-        memcpy( &vdd_erase, &dat[11], sizeof(uint32_t) );
+        memcpy( &vdd_erase, &dat[13], sizeof(uint32_t) );
         uint32_t vpp_erase;
-        memcpy( &vpp_erase, &dat[15], sizeof(uint32_t) );
-        uint8_t erase_clocks = dat[19];
+        memcpy( &vpp_erase, &dat[17], sizeof(uint32_t) );
+        uint8_t erase_clocks = dat[21];
+        uint16_t erase_clock_hcycles;
+        memcpy( &erase_clock_hcycles, &dat[22], sizeof(uint16_t) );
  
         FPDK_SetLed(FPDK_LED_IC,true);
-        ic_id = FPDK_EraseIC(ic_id, type, vpp_cmd, vdd_cmd, vpp_erase, vdd_erase, erase_clocks);
+        ic_id = FPDK_EraseIC(ic_id, type, cmd, cmd_trailing_clocks,
+                             vpp_cmd, vdd_cmd, vpp_erase, vdd_erase, 
+                             erase_clocks, erase_clock_hcycles);
         FPDK_SetLed(FPDK_LED_IC,false);
 
         _FPDKUSB_Ack((uint8_t*)&ic_id, sizeof(ic_id));
@@ -277,34 +289,41 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
     case FPDKPROTO_CMD_READIC:
       {
-        if( len<(2*sizeof(uint32_t)+4*sizeof(uint16_t)+3*sizeof(uint8_t)) )
+        if( len<(2*sizeof(uint32_t)+4*sizeof(uint16_t)+6*sizeof(uint8_t)) )
           return false;
 
         uint16_t ic_id;
         memcpy( &ic_id, &dat[0], sizeof(uint16_t) );
         uint8_t type = dat[2];
+        uint8_t cmd = dat[3];
+        uint8_t cmd_trailing_clocks = dat[4];
         uint32_t vdd_cmd;
-        memcpy( &vdd_cmd, &dat[3], sizeof(uint32_t) );
+        memcpy( &vdd_cmd, &dat[5], sizeof(uint32_t) );
         uint32_t vpp_cmd;
-        memcpy( &vpp_cmd, &dat[7], sizeof(uint32_t) );
+        memcpy( &vpp_cmd, &dat[9], sizeof(uint32_t) );
         uint32_t vdd_read;
-        memcpy( &vdd_read, &dat[11], sizeof(uint32_t) );
+        memcpy( &vdd_read, &dat[13], sizeof(uint32_t) );
         uint32_t vpp_read;
-        memcpy( &vpp_read, &dat[15], sizeof(uint32_t) );
+        memcpy( &vpp_read, &dat[17], sizeof(uint32_t) );
         uint16_t addr;
-        memcpy( &addr, &dat[19], sizeof(uint16_t) );
-        uint8_t addr_bits = dat[21];
+        memcpy( &addr, &dat[21], sizeof(uint16_t) );
+        uint8_t addr_bits = dat[23];
         uint16_t data_offs;
-        memcpy( &data_offs, &dat[22], sizeof(uint16_t) );
-        uint8_t data_bits = dat[24];
+        memcpy( &data_offs, &dat[24], sizeof(uint16_t) );
+        uint8_t data_bits = dat[26];
+        uint8_t ecc_bits = dat[27];
         uint16_t count;
-        memcpy( &count, &dat[25], sizeof(uint16_t) );
+        memcpy( &count, &dat[28], sizeof(uint16_t) );
  
         if( (data_offs>sizeof(_ic_rw_buffer)) || ((data_offs+len)>sizeof(_ic_rw_buffer)) )
           return false;
 
         FPDK_SetLed(FPDK_LED_IC,true);
-        ic_id = FPDK_ReadIC(ic_id, type, vpp_cmd, vdd_cmd, vpp_read, vdd_read, addr, addr_bits, &_ic_rw_buffer[data_offs], data_bits, count );
+        ic_id = FPDK_ReadIC(ic_id, type, cmd, cmd_trailing_clocks,
+                            vpp_cmd, vdd_cmd, vpp_read, vdd_read,
+                            addr, addr_bits, 
+                            &_ic_rw_buffer[data_offs], 
+                            data_bits, ecc_bits, count );
         FPDK_SetLed(FPDK_LED_IC,false);
 
         _FPDKUSB_Ack((uint8_t*)&ic_id, sizeof(ic_id));
@@ -313,37 +332,59 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
     case FPDKPROTO_CMD_WRITEIC:
       {
-        if( len<(4*sizeof(uint32_t)+4*sizeof(uint16_t)+6*sizeof(uint8_t)) )
+        if( len<(4*sizeof(uint32_t)+5*sizeof(uint16_t)+13*sizeof(uint8_t)) )
           return false;
 
         uint16_t ic_id;
         memcpy( &ic_id, &dat[0], sizeof(uint16_t) );
         uint8_t type = dat[2];
+        uint8_t cmd = dat[3];
+        uint8_t cmd_trailing_clocks = dat[4];
         uint32_t vdd_cmd;
-        memcpy( &vdd_cmd, &dat[3], sizeof(uint32_t) );
+        memcpy( &vdd_cmd, &dat[5], sizeof(uint32_t) );
         uint32_t vpp_cmd;
-        memcpy( &vpp_cmd, &dat[7], sizeof(uint32_t) );
+        memcpy( &vpp_cmd, &dat[9], sizeof(uint32_t) );
         uint32_t vdd_write;
-        memcpy( &vdd_write, &dat[11], sizeof(uint32_t) );
+        memcpy( &vdd_write, &dat[13], sizeof(uint32_t) );
         uint32_t vpp_write;
-        memcpy( &vpp_write, &dat[15], sizeof(uint32_t) );
+        memcpy( &vpp_write, &dat[17], sizeof(uint32_t) );
         uint16_t addr;
-        memcpy( &addr, &dat[19], sizeof(uint16_t) );
-        uint8_t addr_bits = dat[21];
+        memcpy( &addr, &dat[21], sizeof(uint16_t) );
+        uint8_t addr_bits = dat[23];
         uint16_t data_offs;
-        memcpy( &data_offs, &dat[22], sizeof(uint16_t) );
-        uint8_t data_bits = dat[24];
+        memcpy( &data_offs, &dat[24], sizeof(uint16_t) );
+        uint8_t data_bits = dat[26];
+        uint8_t ecc_bits = dat[27];
         uint16_t count;
-        memcpy( &count, &dat[25], sizeof(uint16_t) );
-        uint8_t write_block_size = dat[27];
-        uint8_t write_block_clock_groups = dat[28];
-        uint8_t write_block_clocks_per_group = dat[29];
+        memcpy( &count, &dat[28], sizeof(uint16_t) );
+        uint8_t write_block_address_first = dat[30];
+        uint8_t write_block_size = dat[31];
+        uint8_t write_block_limited = dat[32];
+        uint8_t write_block_clock_groups = dat[33];
+        uint8_t write_block_clock_group_lead_clocks = dat[34];
+        uint8_t write_block_clock_group_slow_clocks = dat[35];
+        uint16_t write_block_clock_group_slow_clock_hcycle;
+        memcpy( &write_block_clock_group_slow_clock_hcycle, &dat[36], sizeof(uint16_t) );
+        uint8_t write_block_clock_group_trail_clocks = dat[38];
  
         if( (data_offs>sizeof(_ic_rw_buffer)) || ((data_offs+len)>sizeof(_ic_rw_buffer)) )
           return false;
 
         FPDK_SetLed(FPDK_LED_IC,true);
-        ic_id = FPDK_WriteIC(ic_id, type, vpp_cmd, vdd_cmd, vpp_write, vdd_write, addr, addr_bits, &_ic_rw_buffer[data_offs], data_bits, count, write_block_size, write_block_clock_groups, write_block_clocks_per_group );
+        ic_id = FPDK_WriteIC(ic_id, type, cmd, cmd_trailing_clocks,
+                             vpp_cmd, vdd_cmd, vpp_write, vdd_write,
+                             addr, addr_bits,
+                             &_ic_rw_buffer[data_offs],
+                             data_bits, ecc_bits,
+                             count,
+                             write_block_address_first,
+                             write_block_size,
+                             write_block_limited,
+                             write_block_clock_groups,
+                             write_block_clock_group_lead_clocks,
+                             write_block_clock_group_slow_clocks,
+                             write_block_clock_group_slow_clock_hcycle,
+                             write_block_clock_group_trail_clocks);
         FPDK_SetLed(FPDK_LED_IC,false);
 
         _FPDKUSB_Ack((uint8_t*)&ic_id, sizeof(ic_id));
@@ -352,39 +393,47 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
 
     case FPDKPROTO_CMD_VERIFYIC:
       {
-        if( len<(2*sizeof(uint32_t)+6*sizeof(uint16_t)+4*sizeof(uint8_t)) )
+        if( len<(2*sizeof(uint32_t)+6*sizeof(uint16_t)+7*sizeof(uint8_t)) )
           return false;
 
         uint16_t ic_id;
         memcpy( &ic_id, &dat[0], sizeof(uint16_t) );
         uint8_t type = dat[2];
+        uint8_t cmd = dat[3];
+        uint8_t cmd_trailing_clocks = dat[4];
         uint32_t vdd_cmd;
-        memcpy( &vdd_cmd, &dat[3], sizeof(uint32_t) );
+        memcpy( &vdd_cmd, &dat[5], sizeof(uint32_t) );
         uint32_t vpp_cmd;
-        memcpy( &vpp_cmd, &dat[7], sizeof(uint32_t) );
+        memcpy( &vpp_cmd, &dat[9], sizeof(uint32_t) );
         uint32_t vdd_read;
-        memcpy( &vdd_read, &dat[11], sizeof(uint32_t) );
+        memcpy( &vdd_read, &dat[13], sizeof(uint32_t) );
         uint32_t vpp_read;
-        memcpy( &vpp_read, &dat[15], sizeof(uint32_t) );
+        memcpy( &vpp_read, &dat[17], sizeof(uint32_t) );
         uint16_t addr;
-        memcpy( &addr, &dat[19], sizeof(uint16_t) );
-        uint8_t addr_bits = dat[21];
+        memcpy( &addr, &dat[21], sizeof(uint16_t) );
+        uint8_t addr_bits = dat[23];
         uint16_t data_offs;
-        memcpy( &data_offs, &dat[22], sizeof(uint16_t) );
-        uint8_t data_bits = dat[24];
+        memcpy( &data_offs, &dat[24], sizeof(uint16_t) );
+        uint8_t data_bits = dat[26];
+        uint8_t ecc_bits = dat[27];
         uint16_t count;
-        memcpy( &count, &dat[25], sizeof(uint16_t) );
-        uint8_t addr_exclude_first_instr = dat[27];
+        memcpy( &count, &dat[28], sizeof(uint16_t) );
+        uint8_t addr_exclude_first_instr = dat[30];
         uint16_t addr_exclude_start;
-        memcpy( &addr_exclude_start, &dat[28], sizeof(uint16_t) );
+        memcpy( &addr_exclude_start, &dat[31], sizeof(uint16_t) );
         uint16_t addr_exclude_end;
-        memcpy( &addr_exclude_end, &dat[30], sizeof(uint16_t) );
+        memcpy( &addr_exclude_end, &dat[33], sizeof(uint16_t) );
  
         if( (data_offs>sizeof(_ic_rw_buffer)) || ((data_offs+len)>sizeof(_ic_rw_buffer)) )
           return false;
 
         FPDK_SetLed(FPDK_LED_IC,true);
-        ic_id = FPDK_VerifyIC(ic_id, type, vpp_cmd, vdd_cmd, vpp_read, vdd_read, addr, addr_bits, &_ic_rw_buffer[data_offs], data_bits, count, addr_exclude_first_instr, addr_exclude_start, addr_exclude_end );
+        ic_id = FPDK_VerifyIC(ic_id, type, cmd, cmd_trailing_clocks,
+                              vpp_cmd, vdd_cmd, vpp_read, vdd_read,
+                              addr, addr_bits,
+                              &_ic_rw_buffer[data_offs],
+                              data_bits, ecc_bits, count,
+                              addr_exclude_first_instr, addr_exclude_start, addr_exclude_end );
         FPDK_SetLed(FPDK_LED_IC,false);
 
         _FPDKUSB_Ack((uint8_t*)&ic_id, sizeof(ic_id));

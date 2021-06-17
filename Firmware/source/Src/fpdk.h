@@ -52,13 +52,7 @@ typedef enum FPDKICTYPE
   FPDK_IC_OTP2_2   = 0x22,
   FPDK_IC_OTP3_1   = 0x31,
   FPDK_IC_FLASH    = 0xF0,
-  FPDK_IC_FLASH_1  = 0xF1,
-  FPDK_IC_FLASH_2  = 0xF2,
-  FPDK_IC_FLASH_3  = 0xF3,
-  FPDK_IC_FLASH_4  = 0xF4,
 } FPDKICTYPE;
-
-#define  FPDK_IS_FLASH_TYPE(type) (0xF0==(type&0xF0))
 
 void     FPDK_Init(void);
 void     FPDK_DeInit(void);
@@ -80,44 +74,67 @@ uint32_t FPDK_ProbeIC(FPDKICTYPE* type, uint32_t* vpp_cmd, uint32_t* vdd_cmd);
 
 uint16_t FPDK_ReadIC(const uint16_t ic_id,
                      const FPDKICTYPE type,
+                     const uint8_t cmd,
+                     const uint8_t cmd_trailing_clocks,
                      const uint32_t vpp_cmd, const uint32_t vdd_cmd,
                      const uint32_t vpp_read, const uint32_t vdd_read,
                      const uint32_t addr, const uint8_t addr_bits,
                      uint16_t* data, const uint8_t data_bits,
+                     const uint8_t ecc_bits,
                      const uint32_t count);
 
 uint16_t FPDK_VerifyIC(const uint16_t ic_id,
                        const FPDKICTYPE type,
+                       const uint8_t cmd,
+                       const uint8_t cmd_trailing_clocks,
                        const uint32_t vpp_cmd, const uint32_t vdd_cmd,
                        const uint32_t vpp_read, const uint32_t vdd_read,
                        const uint32_t addr, const uint8_t addr_bits,
                        const uint16_t* data, const uint8_t data_bits,
+                       const uint8_t ecc_bits,
                        const uint32_t count,
                        const bool addr_exclude_first_instr, const uint32_t addr_exclude_start, const uint32_t addr_exclude_end);
 
 uint16_t FPDK_BlankCheckIC(const uint16_t ic_id,
                            const FPDKICTYPE type,
+                           const uint8_t cmd,
+                           const uint8_t cmd_trailing_clocks,
                            const uint32_t vpp_cmd, const uint32_t vdd_cmd,
                            const uint32_t vpp_read, const uint32_t vdd_read,
                            const uint8_t addr_bits,
                            const uint8_t data_bits,
+                           const uint8_t ecc_bits,
                            const uint32_t count,
                            const bool addr_exclude_first_instr, const uint32_t addr_exclude_start, const uint32_t addr_exclude_end);
 
 uint16_t FPDK_EraseIC(const uint16_t ic_id,
                       const FPDKICTYPE type,
+                      const uint8_t cmd,
+                      const uint8_t cmd_trailing_clocks,
                       const uint32_t vpp_cmd, const uint32_t vdd_cmd,
                       const uint32_t vpp_erase, const uint32_t vdd_erase,
-                      const uint8_t erase_clocks);
+                      const uint8_t erase_clocks, const uint16_t erase_clock_hcycle);
 
 uint16_t FPDK_WriteIC(const uint16_t ic_id,
                       const FPDKICTYPE type,
+                      const uint8_t cmd,
+                      const uint8_t cmd_trailing_clocks,
                       const uint32_t vpp_cmd, const uint32_t vdd_cmd,
                       const uint32_t vpp_write, const uint32_t vdd_write,
                       const uint32_t addr, const uint8_t addr_bits,
                       const uint16_t* data, const uint8_t data_bits,
+                      const uint8_t ecc_bits,
                       const uint32_t count,
-                      const uint8_t write_block_size, const uint8_t write_block_clock_groups, const uint8_t write_block_clocks_per_group);
+                      const uint8_t write_block_address_first,
+                      const uint8_t write_block_size, 
+                      const uint8_t write_block_limited,
+                      const uint8_t write_block_clock_groups, 
+                      const uint8_t write_block_clock_group_lead_clocks,
+                      const uint8_t write_block_clock_group_slow_clocks,
+                      const uint16_t write_block_clock_group_slow_clock_hcycle,
+                      const uint8_t write_block_clock_group_trail_clocks);
+
+
 
 bool FPDK_Calibrate(const uint32_t type, const uint32_t vdd,
                     const uint32_t frequency, const uint32_t multiplier,

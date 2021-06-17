@@ -302,9 +302,10 @@ int FPDKCOM_IC_Probe(const int fd, float* vpp_found, float* vdd_found, FPDKICTYP
 
 int FPDKCOM_IC_BlankCheck(const int fd,
                           const uint16_t icid, const FPDKICTYPE type,
+                          const uint8_t cmd, const uint8_t cmd_trailing_clocks,
                           const float vdd_cmd, const float vpp_cmd,
                           const float vdd_read, const float vpp_read,
-                          const uint8_t addr_bits, const uint8_t data_bits,
+                          const uint8_t addr_bits, const uint8_t data_bits, const uint8_t ecc_bits,
                           const uint16_t count,
                           const bool exclude_first_instruction, const uint16_t exclude_start, const uint16_t exclude_end)
 {
@@ -313,11 +314,21 @@ int FPDKCOM_IC_BlankCheck(const int fd,
   uint32_t vdd_read_u = vdd_read*1000;
   uint32_t vpp_read_u = vpp_read*1000;
 
-  uint8_t dat[] = { icid,icid>>8, type,
-                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
-                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24, vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
-                    addr_bits, data_bits, count,count>>8, 
-                    exclude_first_instruction, exclude_start,exclude_start>>8, exclude_end,exclude_end>>8 };
+  uint8_t dat[] = { icid,icid>>8,
+                    type,
+                    cmd,
+                    cmd_trailing_clocks,
+                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24,
+                    vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24,
+                    vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
+                    addr_bits,
+                    data_bits,
+                    ecc_bits,
+                    count,count>>8,
+                    exclude_first_instruction,
+                    exclude_start,exclude_start>>8,
+                    exclude_end,exclude_end>>8 };
 
   uint8_t resp[3+sizeof(uint16_t)];
   if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_BLANKCKIC, dat,sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_READIC_TIMEOUT) )
@@ -328,19 +339,26 @@ int FPDKCOM_IC_BlankCheck(const int fd,
 
 int FPDKCOM_IC_Erase(const int fd,
                      const uint16_t icid, const FPDKICTYPE type,
+                     const uint8_t cmd, const uint8_t cmd_trailing_clocks,
                      const float vdd_cmd, const float vpp_cmd,
                      const float vdd_erase, const float vpp_erase,
-                     const uint8_t erase_clocks)
+                     const uint8_t erase_clocks, const uint16_t erase_clock_hcycle)
 {
   uint32_t vdd_cmd_u = vdd_cmd*1000;
   uint32_t vpp_cmd_u = vpp_cmd*1000;
   uint32_t vdd_erase_u = vdd_erase*1000;
   uint32_t vpp_erase_u = vpp_erase*1000;
 
-  uint8_t dat[] = { icid,icid>>8, type,
-                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
-                    vdd_erase_u,vdd_erase_u>>8,vdd_erase_u>>16,vdd_erase_u>>24, vpp_erase_u,vpp_erase_u>>8, vpp_erase_u>>16,vpp_erase_u>>24,
-                    erase_clocks };
+  uint8_t dat[] = { icid,icid>>8,
+                    type,
+                    cmd,
+                    cmd_trailing_clocks,
+                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24,
+                    vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_erase_u,vdd_erase_u>>8,vdd_erase_u>>16,vdd_erase_u>>24,
+                    vpp_erase_u,vpp_erase_u>>8, vpp_erase_u>>16,vpp_erase_u>>24,
+                    erase_clocks, 
+                    erase_clock_hcycle, erase_clock_hcycle>>8 };
 
   uint8_t resp[3+sizeof(uint16_t)];
   if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_ERASEIC, dat,sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_ERASE_TIMEOUT) )
@@ -351,10 +369,11 @@ int FPDKCOM_IC_Erase(const int fd,
 
 int FPDKCOM_IC_Read(const int fd,
                     const uint16_t icid, const FPDKICTYPE type,
+                    const uint8_t cmd, const uint8_t cmd_trailing_clocks,
                     const float vdd_cmd, const float vpp_cmd,
                     const float vdd_read, const float vpp_read,
                     const uint16_t addr, const uint8_t addr_bits,
-                    const uint16_t data_offs, const uint8_t data_bits,
+                    const uint16_t data_offs, const uint8_t data_bits, const uint8_t ecc_bits,
                     const uint16_t count)
 {
   uint32_t vdd_cmd_u  = vdd_cmd*1000;
@@ -362,11 +381,19 @@ int FPDKCOM_IC_Read(const int fd,
   uint32_t vdd_read_u = vdd_read*1000;
   uint32_t vpp_read_u = vpp_read*1000;
 
-  uint8_t dat[] = { icid,icid>>8, type,
-                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
-                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24, vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
-                    addr,addr>>8, addr_bits,
-                    data_offs,data_offs>>8, data_bits,
+  uint8_t dat[] = { icid,icid>>8,
+                    type,
+                    cmd,
+                    cmd_trailing_clocks,
+                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24,
+                    vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24,
+                    vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
+                    addr,addr>>8,
+                    addr_bits,
+                    data_offs,data_offs>>8,
+                    data_bits,
+                    ecc_bits,
                     count,count>>8 };
 
   uint8_t resp[3+sizeof(uint16_t)];
@@ -378,24 +405,48 @@ int FPDKCOM_IC_Read(const int fd,
 
 int FPDKCOM_IC_Write(const int fd,
                      const uint16_t icid, const FPDKICTYPE type,
+                     const uint8_t cmd, const uint8_t cmd_trailing_clocks,
                      const float vdd_cmd, const float vpp_cmd,
                      const float vdd_write, const float vpp_write,
                      const uint16_t addr, const uint8_t addr_bits,
-                     const uint16_t data_offs, const uint8_t data_bits,
-                     const uint16_t count, 
-                     const uint8_t write_block_size, const uint8_t write_block_clock_groups, const uint8_t write_block_clocks_per_group)
+                     const uint16_t data_offs, const uint8_t data_bits, const uint8_t ecc_bits,
+                     const uint16_t count,
+                     const uint8_t write_block_address_first,
+                     const uint8_t write_block_size,
+                     const uint8_t write_block_limited,
+                     const uint8_t write_block_clock_groups,
+                     const uint8_t write_block_clock_group_lead_clocks,
+                     const uint8_t write_block_clock_group_slow_clocks,
+                     const uint16_t write_block_clock_group_slow_clock_hcycle,
+                     const uint8_t write_block_clock_group_trail_clocks)
 {
   uint32_t vdd_cmd_u = vdd_cmd*1000;
   uint32_t vpp_cmd_u = vpp_cmd*1000;
   uint32_t vdd_write_u = vdd_write*1000;
   uint32_t vpp_write_u = vpp_write*1000;
 
-  uint8_t dat[] = { icid,icid>>8, type,
-                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
-                    vdd_write_u,vdd_write_u>>8,vdd_write_u>>16,vdd_write_u>>24, vpp_write_u,vpp_write_u>>8, vpp_write_u>>16,vpp_write_u>>24,
-                    addr,addr>>8, addr_bits,
-                    data_offs,data_offs>>8, data_bits,
-                    count,count>>8, write_block_size, write_block_clock_groups, write_block_clocks_per_group };
+  uint8_t dat[] = { icid,icid>>8,
+                    type,
+                    cmd,
+                    cmd_trailing_clocks,
+                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24,
+                    vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_write_u,vdd_write_u>>8,vdd_write_u>>16,vdd_write_u>>24,
+                    vpp_write_u,vpp_write_u>>8, vpp_write_u>>16,vpp_write_u>>24,
+                    addr,addr>>8,
+                    addr_bits,
+                    data_offs,data_offs>>8,
+                    data_bits,
+                    ecc_bits,
+                    count,count>>8,
+                    write_block_address_first,
+                    write_block_size,
+                    write_block_limited,
+                    write_block_clock_groups,
+                    write_block_clock_group_lead_clocks,
+                    write_block_clock_group_slow_clocks,
+                    write_block_clock_group_slow_clock_hcycle, write_block_clock_group_slow_clock_hcycle>>8,
+                    write_block_clock_group_trail_clocks };
 
   uint8_t resp[3+sizeof(uint16_t)];
   if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_WRITEIC, dat,sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_READIC_TIMEOUT) )
@@ -406,10 +457,11 @@ int FPDKCOM_IC_Write(const int fd,
 
 int FPDKCOM_IC_Verify(const int fd,
                       const uint16_t icid, const FPDKICTYPE type,
+                      const uint8_t cmd, const uint8_t cmd_trailing_clocks,
                       const float vdd_cmd, const float vpp_cmd,
                       const float vdd_read, const float vpp_read,
                       const uint16_t addr, const uint8_t addr_bits,
-                      const uint16_t data_offs, const uint8_t data_bits,
+                      const uint16_t data_offs, const uint8_t data_bits, const uint8_t ecc_bits,
                       const uint16_t count,
                       const bool exclude_first_instruction, const uint16_t exclude_start, const uint16_t exclude_end)
 {
@@ -418,13 +470,22 @@ int FPDKCOM_IC_Verify(const int fd,
   uint32_t vdd_read_u = vdd_read*1000;
   uint32_t vpp_read_u = vpp_read*1000;
 
-  uint8_t dat[] = { icid,icid>>8, type,
-                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24, vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
-                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24, vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
+  uint8_t dat[] = { icid,icid>>8,
+                    type,
+                    cmd,
+                    cmd_trailing_clocks,
+                    vdd_cmd_u,vdd_cmd_u>>8,vdd_cmd_u>>16,vdd_cmd_u>>24,
+                    vpp_cmd_u,vpp_cmd_u>>8, vpp_cmd_u>>16,vpp_cmd_u>>24,
+                    vdd_read_u,vdd_cmd_u>>8,vdd_read_u>>16,vdd_read_u>>24,
+                    vpp_read_u,vpp_read_u>>8, vpp_read_u>>16,vpp_read_u>>24,
                     addr,addr>>8, addr_bits,
-                    data_offs,data_offs>>8, data_bits,
+                    data_offs,data_offs>>8,
+                    data_bits,
+                    ecc_bits,
                     count,count>>8,
-                    exclude_first_instruction, exclude_start,exclude_start>>8, exclude_end,exclude_end>>8 };
+                    exclude_first_instruction,
+                    exclude_start,exclude_start>>8,
+                    exclude_end,exclude_end>>8 };
 
   uint8_t resp[3+sizeof(uint16_t)];
   if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_VERIFYIC, dat,sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_READIC_TIMEOUT) )

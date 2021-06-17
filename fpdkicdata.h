@@ -26,14 +26,8 @@ typedef enum FPDKICTYPE
   FPDK_IC_OTP2_1  = 0x21,
   FPDK_IC_OTP2_2  = 0x22,
   FPDK_IC_OTP3_1  = 0x31,
-//  FPDK_IC_FLASH    = 0xF0,
-  FPDK_IC_FLASH_1  = 0xF1,
-  FPDK_IC_FLASH_2  = 0xF2,
-  FPDK_IC_FLASH_3  = 0xF3,
-  FPDK_IC_FLASH_4  = 0xF4,
+  FPDK_IC_FLASH    = 0xF0,
 } FPDKICTYPE;
-
-#define FPDK_IS_FLASH_TYPE(type) (0xF0==(type&0xF0))
 
 typedef struct FPDKICDATA
 {
@@ -45,6 +39,7 @@ typedef struct FPDKICDATA
   FPDKICTYPE type;
   uint8_t    addressbits;
   uint8_t    codebits;
+  uint8_t    eccbits;
   uint16_t   codewords;
   uint16_t   ramsize;
   bool       exclude_code_first_instr;
@@ -53,22 +48,33 @@ typedef struct FPDKICDATA
   uint16_t   scramble_code_block_length;
   uint16_t   scramble_code_block_repeat;
   char       scramble_code_shuffle_bits[16];
+  uint8_t    command_trailing_clocks;
+  int16_t    calibration_loop_cycle_correction;
+  uint8_t    cmd_read;
   float      vdd_cmd_read;
   float      vpp_cmd_read;
   float      vdd_read_hv;
   float      vpp_read_hv;
   float      vdd_cmd_write;
   float      vpp_cmd_write;
+  uint8_t    cmd_write;
   float      vdd_write_hv;
   float      vpp_write_hv;
+  uint8_t    write_block_address_first;
   uint8_t    write_block_size;
+  uint8_t    write_block_limited;
   uint8_t    write_block_clock_groups;
-  uint8_t    write_block_clocks_per_group;
+  uint8_t    write_block_clock_group_lead_clocks;
+  uint8_t    write_block_clock_group_slow_clocks;
+  uint16_t   write_block_clock_group_slow_clock_hcycle;
+  uint8_t    write_block_clock_group_trail_clocks;
+  uint8_t    cmd_erase;
   float      vdd_cmd_erase;
   float      vpp_cmd_erase;
   float      vdd_erase_hv;
   float      vpp_erase_hv;
   uint8_t    erase_clocks;
+  uint16_t   erase_clock_hcycle;
 
 } FPDKICDATA;
 

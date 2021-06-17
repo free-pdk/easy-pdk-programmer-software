@@ -54,34 +54,48 @@ int      FPDKCOM_GetBuffer(const int fd, const uint16_t roffset, uint8_t* dat, c
 int      FPDKCOM_IC_Probe(const int fd, float* vpp_found, float* vdd_found, FPDKICTYPE* type);
 
 int      FPDKCOM_IC_BlankCheck(const int fd, const uint16_t icid, const FPDKICTYPE type,
+                               const uint8_t cmd, const uint8_t cmd_trailing_clocks, 
                                const float vdd_cmd, const float vpp_cmd,
                                const float vdd_read, const float vpp_read,
-                               const uint8_t addr_bits, const uint8_t data_bits, const uint16_t count,
+                               const uint8_t addr_bits, const uint8_t data_bits, const uint8_t ecc_bits,
+                               const uint16_t count,
                                const bool exclude_first_instructionconst, uint16_t exclude_start, const uint16_t exclude_end);
 
 int      FPDKCOM_IC_Erase(const int fd, const uint16_t icid, const FPDKICTYPE type,
-                          const float vdd_cmd, const float vpp_cmd, const float vdd_erase, const float vpp_erase, const uint8_t erase_clocks);
+                          const uint8_t cmd, const uint8_t cmd_trailing_clocks, 
+                          const float vdd_cmd, const float vpp_cmd, const float vdd_erase, const float vpp_erase, 
+                          const uint8_t erase_clocks, const uint16_t erase_clock_hcycle);
 
 int      FPDKCOM_IC_Read(const int fd, const uint16_t icid, const FPDKICTYPE type,
+                         const uint8_t cmd, const uint8_t cmd_trailing_clocks, 
                          const float vdd_cmd, const float vpp_cmd,
                          const float vdd_read, const float vpp_read,
                          const uint16_t addr, const uint8_t addr_bits,
-                         const uint16_t data_offs, const uint8_t data_bits,
+                         const uint16_t data_offs, const uint8_t data_bits, const uint8_t ecc_bits,
                          const uint16_t count);
 
 int      FPDKCOM_IC_Write(const int fd, const uint16_t icid, const FPDKICTYPE type,
+                          const uint8_t cmd, const uint8_t cmd_trailing_clocks, 
                           const float vdd_cmd, const float vpp_cmd,
                           const float vdd_write, const float vpp_write,
                           const uint16_t addr, const uint8_t addr_bits,
-                          const uint16_t data_offs, const uint8_t data_bits,
-                          const uint16_t count, 
-                          const uint8_t write_block_size, const uint8_t write_block_clock_groups, const uint8_t write_block_clocks_per_group);
+                          const uint16_t data_offs, const uint8_t data_bits, const uint8_t ecc_bits,
+                          const uint16_t count,
+                          const uint8_t write_block_address_first,
+                          const uint8_t write_block_size,
+                          const uint8_t write_block_limited,
+                          const uint8_t write_block_clock_groups,
+                          const uint8_t write_block_clock_group_lead_clocks,
+                          const uint8_t write_block_clock_group_slow_clocks,
+                          const uint16_t write_block_clock_group_slow_clock_hcycle,
+                          const uint8_t write_block_clock_group_trail_clocks);
 
 int      FPDKCOM_IC_Verify(const int fd, const uint16_t icid, const FPDKICTYPE type,
+                           const uint8_t cmd, const uint8_t cmd_trailing_clocks, 
                            const float vdd_cmd, const float vpp_cmd,
                            const float vdd_read, const float vpp_read,
                            const uint16_t addr, const uint8_t addr_bits,
-                           const uint16_t data_offs, const uint8_t data_bits,
+                           const uint16_t data_offs, const uint8_t data_bits, const uint8_t ecc_bits,
                            const uint16_t count,
                            const bool exclude_first_instruction, const uint16_t exclude_start, const uint16_t exclude_end);
 

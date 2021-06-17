@@ -159,11 +159,11 @@ int main( int argc, const char * argv [] )
       FPDKICDATA* icdata = FPDKICDATA_GetICDataById12Bit(id);
       if( icdata )
       {
-        sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+        sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name, icdata->id12bit, (FPDK_IC_FLASH == icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_1[0] )
-          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_1, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_1, icdata->id12bit, (FPDK_IC_FLASH == icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_2[0] )
-          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_2, icdata->id12bit, FPDK_IS_FLASH_TYPE(icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_2, icdata->id12bit, (FPDK_IC_FLASH == icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
       }
     }
 
@@ -270,7 +270,7 @@ int main( int argc, const char * argv [] )
       }
       else
       {
-        printf("found.\nTYPE:%s RSP:0x%X VPP=%.2f VDD=%.2f\n",FPDK_IS_FLASH_TYPE(type)?"FLASH":"OTP",icid,vpp,vdd);
+        printf("found.\nTYPE:%s RSP:0x%X VPP=%.2f VDD=%.2f\n",(FPDK_IC_FLASH == type)?"FLASH":"OTP",icid,vpp,vdd);
         icdata = FPDKICDATA_GetICDataByCmdResponse(type,icid);
         if( icdata )
         {
@@ -298,7 +298,9 @@ int main( int argc, const char * argv [] )
         return -20;
       }
       printf("Reading IC (%" PRIu32 " words)...", icdata->codewords);
-      int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, 0, icdata->addressbits, 0, icdata->codebits, icdata->codewords);
+      int r = FPDKCOM_IC_Read(comfd, icdata->id12bit, icdata->type, icdata->cmd_read, icdata->command_trailing_clocks,
+                              icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv,
+                              0, icdata->addressbits, 0, icdata->codebits, icdata->eccbits, icdata->codewords);
       if( r>=FPDK_ERR_ERROR )
       {
         fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -356,7 +358,7 @@ int main( int argc, const char * argv [] )
 
     case 'w': //write
     {
-      if( !icdata->vdd_cmd_write  || !icdata->vpp_cmd_write || !icdata->vdd_write_hv )
+      if( !icdata->cmd_write || !icdata->vdd_cmd_write || !icdata->vpp_cmd_write || !icdata->vdd_write_hv )
       {
         fprintf(stderr, "Write for this IC not implemented yet.\n");
         return -20;
@@ -450,11 +452,13 @@ int main( int argc, const char * argv [] )
         }
       }
 
-      if( FPDK_IS_FLASH_TYPE(icdata->type) && !arguments.noerase )
+      if( (FPDK_IC_FLASH == icdata->type) && !arguments.noerase )
       {
         printf("Erasing IC... ");
 
-        int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, icdata->erase_clocks );
+        int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->cmd_erase, icdata->command_trailing_clocks, 
+                                 icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, 
+                                 icdata->erase_clocks, icdata->erase_clock_hcycle);
         if( r>=FPDK_ERR_ERROR )
         {
           fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -473,7 +477,10 @@ int main( int argc, const char * argv [] )
       if( !arguments.noblankcheck )
       {
         verbose_printf("Blank check IC... ");
-        int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+        int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->cmd_read, icdata->command_trailing_clocks,
+                                      icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv,
+                                      icdata->addressbits, icdata->codebits, icdata->eccbits, icdata->codewords,
+                                      icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
         if( r>=FPDK_ERR_ERROR )
         {
           fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -501,10 +508,17 @@ int main( int argc, const char * argv [] )
         return -11;
       }
 
-      int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
+      int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, icdata->cmd_write, icdata->command_trailing_clocks,
                                icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                               0, icdata->addressbits, 0, icdata->codebits, codewords,
-                               icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
+                               0, icdata->addressbits, 0, icdata->codebits, icdata->eccbits, codewords,
+                               icdata->write_block_address_first,
+                               icdata->write_block_size,
+                               icdata->write_block_limited,
+                               icdata->write_block_clock_groups,
+                               icdata->write_block_clock_group_lead_clocks,
+                               icdata->write_block_clock_group_slow_clocks,
+                               icdata->write_block_clock_group_slow_clock_hcycle,
+                               icdata->write_block_clock_group_trail_clocks);
       if( r>=FPDK_ERR_ERROR )
       {
         fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -520,7 +534,10 @@ int main( int argc, const char * argv [] )
       if( !arguments.noverify )
       {
         verbose_printf("Verifiying IC... ");
-        int r = FPDKCOM_IC_Verify(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv, 0, icdata->addressbits, 0, icdata->codebits, codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+        int r = FPDKCOM_IC_Verify(comfd, icdata->id12bit, icdata->type, icdata->cmd_read, icdata->command_trailing_clocks,
+                                  icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->vpp_read_hv,
+                                  0, icdata->addressbits, 0, icdata->codebits, icdata->eccbits, codewords,
+                                  icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
         if( r>=FPDK_ERR_ERROR )
         {
           printf("FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -553,9 +570,9 @@ int main( int argc, const char * argv [] )
             break;
           switch( calibdata[calib].type )
           {
-            case FPDKCALIB_IHRC:         printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
-            case FPDKCALIB_ILRC:         printf("* ILRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
-            case FPDKCALIB_BG:           printf("* BandGap "); break;
+            case FPDKCALIB_IHRC: printf("* IHRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_ILRC: printf("* ILRC SYSCLK=%dHz @ %.2fV ", calibdata[calib].frequency, (float)calibdata[calib].millivolt/1000.0); break;
+            case FPDKCALIB_BG:   printf("* BandGap "); break;
             default:
               fprintf(stderr, "ERROR: Unknown calibration\n");
               return -17;
@@ -565,7 +582,10 @@ int main( int argc, const char * argv [] )
           uint8_t fcalval;
           uint32_t fcalfreq;
 
-          if( !FPDKCOM_IC_Calibrate(comfd, calibdata[calib].type, calibdata[calib].millivolt, calibdata[calib].frequency, calibdata[calib].loopcycles, &fcalval, &fcalfreq) )
+          if( !FPDKCOM_IC_Calibrate(comfd, calibdata[calib].type, 
+                                    calibdata[calib].millivolt, calibdata[calib].frequency, 
+                                    calibdata[calib].loopcycles + icdata->calibration_loop_cycle_correction,
+                                    &fcalval, &fcalfreq) )
           {
             printf("failed.\n");
             fprintf(stderr, "ERROR: Calibration failed\n");
@@ -609,10 +629,17 @@ int main( int argc, const char * argv [] )
 
             uint32_t codewords = (len+1)/2;
 
-            int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type,
+            int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, icdata->cmd_write, icdata->command_trailing_clocks,
                                      icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                                     0, icdata->addressbits, 0, icdata->codebits, codewords,
-                                     icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
+                                     0, icdata->addressbits, 0, icdata->codebits, icdata->eccbits, codewords,
+                                     icdata->write_block_address_first,
+                                     icdata->write_block_size,
+                                     icdata->write_block_limited,
+                                     icdata->write_block_clock_groups,
+                                     icdata->write_block_clock_group_lead_clocks,
+                                     icdata->write_block_clock_group_slow_clocks,
+                                     icdata->write_block_clock_group_slow_clock_hcycle,
+                                     icdata->write_block_clock_group_trail_clocks);
             if( r>=FPDK_ERR_ERROR )
             {
               fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -655,10 +682,17 @@ int main( int argc, const char * argv [] )
           return -14;
         }
 
-        int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, 
+        int r = FPDKCOM_IC_Write(comfd, icdata->id12bit, icdata->type, icdata->cmd_write, icdata->command_trailing_clocks,
                                  icdata->vdd_cmd_write, icdata->vpp_cmd_write, icdata->vdd_write_hv, icdata->vpp_write_hv,
-                                 fuseaddr, icdata->addressbits, fuseaddr, icdata->codebits, 1, 
-                                 icdata->write_block_size, icdata->write_block_clock_groups, icdata->write_block_clocks_per_group);
+                                 fuseaddr, icdata->addressbits, fuseaddr, icdata->codebits, icdata->eccbits, 1, 
+                                 icdata->write_block_address_first,
+                                 icdata->write_block_size,
+                                 icdata->write_block_limited,
+                                 icdata->write_block_clock_groups,
+                                 icdata->write_block_clock_group_lead_clocks,
+                                 icdata->write_block_clock_group_slow_clocks,
+                                 icdata->write_block_clock_group_slow_clock_hcycle,
+                                 icdata->write_block_clock_group_trail_clocks);
         if( r>=FPDK_ERR_ERROR )
         {
           fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -677,19 +711,21 @@ int main( int argc, const char * argv [] )
 
     case 'e': //erase
     {
-      if( !FPDK_IS_FLASH_TYPE(icdata->type) )
+      if( FPDK_IC_FLASH != icdata->type )
       {
         fprintf(stderr, "ERROR: Only FLASH type IC can get erased\n");
         return -18;
       }
-      if( !icdata->vdd_cmd_erase  || !icdata->vpp_cmd_erase || !icdata->vdd_erase_hv )
+      if( !icdata->cmd_erase || !icdata->vdd_cmd_erase  || !icdata->vpp_cmd_erase || !icdata->vdd_erase_hv )
       {
         fprintf(stderr, "Erase for this IC not implemented yet.\n");
         return -20;
       }
 
       printf("Erasing IC... ");
-      int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, icdata->erase_clocks );
+      int r = FPDKCOM_IC_Erase(comfd, icdata->id12bit, icdata->type, icdata->cmd_erase, icdata->command_trailing_clocks, 
+                               icdata->vdd_cmd_erase, icdata->vpp_cmd_erase, icdata->vdd_erase_hv, icdata->vpp_erase_hv, 
+                               icdata->erase_clocks, icdata->erase_clock_hcycle);
       if( r>=FPDK_ERR_ERROR )
       {
         fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
@@ -708,7 +744,10 @@ int main( int argc, const char * argv [] )
         if( !arguments.noblankcheck )
         {
           verbose_printf("Blank check IC... ");
-          int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv, icdata->addressbits, icdata->codebits, icdata->codewords, icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
+          int r = FPDKCOM_IC_BlankCheck(comfd, icdata->id12bit, icdata->type, icdata->cmd_read, icdata->command_trailing_clocks,
+                                        icdata->vdd_cmd_read, icdata->vpp_cmd_read, icdata->vpp_cmd_read, icdata->vdd_read_hv,
+                                        icdata->addressbits, icdata->codebits, icdata->eccbits, icdata->codewords,
+                                        icdata->exclude_code_first_instr, icdata->exclude_code_start, icdata->exclude_code_end);
           if( r>=FPDK_ERR_ERROR )
           {
             fprintf(stderr, "FPDK_ERROR: %s\n",FPDK_ERR_MSG[r&0x000F]);
