@@ -1,0 +1,5 @@
+easypdkprog
+easypdkprogtest
+*.o
+*.exe
+lib/
