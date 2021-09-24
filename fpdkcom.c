@@ -545,3 +545,13 @@ bool FPDKCOM_IC_SendDebugData(const int fd, const uint8_t* dat, const uint8_t le
 {
   return _FPDKCOM_SendCommand(fd, FPDKPROTO_CMD_DBGDAT, dat, len);
 }
+
+bool FPDKCOM_DACOut(const int fd, const uint16_t timerval)
+{
+  return( _FPDKCOM_SendReceiveCommand(fd, FPDKPROTO_CMD_DACOUT, (uint8_t*)&timerval, sizeof(timerval), 0, 0) > 0 );
+}
+
+bool FPDKCOM_DACBuffer(const int fd, const uint16_t dat[124])
+{
+  return(_FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_DACBUF, (uint8_t*)dat, sizeof(uint16_t)*124, 0, 0, 1000) > 0 );
+}

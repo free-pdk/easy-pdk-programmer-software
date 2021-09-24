@@ -113,4 +113,10 @@ int      FPDKCOM_IC_ReceiveDebugData(const int fd, uint8_t* dat, const uint8_t l
 
 bool     FPDKCOM_IC_SendDebugData(const int fd, const uint8_t* dat, const uint8_t len);
 
+
+bool     FPDKCOM_DACOut(const int fd, const uint16_t timerval);
+
+bool     FPDKCOM_DACBuffer(const int fd, const uint16_t dat[124]);
+
+
 #endif //__FPDKCOM_H_

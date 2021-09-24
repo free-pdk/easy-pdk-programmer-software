@@ -42,6 +42,37 @@ static const uint32_t _dbg_led_on_time = 50;
 static volatile uint32_t _dbg_led_rx_off_tick = 0;
 static volatile uint32_t _dbg_led_tx_off_tick = 0;
 
+//DAC DMA
+#define DAC_BUFFER_WORDS 124
+static uint32_t          _dac_buffer[DAC_BUFFER_WORDS];
+static bool              _dac_is_running;
+static uint32_t          _dac_buffer_next;
+static volatile bool     _dac_buffer0_full;
+static volatile bool     _dac_buffer1_full;
+
+extern DAC_HandleTypeDef  hdac;
+extern TIM_HandleTypeDef  htim3;
+
+static void DAC_DMAHalfConvCplt(DMA_HandleTypeDef *hdma) {
+//  DAC_HandleTypeDef* hdac = ( DAC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+//  HAL_DAC_ConvHalfCpltCallbackCh1(hdac);
+  _dac_buffer0_full = false;
+}
+
+static void DAC_DMAConvCplt(DMA_HandleTypeDef *hdma) {
+//  DAC_HandleTypeDef* hdac = ( DAC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+//  HAL_DAC_ConvCpltCallbackCh1(hdac); 
+//  hdac->State= HAL_DAC_STATE_READY;
+  _dac_buffer1_full = false;
+}
+
+static void DAC_DMAError(DMA_HandleTypeDef *hdma) {
+  DAC_HandleTypeDef* hdac = ( DAC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+  hdac->ErrorCode |= HAL_DAC_ERROR_DMA;
+  //handle error here
+  hdac->State= HAL_DAC_STATE_READY;
+}
+
 void FPDKUSB_Init(void)
 {
   _packetbufpos = 0;
@@ -62,6 +93,23 @@ void FPDKUSB_USBSignalPortOpenClose(void)
     FPDK_SetVDD(0,0);
     FPDK_SetLed(FPDK_LED_IC,false);
     _ic_is_running = false;
+  }
+
+  if( _dac_is_running )
+  {
+    FPDK_SetLeds(0);
+
+    HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_2);
+    HAL_TIM_Base_Stop(&htim3);
+
+    HAL_DAC_DeInit(&hdac);
+    HAL_DAC_Init(&hdac);
+    DAC_ChannelConfTypeDef sConfig = {0};
+    sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_DISABLE;
+    HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1);
+    HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_2);
+    FPDK_SetVDD(0,0);
+    _dac_is_running = false;
   }
 }
 
@@ -507,7 +555,98 @@ bool _FPDKUSB_HandleCmd(const FPDKPROTO_CMD cmd, const uint8_t* dat, const uint3
         FPDKUART_SendData(dat, len);
         //no ACK here, since we could receive debug data in this moment
       }
-      break;;
+      break;
+
+    case FPDKPROTO_CMD_DACOUT:
+      {
+        if( sizeof(uint16_t) != len )
+          return false;
+        uint16_t timerval;
+        memcpy( &timerval, &dat[0], sizeof(uint16_t) );
+
+        if( 0 != timerval ) {
+          _dac_is_running = true;
+          HAL_DAC_DeInit(&hdac);
+          HAL_DAC_Init(&hdac);
+          DAC_ChannelConfTypeDef sConfig = {0};
+          sConfig.DAC_Trigger = DAC_TRIGGER_T3_TRGO;
+          sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_DISABLE;
+          HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1);
+          HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_2);
+
+          //setup DUAL DAC DMA manually since HAL does not support it
+          __HAL_LOCK(&hdac);
+          hdac.State = HAL_DAC_STATE_BUSY;
+          hdac.DMA_Handle2->XferCpltCallback = DAC_DMAConvCplt;
+          hdac.DMA_Handle2->XferHalfCpltCallback = DAC_DMAHalfConvCplt;
+          hdac.DMA_Handle2->XferErrorCallback = DAC_DMAError;
+          SET_BIT(hdac.Instance->CR, DAC_CR_DMAEN2);
+          __HAL_DAC_ENABLE_IT(&hdac, DAC_IT_DMAUDR2);
+          HAL_DMA_Start_IT(hdac.DMA_Handle2, (uint32_t)_dac_buffer, (uint32_t)&hdac.Instance->DHR12LD, DAC_BUFFER_WORDS); //12bit LEFT aligned, DUAL, DAC_BUFFER_WORDS WORDS (WORD = 2ch*16bit)
+          __HAL_DAC_ENABLE(&hdac, DAC_CHANNEL_1);
+          __HAL_DAC_ENABLE(&hdac, DAC_CHANNEL_2);
+          __HAL_UNLOCK(&hdac);
+
+          TIM3->ARR = timerval;
+          HAL_TIM_Base_Start(&htim3);
+
+          FPDK_SetLeds(0xFF);
+        }
+        else{
+          if( _dac_is_running )
+          {
+            FPDK_SetLeds(0);
+
+            HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_2);
+            HAL_TIM_Base_Stop(&htim3);
+
+            HAL_DAC_DeInit(&hdac);
+            HAL_DAC_Init(&hdac);
+            DAC_ChannelConfTypeDef sConfig = {0};
+            sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_DISABLE;
+            HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1);
+            HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_2);
+            _dac_is_running = false;
+            FPDK_SetVDD(0,0);
+          }
+          _dac_buffer_next = 0;
+          _dac_buffer0_full = false;
+          _dac_buffer1_full = false;
+        }
+
+        _FPDKUSB_Ack(0, 0);
+      }
+      break;
+
+    case FPDKPROTO_CMD_DACBUF:
+      {
+        if( ((DAC_BUFFER_WORDS/2*2)*sizeof(uint16_t)) != len )
+          return false;
+        
+        //wait for free buffer (max 500msec, then error)
+        uint32_t tickstimeout = HAL_GetTick()+500;
+        if( 0 == _dac_buffer_next ) {
+          while( _dac_buffer0_full ) {
+            if( HAL_GetTick()>tickstimeout )
+              return false;
+          }
+          memcpy( ((uint8_t*)&_dac_buffer[0]), dat, len );
+          _dac_buffer0_full = true;
+          _dac_buffer_next = 1;
+        }
+        else {
+          while( _dac_buffer1_full ) {
+            if( HAL_GetTick()>tickstimeout )
+              return false;
+          }
+          memcpy( ((uint8_t*)&_dac_buffer[DAC_BUFFER_WORDS/2]), dat, len );
+          _dac_buffer1_full = true;
+          _dac_buffer_next = 0;
+        }
+
+        _FPDKUSB_Ack(0, 0);
+      }
+      break;
 
     default:
       return false;

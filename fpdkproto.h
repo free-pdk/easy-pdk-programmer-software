@@ -46,6 +46,9 @@ typedef enum FPDKPROTO_CMD
   FPDKPROTO_CMD_STOPIC       = 'Q',
   FPDKPROTO_CMD_DBGDAT       = 'D',
 
+  FPDKPROTO_CMD_DACOUT       = 0xDA,
+  FPDKPROTO_CMD_DACBUF       = 0xDB,
+
 } FPDKPROTO_CMD;
 
 typedef enum FPDKPROTO_RSP
