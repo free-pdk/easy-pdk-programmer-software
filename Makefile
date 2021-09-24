@@ -32,6 +32,8 @@ easypdkprog: $(ARGPSALIB) $(DEP) $(OBJ) easypdkprog.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o easypdkprog easypdkprog.c $(OBJ) $(LIBS) $(ARGPSALIB)
 	$(STRIP) easypdkprog$(EXE_EXTENSION)
 
+easypdkdac: $(DEP) $(OBJ) easypdkdac.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o easypdkdac easypdkdac.c $(OBJ) $(LIBS)
 
 $(ARGPSALIB):
 	cd $(ARGPSA) && sh configure CFLAGS='-w -Os $(ECFLAGS)' $(EHOST)
@@ -40,7 +42,7 @@ $(ARGPSALIB):
 clean:
 	$(RM) $(OBJ)
 	$(RM) easypdkprog$(EXE_EXTENSION)
-	$(RM) easypdkprogtest$(EXE_EXTENSION)
+	$(RM) easypdkdac$(EXE_EXTENSION)
 
 distclean: clean
 ifneq ($(UNAME_S),Linux)
