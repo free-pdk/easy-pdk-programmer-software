@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 const char *argp_program_version                = "easypdkprog " EPDKVER;
 static const char easypdkprog_doc[]             = "easypdkprog -- read, write and execute programs on PADAUK microcontroller\nhttps://free-pdk.github.io";
-static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start [FILE]";
+static const char easypdkprog_args_doc[]        = "list|probe|read|write|erase|start|test [FILE]";
 
 static struct argp_option easypdkprog_options[] = {
   {"verbose",      'v', 0,        0,  "Verbose output" },
@@ -103,7 +103,8 @@ static error_t easypdkprog_parse_opt(int key, char *arg, struct argp_state *stat
             !strcmp(arg,"read") && 
             !strcmp(arg,"write") && 
             !strcmp(arg,"erase") && 
-            !strcmp(arg,"start") )
+            !strcmp(arg,"start") && 
+            !strcmp(arg,"test") )
         {
           argp_usage(state);
         }
@@ -796,6 +797,38 @@ int main( int argc, const char * argv [] )
     }
     break;
 
+    case 't':
+    {
+      printf("Selftest...\n");
+
+      printf("Setting VDD and VPP to 1.0 Volt... ");
+      if( !FPDKCOM_SetOutputVoltages(comfd, 1.0, 1.0) )
+      {
+        fprintf(stderr, "ERROR: Could not send command\n");
+        return -30;
+      }
+      printf("done\n\n");
+      printf("Internal voltage measurement (should read vdd: 1.00V  vpp: 1.00V  vref: 3.30V (+/- 0.10V)\n");
+      printf("Use a multimeter to verify that vdd and vpp are indeed 1.00V.\n");
+      printf("When pressing the button on easypdk programer all 3 LEDs should light up\n");
+      printf("Press [Esc] to stop.\n");
+      for(;;)
+      {
+        bool btn;
+        FPDKCOM_GetButtonState(comfd, &btn);
+        FPDKCOM_SetLed(comfd, btn?0xFF:0x00);
+
+        float vdd,vpp,vref;
+        if( FPDKCOM_MeasureOutputVoltages(comfd, &vdd, &vpp, &vref) )
+          printf("vdd: %.2fV  vpp: %.2fV  vref: %.2fV          \r", vdd, vpp, vref);
+
+        fpdkutil_waitfdorkeypress(comfd, 20);
+        if( 27 == fpdkutil_getchar() )
+          break;
+      }
+      printf("\n");
+    }
+    break;
   }
 
   return 0;
