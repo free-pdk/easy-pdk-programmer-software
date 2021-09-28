@@ -29,7 +29,7 @@ Update firmware on Easy PDK Programmer:
 4. ONLY AFTER USB is connected release the button
 
 5. EXECUTE: 
-   dfu-util -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D EASYPDKPROG.bin 
+   dfu-util -d 0483:df11 -a "@Internal Flash  /0x08000000/064*0002Kg" --dfuse-address 0x08000000 -D EASYPDKPROG.dfu
 
 6. UNPLUG USB from Easy PDK programmer
 
