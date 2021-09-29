@@ -92,6 +92,23 @@ Writing IC... done.
 Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
 ```
 
+PFC151:
+```
+$ ./easypdkprog --icname=PFC151  write helloworld_pfc151.ihx
+Erasing IC... done.
+Writing IC... done.
+Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
+```
+
+PFC161:
+```
+$ ./easypdkprog --icname=PFC161  write helloworld_pfc161.ihx
+Erasing IC... done.
+Writing IC... done.
+Calibrating IC (@4.00V IHRC SYSCLK=8000000Hz)... calibration result: 7946104Hz (0x84)  done.
+```
+
+
 **RUN PROGRAM ON IC**
 
 ```
