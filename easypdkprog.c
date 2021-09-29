@@ -801,15 +801,15 @@ int main( int argc, const char * argv [] )
     {
       printf("Selftest...\n");
 
-      printf("Setting VDD and VPP to 1.0 Volt... ");
-      if( !FPDKCOM_SetOutputVoltages(comfd, 1.0, 1.0) )
+      printf("Setting VDD and VPP to 5.0 Volt... ");
+      if( !FPDKCOM_SetOutputVoltages(comfd, 5.0, 5.0) )
       {
         fprintf(stderr, "ERROR: Could not send command\n");
         return -30;
       }
       printf("done\n\n");
-      printf("Internal voltage measurement (should read vdd: 1.00V  vpp: 1.00V  vref: 3.30V (+/- 0.10V)\n");
-      printf("Use a multimeter to verify that vdd and vpp are indeed 1.00V.\n");
+      printf("Internal voltage measurement (should read vdd: 5.00V  vpp: 5.00V  vref: 3.30V (+/- 0.10V)\n");
+      printf("Use a multimeter to verify that vdd and vpp are indeed 5.00V.\n");
       printf("When pressing the button on easypdk programer all 3 LEDs should light up\n");
       printf("Press [Esc] to stop.\n");
       for(;;)
