@@ -193,7 +193,7 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
     { .sopc=0xFFFF, .copc=0x0C90, .cocf=CO_AC_NOP},              //calib: T0SN IO(0x10).4  (PA.4)     /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x1001, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x0E70, .cocf=CO_AC_NOP},              //calib: SET0 IO(0x10).3  (PA.3)     /   after-calib: NOP
-    { .sopc=0xFFFF, .copc=0x1805, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x005       <FIXUP>    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1806, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x006       <FIXUP>    /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x003A, .cocf=CO_AC_SAME},             //calib: RET                         /   after-calib: stay same
   }
  },
@@ -213,7 +213,7 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
     { .sopc=0xFFFF, .copc=0x1910, .cocf=CO_AC_NOP},              //calib: T0SN IO(0x10).4  (PA.4)     /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x2801, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x1CD0, .cocf=CO_AC_NOP},              //calib: SET0 IO(0x10).3  (PA.3)     /   after-calib: NOP
-    { .sopc=0xFFFF, .copc=0x3005, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x005       <FIXUP>    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3006, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x006       <FIXUP>    /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x007A, .cocf=CO_AC_SAME},             //calib: RET                         /   after-calib: stay same
   }
  },
@@ -233,7 +233,7 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
     { .sopc=0xFFFF, .copc=0x3210, .cocf=CO_AC_NOP},              //calib: T0SN IO(0x10).4  (PA.4)     /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x5001, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x3990, .cocf=CO_AC_NOP},              //calib: SET0 IO(0x10).3  (PA.3)     /   after-calib: NOP
-    { .sopc=0xFFFF, .copc=0x6005, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x005       <FIXUP>    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x6006, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x006       <FIXUP>    /   after-calib: NOP
     { .sopc=0xFFFF, .copc=0x007A, .cocf=CO_AC_SAME},             //calib: RET                         /   after-calib: stay same
   }
  },
