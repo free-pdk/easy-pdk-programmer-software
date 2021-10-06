@@ -440,7 +440,7 @@ bool FPDKCALIB_InsertCalibrationPDK(const FPDKICDATA* icdata, uint8_t* code, con
   }
   
   //calculate GOTO and insert at PDK IHRCR subroutine
-  uint16_t opgoto;
+  uint16_t opgoto=0;
   switch( fpdk_calib_algos[calibdata->algo].codebits )
   {
     case 13: opgoto = 0x1800; break;
