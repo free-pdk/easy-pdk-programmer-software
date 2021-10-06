@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CO_BC_SETREG1  0x4000  //Before Calibration SET REGISTER1           (sets the register1 used for calibration)
 #define CO_BC_SETREG2  0x8000  //Before Calibration SET REGISTER2           (sets the register2 used for calibration)
 
+#define CO_AC_SAME     0x0000  //After Calibration stay same                (intruction is not changed)
 #define CO_AC_NOP      0x0100  //After Calibration NOP                      (replace the calibration opcode with a NOP after calibration is done)
 #define CO_AC_SETIMM   0x0200  //After Calibration SET IMMediate from val 2 (set lower part to value supplied to remove function, e.g. the calibration result)
 
@@ -173,6 +174,67 @@ static const FPDKCALIBALGO fpdk_calib_algos[] = {
     { .sopc=0x5400, .smsk=0xFFFF, .copc=0x5001, .cocf=CO_AC_NOP},                                //search: AND A, 0              /   calib: ADD A, 0x01                /   after-calib: NOP
     { .sopc=0x5400, .smsk=0xFFFF, .copc=0x3990, .cocf=CO_AC_NOP},                                //search: AND A, 0              /   calib: SET0 IO(0x10).3  (PA.3)    /   after-calib: NOP
     { .sopc=0x5400, .smsk=0xFFFF, .copc=0x6008, .cocf=CO_BC_FIXUP|CO_AC_NOP},                    //search: AND A, 0              /   calib: GOTO 0x008       <FIXUP>   /   after-calib: NOP
+  }
+ },
+
+ //special algos inserted into PDK files
+ {
+  .codebits=13,
+  .loopcycles=7,
+  .algo={
+    { .sopc=0xFFFF, .copc=0x1734, .cocf=CO_AC_NOP},              //calib: MOV A, 0x34      (IHRC/2)   /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0083, .cocf=CO_AC_NOP},              //calib: MOV IO(0x03),A   (CLKMD)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0F71, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x11).3  (PAC.3)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0F8D, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x0D).4  (PADIER.4) /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x17FF, .cocf=CO_AC_SETIMM},           //calib: MOV A, 0xFF                 /   after-calib: MOV A, <val>
+    { .sopc=0xFFFF, .copc=0x1001, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0F70, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x10).3  (PA.3)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x008B, .cocf=CO_AC_NOP},              //calib: MOV IO(0x0B), A  (IHRCR)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0C90, .cocf=CO_AC_NOP},              //calib: T0SN IO(0x10).4  (PA.4)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1001, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0E70, .cocf=CO_AC_NOP},              //calib: SET0 IO(0x10).3  (PA.3)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1805, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x005       <FIXUP>    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x003A, .cocf=CO_AC_SAME},             //calib: RET                         /   after-calib: stay same
+  }
+ },
+
+ {
+  .codebits=14,
+  .loopcycles=7,
+  .algo={
+    { .sopc=0xFFFF, .copc=0x2F34, .cocf=CO_AC_NOP},              //calib: MOV A, 0x34      (IHRC/2)   /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0183, .cocf=CO_AC_NOP},              //calib: MOV IO(0x03),A   (CLKMD)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1ED1, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x11).3  (PAC.3)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1F0D, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x0D).4  (PADIER.4) /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x2FFF, .cocf=CO_AC_SETIMM},           //calib: MOV A, 0xFF                 /   after-calib: MOV A, <val>
+    { .sopc=0xFFFF, .copc=0x2801, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1ED0, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x10).3  (PA.3)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x018B, .cocf=CO_AC_NOP},              //calib: MOV IO(0x0B), A  (IHRCR)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1910, .cocf=CO_AC_NOP},              //calib: T0SN IO(0x10).4  (PA.4)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x2801, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x1CD0, .cocf=CO_AC_NOP},              //calib: SET0 IO(0x10).3  (PA.3)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3005, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x005       <FIXUP>    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x007A, .cocf=CO_AC_SAME},             //calib: RET                         /   after-calib: stay same
+  }
+ },
+
+ {
+  .codebits=15,
+  .loopcycles=7,
+  .algo={
+    { .sopc=0xFFFF, .copc=0x2F34, .cocf=CO_AC_NOP},              //calib: MOV A, 0x34      (IHRC/2)   /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x0103, .cocf=CO_AC_NOP},              //calib: MOV IO(0x03),A   (CLKMD)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3D91, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x11).3  (PAC.3)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3E0D, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x0D).4  (PADIER.4) /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x57FF, .cocf=CO_AC_SETIMM},           //calib: MOV A, 0xFF                 /   after-calib: MOV A, <val>
+    { .sopc=0xFFFF, .copc=0x5001, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3D90, .cocf=CO_AC_NOP},              //calib: SET1 IO(0x10).3  (PA.3)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x010B, .cocf=CO_AC_NOP},              //calib: MOV IO(0x0B), A  (IHRCR)    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3210, .cocf=CO_AC_NOP},              //calib: T0SN IO(0x10).4  (PA.4)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x5001, .cocf=CO_AC_NOP},              //calib: ADD A, 0x01                 /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x3990, .cocf=CO_AC_NOP},              //calib: SET0 IO(0x10).3  (PA.3)     /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x6005, .cocf=CO_BC_FIXUP|CO_AC_NOP},  //calib: GOTO 0x005       <FIXUP>    /   after-calib: NOP
+    { .sopc=0xFFFF, .copc=0x007A, .cocf=CO_AC_SAME},             //calib: RET                         /   after-calib: stay same
   }
  },
 
@@ -336,6 +398,60 @@ bool FPDKCALIB_InsertCalibration(const FPDKICDATA* icdata, uint8_t* code, const 
     if( fpdk_calib_algos[calibdata->algo].algo[i].cocf & CO_BC_FIXUP )
       code16[calibdata->pos+i] += calibdata->pos;
   }
+
+  return true;
+}
+
+bool FPDKCALIB_InsertCalibrationPDK(const FPDKICDATA* icdata, uint8_t* code, const uint16_t pos, const uint32_t frequency, const uint32_t millivolt, FPDKCALIBDATA* calibdata)
+{
+  uint16_t* code16 = (uint16_t*)code;
+
+  calibdata->pos = 0xFFFF;
+
+  //select algo
+  for( uint8_t p=0; p<sizeof(fpdk_calib_algos)/sizeof(FPDKCALIBALGO); p++ )
+  {
+    if( (fpdk_calib_algos[p].codebits == icdata->codebits) &&
+        (fpdk_calib_algos[p].algo[0].sopc == 0xFFFF) 
+      )
+    {
+      calibdata->pos = pos;
+      calibdata->loopcycles = fpdk_calib_algos[p].loopcycles;
+      calibdata->algo = p;
+      break;
+    }
+  }
+  if( 0xFFFF == calibdata->pos )
+    return false;
+  
+  uint16_t algowords = _FPDKCALIB_GetAlgoLength(fpdk_calib_algos[calibdata->algo].algo);
+
+  calibdata->type      = FPDKCALIB_IHRC;
+  calibdata->frequency = frequency;
+  calibdata->millivolt = millivolt;
+
+  //insert calibration code + setreg + fixup
+  for( uint16_t i=0; i<algowords; i++ )
+  {
+    code16[calibdata->pos+i] = fpdk_calib_algos[calibdata->algo].algo[i].copc;
+
+    if( fpdk_calib_algos[calibdata->algo].algo[i].cocf & CO_BC_FIXUP )
+      code16[calibdata->pos+i] += calibdata->pos;
+  }
+  
+  //calculate GOTO and insert at PDK IHRCR subroutine
+  uint16_t opgoto;
+  switch( fpdk_calib_algos[calibdata->algo].codebits )
+  {
+    case 13: opgoto = 0x1800; break;
+    case 14: opgoto = 0x3000; break;
+    case 15: opgoto = 0x6000; break;
+    case 16: opgoto = 0xC000; break;
+  }
+  code16[icdata->codewords-2] = opgoto | pos;                              //insert GOTO pos
+
+  //PFC151/161...
+  code16[icdata->codewords-10] = opgoto | pos;                             //insert GOTO pos
 
   return true;
 }

@@ -43,6 +43,7 @@ typedef struct FPDKCALIBDATA
 } FPDKCALIBDATA;
 
 bool FPDKCALIB_InsertCalibration(const FPDKICDATA* icdata, uint8_t* code, const uint16_t len, FPDKCALIBDATA* calibdata);
+bool FPDKCALIB_InsertCalibrationPDK(const FPDKICDATA* icdata, uint8_t* code, const uint16_t pos, const uint32_t frequency, const uint32_t millivolt, FPDKCALIBDATA* calibdata);
 bool FPDKCALIB_RemoveCalibration(const FPDKCALIBDATA* calibdata, uint8_t* code, const uint8_t val);
 
 #endif //__FPDKICCALIB_H__

@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkicserial.h"
 #include "fpdkicscramble.h"
 #include "fpdkihex8.h"
+#include "fpdkpdkformat.h"
 #include "argp.h"
 
 #ifndef EPDKVER
@@ -364,45 +365,103 @@ int main( int argc, const char * argv [] )
         fprintf(stderr, "Write for this IC not implemented yet.\n");
         return -20;
       }
-      uint16_t write_data[0x1000*2];
-      if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, 0x1000*2) < 0 )
-      {
-        fprintf(stderr, "ERROR: Invalid input file / not ihex8 format.\n");
-        return -8;
-      }
 
-      //fuse bits in ihex file?
-      if( (write_data[icdata->codewords*2 - 1] & 0xFF00) && (write_data[icdata->codewords*2 - 2] & 0xFF00) )
-      {
-        //only use fuse bits from ihex file if there is no fuse argument in command line
-        if( 0xFFFF == arguments.fuse )
-          arguments.fuse = ((write_data[icdata->codewords*2 - 1] & 0xFF)<<8) | (write_data[icdata->codewords*2 - 2] & 0xFF);
-
-        //delete fuse bits from write_data, fuse will be set after write completed
-        write_data[icdata->codewords*2 - 1] = 0; write_data[icdata->codewords*2 - 2] = 0;
-      }
-
-      uint8_t data[0x1000*2];
       uint8_t wdat[0x1000*2];
+      uint8_t data[0x1000*2];
       memset(data, arguments.securefill?0x00:0xFF, sizeof(data));
-
       uint32_t len = 0;
-      for( uint32_t p=0; p<sizeof(data); p++)
+
+      #define MAX_CALIBRATIONS 16
+      FPDKCALIBDATA  calibdata[MAX_CALIBRATIONS];
+      memset(calibdata, 0, sizeof(calibdata));
+      uint32_t calibrations = 0;
+
+      FPDKPDKHDR pdkhdr;
+      uint16_t write_data[0x1000*2];
+
+      if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, sizeof(write_data)) > 0 )
       {
-        if( write_data[p] & 0xFF00 )
+        //fuse bits in ihex file?
+        if( (write_data[icdata->codewords*2 - 1] & 0xFF00) && (write_data[icdata->codewords*2 - 2] & 0xFF00) )
         {
-          data[p] = write_data[p]&0xFF;
-          len = p + 1;
+          //only use fuse bits from ihex file if there is no fuse argument in command line
+          if( 0xFFFF == arguments.fuse )
+            arguments.fuse = ((write_data[icdata->codewords*2 - 1] & 0xFF)<<8) | (write_data[icdata->codewords*2 - 2] & 0xFF);
+
+          //delete fuse bits from write_data, fuse will be set after write completed
+          write_data[icdata->codewords*2 - 1] = 0; write_data[icdata->codewords*2 - 2] = 0;
+        }
+
+        for( uint32_t p=0; p<sizeof(data); p++)
+        {
+          if( write_data[p] & 0xFF00 )
+          {
+            data[p] = write_data[p]&0xFF;
+            len = p + 1;
+          }
+        }
+
+        if( arguments.securefill )
+        {
+          uint16_t fillend = icdata->codewords - 8;
+          if( icdata->exclude_code_start && (icdata->exclude_code_start < fillend) )
+            fillend = icdata->exclude_code_start;
+          len = fillend*sizeof(uint16_t);
         }
       }
-
-      if( arguments.securefill )
+      else
+      if( FPDKPDK_ReadFile(arguments.inoutfile, data, sizeof(data), &pdkhdr) > 0 )
       {
-        uint16_t fillend = icdata->codewords - 8;
-        if( icdata->exclude_code_start && (icdata->exclude_code_start < fillend) )
-          fillend = icdata->exclude_code_start;
+        if( pdkhdr.otp_id != icdata->otpid  ) //OTPID of IC matches the one specified in command line?
+        {
+          fprintf(stderr, "ERROR: PDK file OTP ID (0x%04X) differs from specified IC (0x%04X)\n", pdkhdr.otp_id, icdata->otpid);
+          return -23;
+        }
+        if( pdkhdr.remain_code_free<13 ) //we need 13 instructions for out calibration
+        {
+          fprintf(stderr, "ERROR: Not enough free space to insert calibration.\n");
+          return -24;
+        }
 
-        len = fillend*sizeof(uint16_t);
+        if( !FPDKCALIB_InsertCalibrationPDK(icdata, data, pdkhdr.usable_codesize-13, pdkhdr.tuning_freq_half, pdkhdr.tuning_voltage_mv, &calibdata[0]) )
+        {
+          fprintf(stderr, "ERROR: Can not insert calibration.\n");
+          return -25;
+        }
+
+        //fuse bits in data?
+        if( (0xFF != data[icdata->codewords*2-1]) || (0xFF != data[icdata->codewords*2-2]) )
+        {
+          //only use fuse bits from data if there is no fuse argument in command line
+          if( 0xFFFF == arguments.fuse )
+            arguments.fuse = (((uint16_t)data[icdata->codewords*2 - 1])<<8) | data[icdata->codewords*2 - 2];
+        }
+
+        //do not write to reserved area
+        for( uint32_t p=icdata->exclude_code_start; p<icdata->exclude_code_end; p++ )
+        {
+          data[p*2+0]=0xFF;
+          data[p*2+1]=0xFF;
+        }
+
+        if( arguments.serial != 0x4C41495245535046ULL )
+        {
+           printf("Setting serial: 0x%02X%02X%02X%02X\n", 
+               (uint8_t)(arguments.serial>>24)&0xFF, (uint8_t)(arguments.serial>>16)&0xFF, (uint8_t)(arguments.serial>>8)&0xFF, (uint8_t)(arguments.serial>>0)&0xFF );
+
+           FPDKSERIAL_InsertSerialPDK(icdata, data, icdata->codewords-6, (uint32_t)arguments.serial);
+
+           arguments.serial = 0x4C41495245535046ULL;
+        }
+
+        calibrations=1;
+        arguments.nocalibrate = 1;
+        len = (icdata->codewords-1)*2;
+      }
+      else
+      {
+        fprintf(stderr, "ERROR: Invalid input file / not ihex8 or unsupported PDK format.\n");
+        return -8;
       }
 
       //make sure fuse is never set during normal write operation
@@ -413,12 +472,6 @@ int main( int argc, const char * argv [] )
         printf("Nothing to write\n");
         break;
       }
-
-      #define MAX_CALIBRATIONS 16
-      FPDKCALIBDATA  calibdata[MAX_CALIBRATIONS];
-      memset(calibdata, 0, sizeof(calibdata));
-
-      uint32_t calibrations = 0;
 
       if( !arguments.nocalibrate )
       {

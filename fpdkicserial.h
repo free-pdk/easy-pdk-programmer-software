@@ -23,5 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fpdkicdata.h"
 
 int FPDKSERIAL_InsertSerial(const FPDKICDATA* icdata, uint8_t* code, const uint16_t len, uint64_t serial);
+int FPDKSERIAL_InsertSerialPDK(const FPDKICDATA* icdata, uint8_t* code, const uint16_t pos, uint32_t serial);
 
 #endif //__FPDKICSERIAL_H__

@@ -61,3 +61,27 @@ int FPDKSERIAL_InsertSerial(const FPDKICDATA* icdata, uint8_t* code, const uint1
   }
   return inserts;
 }
+
+int FPDKSERIAL_InsertSerialPDK(const FPDKICDATA* icdata, uint8_t* code, const uint16_t pos, uint32_t serial)
+{
+  uint16_t* code16 = (uint16_t*)code;
+
+  uint16_t retf;
+  switch( icdata->codebits )
+  {
+    case 13: retf=0x0100; break;
+    case 14: retf=0x0200; break;
+    case 15: retf=0x0200; break;
+    case 16: retf=0x0F00; break;
+    default:
+      return 0;
+  }
+  
+  //insert serial number
+  code16[pos+0] = retf | ((serial>> 0)&0xFF);
+  code16[pos+1] = retf | ((serial>> 8)&0xFF);
+  code16[pos+2] = retf | ((serial>>16)&0xFF);
+  code16[pos+3] = retf | ((serial>>24)&0xFF);
+
+  return 1;
+}
