@@ -853,16 +853,18 @@ int main( int argc, const char * argv [] )
     case 't':
     {
       printf("Selftest...\n");
+      float vdd = arguments.runvdd; if( vdd>6.0 ) vdd = 6.0;
+      float vpp = arguments.runvdd; if( vpp>13.0 ) vpp = 13.0;
 
-      printf("Setting VDD and VPP to 5.0 Volt... ");
-      if( !FPDKCOM_SetOutputVoltages(comfd, 5.0, 5.0) )
+      printf("Setting VDD=%.2fV and VPP=%.2fV... ", vdd, vpp);
+      if( !FPDKCOM_SetOutputVoltages(comfd, vdd, vpp) )
       {
         fprintf(stderr, "ERROR: Could not send command\n");
         return -30;
       }
       printf("done\n\n");
-      printf("Internal voltage measurement (should read vdd: 5.00V  vpp: 5.00V  vref: 3.30V (+/- 0.10V)\n");
-      printf("Use a multimeter to verify that vdd and vpp are indeed 5.00V.\n");
+      printf("Internal voltage measurement (should read vdd: %.2fV  vpp: %.2fV  vref: 3.30V (+/- 0.05V)\n", vdd, vpp);
+      printf("Use a multimeter to verify that vdd and vpp have indeed the correct values.\n");
       printf("When pressing the button on easypdk programer all 3 LEDs should light up\n");
       printf("Press [Esc] to stop.\n");
       for(;;)
