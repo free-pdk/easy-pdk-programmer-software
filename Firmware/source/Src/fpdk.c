@@ -552,7 +552,7 @@ void FPDK_Init(void)
   _FPDK_SetPA0Incoming();
   _FPDK_SetPA7Incoming();
 
-  while( !_adc_vdd ) {;}                                                                           //wait for adc to have a measurement
+  for( uint32_t timeout=HAL_GetTick()+1000; (!_adc_vdd) && (timeout<HAL_GetTick()); ) {;}          //wait for adc to have a measurement, timeout 1 second
   if( _adc_vdd > 1500 )                                                                            //is set test vdd 1V measured > 1.5V?
   {
     _dac_vdd_max = FPDK_VDD_EXTENDED_DAC_MAX_MV;                                                   //variant with changed resisistor on opamp
