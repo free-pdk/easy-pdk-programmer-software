@@ -43,7 +43,7 @@ else
     if [[ $OSTYPE =~ darwin.* ]]; then
         OS="MAC"
         mv easypdkprog easypdkprog.x86_64
-        make distclean 
+        make distclean
         make all EPDKVER=$EPDKVER ECFLAGS="-target arm64-apple-macos11" EHOST="--host=arm64-apple-macos11"
         mv easypdkprog easypdkprog.arm64
         lipo -create -output easypdkprog easypdkprog.x86_64 easypdkprog.arm64
@@ -52,6 +52,10 @@ else
     else
         OS="LINUX"
         cp easypdkprog $DESTDIR
+        make clean all EPDKVER=$EPDKVER CC=aarch64-linux-gnu-gcc STRIP=aarch64-linux-gnu-strip
+        cp easypdkprog $DESTDIR/easypdkprog.aarch64
+        make clean all EPDKVER=$EPDKVER CC=arm-linux-gnueabihf-gcc STRIP=arm-linux-gnueabihf-strip
+        cp easypdkprog $DESTDIR/easypdkprog.armhf
         cp -r Linux_udevrules $DESTDIR
     fi
 fi
