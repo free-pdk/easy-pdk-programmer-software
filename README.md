@@ -6,7 +6,7 @@ Download: [![Release](https://img.shields.io/github/release/free-pdk/easy-pdk-pr
 
 
 ```
-Usage: easypdkprog [OPTION...] list|probe|read|write|erase|start [FILE]
+Usage: easypdkprog [OPTION...] list|probe|read|write|erase|start|test [FILE]
 easypdkprog -- read, write and execute programs on PADAUK microcontroller
 https://free-pdk.github.io
 
@@ -31,6 +31,9 @@ https://free-pdk.github.io
 
 Examples:
 
+test programmer (selftest):
+```  easypdkprog test```
+
 list all supported ICs:
 ```  easypdkprog list```
 
@@ -41,7 +44,7 @@ read IC to readout.hex file:
 ```  easypdkprog -n PFS154 read readout.hex```
 
 read IC to readout.bin file:
-```  easypdkprog -n PFS154 read readout.hex -b```
+```  easypdkprog -n PFS154 read readout.bin -b```
 
 write IC:
 ```  easypdkprog -n PFS154 write myprog.hex```
