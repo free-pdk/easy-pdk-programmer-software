@@ -379,7 +379,7 @@ int main( int argc, const char * argv [] )
       FPDKPDKHDR pdkhdr;
       uint16_t write_data[0x1000*2];
 
-      if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, sizeof(write_data)) > 0 )
+      if( FPDKIHEX8_ReadFile(arguments.inoutfile, write_data, 0x1000*2) >= 0 )
       {
         //fuse bits in ihex file?
         if( (write_data[icdata->codewords*2 - 1] & 0xFF00) && (write_data[icdata->codewords*2 - 2] & 0xFF00) )
