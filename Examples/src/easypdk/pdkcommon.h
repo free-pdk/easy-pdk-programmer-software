@@ -9,14 +9,14 @@
 #define _ASMS(x) _ASME(x)
 
 //definitions for built in opcodess
-#define __nop()      __asm__("nop\n")
-#define __engint()   __asm__("engint\n")
-#define __disgint()  __asm__("disgint\n")
-#define __stopsys()  __asm__("stopsys\n")
-#define __stopexe()  __asm__("stopexe\nnop\n")
-#define __wdreset()  __asm__("wdreset\n")
-#define __set0(x,y)  __asm__("set0 "_ASMV(x)", #"_ASMD(y)"\n")
-#define __set1(x,y)  __asm__("set1 "_ASMV(x)", #"_ASMD(y)"\n")
+#define __nop()        __asm__("nop\n")
+#define __engint()     __asm__("engint\n")
+#define __disgint()    __asm__("disgint\n")
+#define __stopsys()    __asm__("stopsys\n")
+#define __stopexe()    __asm__("stopexe\nnop\n")
+#define __wdreset()    __asm__("wdreset\n")
+#define __set0io(x,y)  __asm__("set0.io "_ASMV(x)", #"_ASMD(y)"\n")
+#define __set1io(x,y)  __asm__("set1.io "_ASMV(x)", #"_ASMD(y)"\n")
 
 //place holder for EASYPDK serial inserted from easypdkprog
 #define EASY_PDK_SERIAL(sname) static const uint8_t sname[8] = {'F','P','S','E','R','I','A','L'}

@@ -18,7 +18,7 @@ $0:                                   \n\
         mov a, #s_OSEG                \n\
         add a, #l_OSEG + 1            \n\
         and a, #0xfe                  \n\
-        mov sp, a                     \n\
+        mov.io sp, a                  \n\
         call __sdcc_external_startup  \n\
         goto s_GSINIT                 \n\
         .area CODE                    \n");
@@ -34,9 +34,9 @@ void interrupt(void) __interrupt(0)
     if( txdata )                                //txdata contains bits to send?
     {
       if( txdata&1 )                            //check bit (1/0) for sending
-        __set1( PA, 7 );                        //send 1 on PA7
+        __set1io( PA, 7 );                      //send 1 on PA7
       else
-        __set0( PA, 7 );                        //send 0 on PA7
+        __set0io( PA, 7 );                      //send 0 on PA7
       txdata >>= 1;                             //shift txdata 
     }
   }
@@ -102,9 +102,9 @@ void core2(void) __naked
 {
 __asm__("                        \n\
         mov a, #0x01             \n\
-        mov __padier, a          \n\
+        mov.io __padier, a       \n\
 $1:                              \n\
-        t1sn __pa, #0            \n\
+        t1sn.io __pa, #0         \n\
         set1 _core2_signal, #0   \n\
         goto $1                  \n");
 }

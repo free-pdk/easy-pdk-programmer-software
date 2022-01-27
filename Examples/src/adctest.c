@@ -14,9 +14,9 @@ void interrupt(void) __interrupt(0)
     if( txdata )                                //txdata contains bits to send?
     {
       if( txdata&1 )                            //check bit (1/0) for sending
-        __set1( PA, 7 );                        //send 1 on PA7
+        __set1io( PA, 7 );                      //send 1 on PA7
       else
-        __set0( PA, 7 );                        //send 0 on PA7
+        __set0io( PA, 7 );                      //send 0 on PA7
       txdata >>= 1;                             //shift txdata 
     }
   }
