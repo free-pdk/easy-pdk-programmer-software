@@ -648,6 +648,22 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//required minimal implementations for newlib (now part of arm-gnu toolchain) => https://sourceware.org/newlib/libc.html#Stubs
+int _open(const char *name, int flags, int mode) {
+  return -1;
+}
+int _read(int file, char *ptr, int len) {
+  return -1;
+}
+int _write(int file, char *ptr, int len) {
+  return -1;
+}
+int _lseek(int file, int ptr, int dir) {
+  return -1;
+}
+int _close(int file) {
+  return -1;
+}
 /* USER CODE END 4 */
 
 /**
