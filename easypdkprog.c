@@ -166,6 +166,8 @@ int main( int argc, const char * argv [] )
           sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_1, icdata->id12bit, (FPDK_IC_FLASH == icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
         if( icdata->name_variant_2[0] )
           sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_2, icdata->id12bit, (FPDK_IC_FLASH == icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
+        if( icdata->name_variant_3[0] )
+          sprintf( mculist[idx++], " %-8s (0x%03X): %s: %d (%d bit), RAM: %3d bytes %s", icdata->name_variant_3, icdata->id12bit, (FPDK_IC_FLASH == icdata->type)?"FLASH":"OTP  ", icdata->codewords, icdata->codebits, icdata->ramsize, icdata->vdd_cmd_write?"":"(RO)");
       }
     }
 
@@ -281,6 +283,8 @@ int main( int argc, const char * argv [] )
             printf(" / %s", icdata->name_variant_1);
           if( icdata->name_variant_2[0] )
             printf(" / %s", icdata->name_variant_2);
+          if( icdata->name_variant_3[0] )
+            printf(" / %s", icdata->name_variant_3);
 
           printf(" ICID:0x%03X", icdata->id12bit);
         }

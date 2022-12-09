@@ -34,6 +34,7 @@ typedef struct FPDKICDATA
   char       name[32];
   char       name_variant_1[32];
   char       name_variant_2[32];
+  char       name_variant_3[32];
   uint16_t   id12bit;
   uint16_t   otpid;
   FPDKICTYPE type;
