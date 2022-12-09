@@ -373,6 +373,9 @@ static const FPDKICDATA fpdk_ic_table[] =
   },
 
   { .name                                      = "PFS172",
+    .name_variant_1                            = "PFS172B",
+    .name_variant_2                            = "PFS121",
+    .name_variant_3                            = "PFS122",
     .otpid                                     = 0x2AA6,
     .id12bit                                   = 0xCA6,
     .type                                      = FPDK_IC_FLASH,
@@ -411,6 +414,8 @@ static const FPDKICDATA fpdk_ic_table[] =
   },
 
   { .name                                      = "PFS173",
+    .name_variant_1                            = "PFS173B",
+    .name_variant_2                            = "PFS123",
     .otpid                                     = 0x2AA2,
     .id12bit                                   = 0xD44,
     .type                                      = FPDK_IC_FLASH,
