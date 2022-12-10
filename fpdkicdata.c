@@ -662,6 +662,9 @@ FPDKICDATA* FPDKICDATA_GetICDataByName(const char* name)
 
     if( 0 == strcasecmp(name, fpdk_ic_table[i].name_variant_2) )
       return (FPDKICDATA*)&fpdk_ic_table[i];
+
+    if( 0 == strcasecmp(name, fpdk_ic_table[i].name_variant_3) )
+      return (FPDKICDATA*)&fpdk_ic_table[i];
   }
 
   return 0;
