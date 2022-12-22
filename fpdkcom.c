@@ -449,7 +449,7 @@ int FPDKCOM_IC_Write(const int fd,
                     write_block_clock_group_trail_clocks };
 
   uint8_t resp[3+sizeof(uint16_t)];
-  if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_WRITEIC, dat,sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_READIC_TIMEOUT) )
+  if( sizeof(resp) != _FPDKCOM_SendReceiveCommandWithTimeout(fd, FPDKPROTO_CMD_WRITEIC, dat,sizeof(dat), resp, sizeof(resp), FPDKCOM_CMDRSP_WRITE_TIMEOUT) )
     return -1;
 
   return( resp[3] | (((int)resp[4])<<8) );
