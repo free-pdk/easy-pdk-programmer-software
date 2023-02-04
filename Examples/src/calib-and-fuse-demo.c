@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "easypdk/pdk.h"
 
-unsigned char _sdcc_external_startup(void)
+unsigned char __sdcc_external_startup(void)
 {
   //
   // F U S E S
@@ -16,7 +16,7 @@ unsigned char _sdcc_external_startup(void)
   //
   // C A L I B R A T I O N S
   //
-  // Calibrations should always be inserted in "_sdcc_external_startup()" function to ensure reachability at startup.
+  // Calibrations should always be inserted in "__sdcc_external_startup()" function to ensure reachability at startup.
   //
   // SYSCLK setup and calibration (Your application should use only one of the IHRC and/or ILRC setup and claibrations).
   

@@ -6,6 +6,10 @@
 #error "SDCC 4.1.10 or newer is required"
 #endif
 
+#if(!(__SDCC_VER>=40211))
+#define __sdcc_external_startup _sdcc_external_startup
+#endif
+
 #if defined(PMS150C)
  #include "pms150c.h"
 #elif defined(PMS150G)

@@ -19,7 +19,7 @@ $0:                                   \n\
         add a, #l_OSEG + 1            \n\
         and a, #0xfe                  \n\
         mov.io sp, a                  \n\
-        call __sdcc_external_startup  \n\
+        call ___sdcc_external_startup  \n\
         goto s_GSINIT                 \n\
         .area CODE                    \n");
 }
@@ -51,7 +51,7 @@ int putchar(int c)
   return (c);
 }
 
-unsigned char _sdcc_external_startup(void)
+unsigned char __sdcc_external_startup(void)
 {
   EASY_PDK_INIT_SYSCLOCK_8MHZ();                //use 8MHz sysclock
 //  EASY_PDK_USE_FACTORY_IHRCR_16MHZ();

@@ -37,7 +37,7 @@ int putchar(int c)
   return (c);
 }
 
-unsigned char _sdcc_external_startup(void)
+unsigned char __sdcc_external_startup(void)
 {
   EASY_PDK_INIT_SYSCLOCK_1MHZ();                //use 1MHz sysclock
   EASY_PDK_CALIBRATE_IHRC(1000000,5000);        //tune SYSCLK to 1MHz @ 5.000V
