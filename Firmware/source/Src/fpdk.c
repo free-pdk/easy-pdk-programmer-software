@@ -34,7 +34,7 @@ extern DMA_HandleTypeDef  hdma_spi1_tx;
 extern DMA_HandleTypeDef  hdma_spi1_rx;
 extern UART_HandleTypeDef huart1;
 
-//board specific defines for programing IO
+//board specific defines for programming IO
 #define _FPDK_CLK2_UP()      HAL_GPIO_WritePin( IC_IO_PA0_UART1_TX_GPIO_Port, IC_IO_PA0_UART1_TX_Pin, GPIO_PIN_SET )
 #define _FPDK_CLK2_DOWN()    HAL_GPIO_WritePin( IC_IO_PA0_UART1_TX_GPIO_Port, IC_IO_PA0_UART1_TX_Pin, GPIO_PIN_RESET )
 #define _FPDK_CLK_UP()       HAL_GPIO_WritePin( IC_IO_PA3_CLK_GPIO_Port, IC_IO_PA3_CLK_Pin, GPIO_PIN_SET )
@@ -44,7 +44,7 @@ extern UART_HandleTypeDef huart1;
 #define _FPDK_GET_DAT()      HAL_GPIO_ReadPin(  IC_IO_PA6_DAT_GPIO_Port, IC_IO_PA6_DAT_Pin )
 #define _FPDK_SET_CMT(bit)   HAL_GPIO_WritePin( IC_IO_PA7_USART1_RX_GPIO_Port, IC_IO_PA7_USART1_RX_Pin, bit?GPIO_PIN_SET:GPIO_PIN_RESET )
 
-//general macros for programing IO
+//general macros for programming IO
 void    _FPDK_DelayUS(uint32_t us) { asm volatile ("MOV R0,%[loops]\n1:\nSUB R0,#1\nCMP R0,#0\nBNE 1b"::[loops]"r"(10*us):"memory"); }
 #define _FPDK_Clock()        { _FPDK_CLK_UP(); _FPDK_DelayUS(1); _FPDK_CLK_DOWN(); }
 #define _FPDK_Clock2()       { _FPDK_CLK2_UP(); _FPDK_DelayUS(1);_FPDK_CLK2_DOWN(); }
@@ -79,11 +79,11 @@ static uint32_t _dac_vdd_max = FPDK_VDD_DAC_MAX_MV;
 #define FPDK_LEAVE_PROG_MODE_DELAYUS    10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
 #define FPDK_VDD_CAL_STARTUP_DELAYUS    1000
 
-//FPDK hardware varaint / hardware mod
+//FPDK hardware variant / hardware mod
 static FPDKHWVARIANT _hw_variant;
 static uint32_t _hw_mod;
 
-//current dac output values, we need to store them so we can set channels seperate
+//current dac output values, we need to store them so we can set channels separate
 static uint32_t _dac_vdd;
 static uint32_t _dac_vpp;
 
@@ -238,7 +238,7 @@ static uint32_t _FPDK_RecvBits32O2(const uint8_t bits)
   return bitdat;
 }
 
-static int _FPDK_EnterProgramingmMode(const FPDKICTYPE type, const uint32_t VPP_mV, const uint32_t VDD_mV)
+static int _FPDK_EnterProgrammingmMode(const FPDKICTYPE type, const uint32_t VPP_mV, const uint32_t VDD_mV)
 {
   _FPDK_SetClkOutgoing();
 
@@ -270,7 +270,7 @@ static int _FPDK_EnterProgramingmMode(const FPDKICTYPE type, const uint32_t VPP_
   return 0;
 }
 
-static void _FPDK_LeaveProgramingMode(const FPDKICTYPE type, const uint32_t extrawaitus)
+static void _FPDK_LeaveProgrammingMode(const FPDKICTYPE type, const uint32_t extrawaitus)
 {
   _FPDK_SetDatIncoming();
   _FPDK_SetPA4Incoming();
@@ -669,7 +669,7 @@ static uint32_t _FPDK_GetIDIC(const FPDKICTYPE type, const uint32_t vpp_cmd, con
 {
   uint32_t ic_id = 0;
 
-  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd)<0 )
+  if( _FPDK_EnterProgrammingmMode(type,vpp_cmd,vdd_cmd)<0 )
     return FPDK_ERR_VPPVDD;
 
   switch( type )
@@ -701,7 +701,7 @@ static uint32_t _FPDK_GetIDIC(const FPDKICTYPE type, const uint32_t vpp_cmd, con
     default:
       break;
   }
-  _FPDK_LeaveProgramingMode(type, 0);                                                              //leave prog mode, abort write before it is executed
+  _FPDK_LeaveProgrammingMode(type, 0);                                                              //leave prog mode, abort write before it is executed
 
   if( 0x3FFF == (ic_id & 0x3FFF) )
     ic_id = 0;
@@ -746,13 +746,13 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( (FPDK_IC_FLASH != type) && (ic_id != (_FPDK_GetIDIC( type, vpp_cmd, vdd_cmd, data_bits )&0xFFF)) )
     return FPDK_ERR_CMDRSP;
 
-  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
+  if( _FPDK_EnterProgrammingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programming mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
   uint16_t resp = _FPDK_SendCommand(type,cmd,cmd_trailing_clocks);                                 //send READ command
   if( (FPDK_IC_FLASH == type) && (ic_id != (resp&0xFFF)) )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_CMDRSP;
   }
 
@@ -762,7 +762,7 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
         !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS)
       )
     {
-      _FPDK_LeaveProgramingMode(type, 0);
+      _FPDK_LeaveProgrammingMode(type, 0);
       return FPDK_ERR_HVPPHVDD;
     }
   }
@@ -770,7 +770,7 @@ uint16_t FPDK_ReadIC(const uint16_t ic_id, const FPDKICTYPE type,
   for( uint32_t p=0; p<count; p++ )
     data[p] = _FPDK_ReadAddr( type, addr+p, addr_bits, data_bits, ecc_bits );
 
-  _FPDK_LeaveProgramingMode(type, 0);
+  _FPDK_LeaveProgrammingMode(type, 0);
   return ic_id;
 }
 
@@ -787,13 +787,13 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( (FPDK_IC_FLASH != type) && (ic_id != (_FPDK_GetIDIC( type, vpp_cmd, vdd_cmd, data_bits )&0xFFF)) )
     return FPDK_ERR_CMDRSP;
 
-  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
+  if( _FPDK_EnterProgrammingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programming mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
   uint16_t resp = _FPDK_SendCommand(type,cmd,cmd_trailing_clocks);                                 //send READ command
   if( (FPDK_IC_FLASH == type) && (ic_id != (resp&0xFFF)) )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_CMDRSP;
   }
 
@@ -803,7 +803,7 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
         !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS)
       )
     {
-      _FPDK_LeaveProgramingMode(type, 0);
+      _FPDK_LeaveProgrammingMode(type, 0);
       return FPDK_ERR_HVPPHVDD;
     }
   }
@@ -832,7 +832,7 @@ uint16_t FPDK_VerifyIC(const uint16_t ic_id, const FPDKICTYPE type,
     }
   }
 
-  _FPDK_LeaveProgramingMode(type, 0);
+  _FPDK_LeaveProgrammingMode(type, 0);
   return ret;
 }
 
@@ -848,13 +848,13 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
   if( (FPDK_IC_FLASH != type) && (ic_id != (_FPDK_GetIDIC( type, vpp_cmd, vdd_cmd, data_bits )&0xFFF)) )
     return FPDK_ERR_CMDRSP;
 
-  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
+  if( _FPDK_EnterProgrammingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programming mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
   uint16_t resp = _FPDK_SendCommand(type,cmd,cmd_trailing_clocks);                                 //send READ command
   if( (FPDK_IC_FLASH == type) && (ic_id != (resp&0xFFF)) )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_CMDRSP;
   }
 
@@ -864,7 +864,7 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
         !FPDK_SetVPP(vpp_read, FPDK_VPP_R_STABELIZE_DELAYUS)
       )
     {
-      _FPDK_LeaveProgramingMode(type, 0);
+      _FPDK_LeaveProgrammingMode(type, 0);
       return FPDK_ERR_HVPPHVDD;
     }
   }
@@ -888,7 +888,7 @@ uint16_t FPDK_BlankCheckIC(const uint16_t ic_id, const FPDKICTYPE type,
     }
   }
 
-  _FPDK_LeaveProgramingMode(type, 0);
+  _FPDK_LeaveProgrammingMode(type, 0);
   return ret;
 }
 
@@ -898,16 +898,16 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
                       const uint32_t vpp_erase, const uint32_t vdd_erase,
                       const uint8_t erase_clocks, const uint16_t erase_clock_hcycle)
 {
-  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
+  if( _FPDK_EnterProgrammingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programming mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
   if( FPDK_IC_FLASH != type )
-    return FPDK_ERR_UKNOWN;
+    return FPDK_ERR_UNKNOWN;
 
   uint16_t resp = _FPDK_SendCommand(type,cmd,cmd_trailing_clocks);                                 //send ERASE command
   if( ic_id != (resp&0xFFF) )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_CMDRSP;
   }
 
@@ -915,7 +915,7 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
       !FPDK_SetVPP(vpp_erase, FPDK_VPP_EW_STABELIZE_DELAYUS)   
     )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_HVPPHVDD;
   }
 
@@ -933,7 +933,7 @@ uint16_t FPDK_EraseIC(const uint16_t ic_id, const FPDKICTYPE type,
   }
 
   _FPDK_Clock();                                                                                   //1 extra clock
-  _FPDK_LeaveProgramingMode(type, 100000);
+  _FPDK_LeaveProgrammingMode(type, 100000);
 
   return ic_id;
 }
@@ -956,18 +956,18 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
                       const uint8_t write_block_clock_group_trail_clocks)
 {
   if( !write_block_size || (write_block_size>8) )
-    return FPDK_ERR_UKNOWN;
+    return FPDK_ERR_UNKNOWN;
 
   if( (FPDK_IC_FLASH != type) && (ic_id != (_FPDK_GetIDIC( type, vpp_cmd, vdd_cmd, data_bits )&0xFFF)) )
     return FPDK_ERR_CMDRSP;
 
-  if( _FPDK_EnterProgramingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programing mode using VPP and VDD
+  if( _FPDK_EnterProgrammingmMode(type,vpp_cmd,vdd_cmd) < 0 )                                       //enter programming mode using VPP and VDD
     return FPDK_ERR_VPPVDD;
 
   uint16_t resp = _FPDK_SendCommand(type,cmd,cmd_trailing_clocks);                                 //send WRITE command
   if( (FPDK_IC_FLASH == type) && (ic_id != (resp&0xFFF)) )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_CMDRSP;
   }
 
@@ -975,7 +975,7 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
       !FPDK_SetVPP(vpp_write, FPDK_VPP_EW_STABELIZE_DELAYUS)   
     )
   {
-    _FPDK_LeaveProgramingMode(type, 0);
+    _FPDK_LeaveProgrammingMode(type, 0);
     return FPDK_ERR_HVPPHVDD;
   }
 
@@ -1050,7 +1050,7 @@ uint16_t FPDK_WriteIC(const uint16_t ic_id, const FPDKICTYPE type,
     _FPDK_DelayUS(100);                                                                            //wait a bit so voltage can stabelize again (makes writing much more reliable)
   }
 
-  _FPDK_LeaveProgramingMode(type, 100000);
+  _FPDK_LeaveProgrammingMode(type, 100000);
 
   return ic_id;
 }
@@ -1127,7 +1127,7 @@ static void _FPDK_CalibrateNext(uint32_t steps)
   }
 }
 
-static uint32_t _FPDK_CalibrateGetNextFreqeuncy()
+static uint32_t _FPDK_CalibrateGetNextFrequency()
 {
   _spiFrequency = 0;
   _spiSendPulses = 1;
@@ -1154,7 +1154,7 @@ static uint8_t _FPDK_CalibrateSingleFrequency(const uint32_t tune_frequency, con
 
   for( uint16_t t=minval+(skipFirstStep?1:0); t<=maxval; t+=step )
   {
-    uint32_t measured_frequency = multiplier * _FPDK_CalibrateGetNextFreqeuncy();
+    uint32_t measured_frequency = multiplier * _FPDK_CalibrateGetNextFrequency();
 
     if( 0 == measured_frequency )
       break;

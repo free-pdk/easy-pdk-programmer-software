@@ -61,7 +61,7 @@ typedef enum FPDKPROTO_RSP
 
 typedef enum FPDK_ERR
 {
-  FPDK_ERR_UKNOWN            = 0xFFFF,
+  FPDK_ERR_UNKNOWN           = 0xFFFF,
   FPDK_ERR_VPPVDD            = 0xFFFE,
   FPDK_ERR_HVPPHVDD          = 0xFFFD,
   FPDK_ERR_CMDRSP            = 0xFFFC,

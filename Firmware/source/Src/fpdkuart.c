@@ -77,7 +77,7 @@ void FPDKUART_HandleQueue(void)
   {
     if( __HAL_UART_GET_FLAG(&huart1,UART_FLAG_ABRF) != RESET)                                      //auto baud detection on STM finished?
     {
-      if( __HAL_UART_GET_FLAG(&huart1, UART_FLAG_ABRE) != RESET )                                  //auto baud error occured ?
+      if( __HAL_UART_GET_FLAG(&huart1, UART_FLAG_ABRE) != RESET )                                  //auto baud error occurred ?
         FPDKUART_Init();                                                                           //restart uart on error
       else
       {
