@@ -25,7 +25,7 @@ Problems with Linux distributions (Ubuntu and others):
 To reduce the initial delay after connecting USB you need to exclude the virtual com port from "modemmanager" to check it as a modem.
 You can do this by the following command:
 
-sudo bash -c 'cp udevrules/90-stm32vcp.rules /etc/udev/rules.d/ ; udevadm control --reload'
+sudo bash -c 'cp Linux_udevrules/70-stm32vcp.rules /etc/udev/rules.d/ ; udevadm control --reload'
 
 
 ************
