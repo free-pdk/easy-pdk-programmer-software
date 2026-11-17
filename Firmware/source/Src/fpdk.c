@@ -78,6 +78,7 @@ static uint32_t _dac_vdd_max = FPDK_VDD_DAC_MAX_MV;
 #define FPDK_VPP_STOP_DELAYUS           0 //100
 #define FPDK_LEAVE_PROG_MODE_DELAYUS    10000  //IMPORTANT: wait a bit after leaving program mode, before executing next command
 #define FPDK_VDD_CAL_STARTUP_DELAYUS    1000
+#define FPDK_VDD_MEASURE_DELAYUS        10000
 
 //FPDK hardware variant / hardware mod
 static FPDKHWVARIANT _hw_variant;
@@ -498,7 +499,7 @@ void FPDK_Init(void)
 
   HAL_GPIO_WritePin( DCDC15VOLT_ENABLE_OUT_GPIO_Port, DCDC15VOLT_ENABLE_OUT_Pin, GPIO_PIN_SET );   //enable DCDC 15V booster
 
-  FPDK_SetVDD(1000,0);                                                                             //set 1V vdd for measurement (after adc start)
+  FPDK_SetVDD(1000,FPDK_VDD_MEASURE_DELAYUS);                                                      //set 1V vdd for measurement (after adc start)
 
   _hw_mod = FPDK_HWMOD_NONE;
 
@@ -552,10 +553,10 @@ void FPDK_Init(void)
   _FPDK_SetPA0Incoming();
   _FPDK_SetPA7Incoming();
 
-  for( uint32_t timeout=HAL_GetTick()+1000; (!_adc_vdd) && (timeout<HAL_GetTick()); ) {;}          //wait for adc to have a measurement, timeout 1 second
+  for( uint32_t t0=HAL_GetTick(); (!_adc_vdd) && (HAL_GetTick()-t0)<1000U; ) {;}                   //wait for adc to have a measurement, timeout 1 second
   if( _adc_vdd > 1500 )                                                                            //is set test vdd 1V measured > 1.5V?
   {
-    _dac_vdd_max = FPDK_VDD_EXTENDED_DAC_MAX_MV;                                                   //variant with changed resisistor on opamp
+    _dac_vdd_max = FPDK_VDD_EXTENDED_DAC_MAX_MV;                                                   //variant with changed resistor on opamp
     _hw_mod |= FPDK_HWMOD_VDD13VMAX;
   }
 
